@@ -352,5 +352,78 @@
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
   </noscript>
+  
+  <div id="google_translate_element" style="position:fixed;right:20px;bottom:120px;z-index:1000;"></div>
+  
+  <script>
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'zh-CN', 
+          // 增加 includedLanguages 参数，指定你需要的语言列表，逗号分隔。
+          // 默认包含了主流语言，你可以按需增删。
+          includedLanguages: 'en,zh-CN,zh-TW,fr,de,es,ru,ja,ko,ar,it,pt,th,vi', 
+          autoDisplay: false,
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE 
+        }, 'google_translate_element');
+      }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <style>
+      /* 隐藏谷歌顶部横幅，修正页顶偏移 */
+      .goog-te-banner-frame { display: none !important; }
+      body { top: 0px !important; }
+      
+      /* 隐藏"Google 翻译"文字和 Google Logo */
+      .goog-logo-link, .goog-te-gadget span {
+        display: none !important;
+      }
+      
+      /* 美化下拉框的容器 */
+      .goog-te-gadget {
+        font-size: 0px !important; 
+        overflow: hidden; /* 隐藏可能溢出的谷歌默认UI */
+        border-radius: 4px; /* 让容器也保持圆角 */
+      }
+      
+      .goog-te-gadget .goog-te-combo {
+        /* 强制禁用浏览器默认外观 */
+        -webkit-appearance: none !important; 
+        -moz-appearance: none !important;
+        appearance: none !important; 
+        
+        /* 使用 CSS Filter 强行改变颜色 */
+        /* invert(100%) 滤镜会将白色变黑，黑色变白。如果原生下拉框颜色较深，可以尝试这个。 */
+        /* filter: invert(100%) hue-rotate(180deg) !important; */
+        
+        /* 强制背景色，用纯色覆盖 */
+        background-color: #203A69 !important; /* 暗蓝色 */
+        color: #FFFFFF !important;           /* 纯白色文字 */
+        border: 1px solid #3F51B5 !important;
+        
+        padding: 4px 20px 4px 6px; /* 右侧留出空间给自定义箭头 */
+        font-size: 14px; 
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5); 
+        width: auto !important; /* 确保宽度自适应 */
+      }
+      
+      /* 重点：添加自定义的下拉箭头（使用base64编码的SVG或图标） */
+      .goog-te-gadget-simple::after {
+          content: '▼' !important; /* 使用简单的 unicode 箭头 */
+          color: #FFFFFF !important; /* 设置箭头颜色为白色 */
+          position: absolute !important;
+          right: 5px !important;
+          top: 3px !important;
+          font-size: 10px !important;
+          pointer-events: none !important; /* 确保它不影响下拉操作 */
+      }
+      
+      .goog-te-gadget-simple {
+        background-color: transparent !important; 
+        border: none !important;
+        position: relative; /* 允许子元素进行绝对定位 */
+      }
+  </style>
+  
 </body>
 </html>
