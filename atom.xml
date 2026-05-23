@@ -8,7 +8,9 @@
   <link href="https://x1aomuchong.github.io/" rel="alternate"/>
   <link href="https://x1aomuchong.github.io/atom.xml" rel="self"/>
   <rights>All rights reserved 2026, x1aomuchong</rights>
-  <subtitle>小木虫的个人博客 — 数学、OI、科幻与 HKDSE 学习笔记</subtitle>
+  <subtitle>
+    <![CDATA[小木虫的技术报告、科学探究以及生活杂谈 | Tech notes, science explorations & life musings]]>
+  </subtitle>
   <title>小木虫的个人主页</title>
   <updated>2025-11-23T01:36:51.048Z</updated>
   <entry>
