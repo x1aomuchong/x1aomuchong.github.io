@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://x1aomuchong.github.io/sitemap.xml
