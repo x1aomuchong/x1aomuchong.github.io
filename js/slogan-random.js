@@ -20,6 +20,5 @@
   ];
 
   var pick = mottoes[Math.floor(Math.random() * mottoes.length)];
-  subtitle.setAttribute('data-typed-text', pick);
   subtitle.textContent = pick;
 })();
