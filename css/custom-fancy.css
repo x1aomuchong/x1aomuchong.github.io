@@ -18,8 +18,8 @@ html {
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* body 竖向渐变背景:顶部稍亮、底部稍暗,打破纯色平面,营造纵深感 */
-/* 同时覆盖 html 与 body:body 设 transparent 后,浏览器回退显示 html 背景 */
+/* 背景策略:html 承载底色渐变,body 保持完全透明,
+   这样 body::before / ::after 的柔光层(z-index:-1)能浮在 html 渐变之上、内容之下。*/
 html {
   background-color: #f5f6f8;
   background-image: linear-gradient(180deg, #f5f6f8 0%, #e3e5ea 100%);
@@ -27,8 +27,7 @@ html {
 }
 body {
   background-color: transparent !important;
-  background-image: linear-gradient(180deg, #f5f6f8 0%, #e3e5ea 100%);
-  background-attachment: fixed;
+  background-image: none;
 }
 /* 暗色模式:深藏蓝过渡,避免纯 #181c27 单调 */
 [data-user-color-scheme="dark"] {
@@ -38,8 +37,7 @@ body {
 }
 [data-user-color-scheme="dark"] body {
   background-color: transparent !important;
-  background-image: linear-gradient(180deg, #1e2535 0%, #141821 100%);
-  background-attachment: fixed;
+  background-image: none;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-user-color-scheme]) {
@@ -49,9 +47,81 @@ body {
   }
   :root:not([data-user-color-scheme]) body {
     background-color: transparent !important;
-    background-image: linear-gradient(180deg, #1e2535 0%, #141821 100%);
-    background-attachment: fixed;
+    background-image: none;
   }
+}
+
+/* ============================================================
+ * 1.5 柔光 blob 光晕层:两个伪元素各承载一团径向渐变光晕,
+ *      缓慢漂移 + 微缩放,营造氛围感。开销极小(纯 CSS transform)。
+ * ============================================================ */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(60px);
+  will-change: transform;
+}
+/* 亮色:淡蓝 + 淡紫,低饱和避免刺眼 */
+body::before {
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(126, 182, 232, 0.32) 0%,
+    transparent 45%
+  );
+  animation: blobDrift1 28s ease-in-out infinite alternate;
+}
+body::after {
+  background: radial-gradient(
+    circle at 70% 70%,
+    rgba(184, 168, 232, 0.26) 0%,
+    transparent 45%
+  );
+  animation: blobDrift2 32s ease-in-out infinite alternate;
+}
+/* 暗色:更亮更饱和的紫蓝,否则暗底下光晕看不出来 */
+[data-user-color-scheme="dark"] body::before {
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(90, 130, 220, 0.42) 0%,
+    transparent 45%
+  );
+}
+[data-user-color-scheme="dark"] body::after {
+  background: radial-gradient(
+    circle at 70% 70%,
+    rgba(140, 110, 220, 0.34) 0%,
+    transparent 45%
+  );
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-user-color-scheme]) body::before {
+    background: radial-gradient(
+      circle at 30% 30%,
+      rgba(90, 130, 220, 0.42) 0%,
+      transparent 45%
+    );
+  }
+  :root:not([data-user-color-scheme]) body::after {
+    background: radial-gradient(
+      circle at 70% 70%,
+      rgba(140, 110, 220, 0.34) 0%,
+      transparent 45%
+    );
+  }
+}
+@keyframes blobDrift1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(4%, -3%) scale(1.08); }
+  100% { transform: translate(-3%, 4%) scale(0.96); }
+}
+@keyframes blobDrift2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-4%, 3%) scale(1.05); }
+  100% { transform: translate(3%, -4%) scale(1.1); }
 }
 
 a,
@@ -314,5 +384,10 @@ button,
   a,
   button {
     transition: none;
+  }
+  /* 光晕停止漂移,但保留静态光晕(仅去掉运动) */
+  body::before,
+  body::after {
+    animation: none;
   }
 }
