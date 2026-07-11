@@ -373,3 +373,44 @@ button,
   background: rgba(246, 247, 249, 0.96);
   border-color: rgba(40, 60, 90, 0.18);
 }
+
+/* Google 翻译 select 美化 — 与主题暗色风契合 */
+.gt-minimal-host .goog-te-combo,
+.gt-minimal-host select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent !important;
+  color: #d0d6df !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 4px 26px 4px 8px !important;
+  font-size: 12px !important;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace !important;
+  letter-spacing: 0.02em;
+  width: auto !important;
+  min-width: 110px;
+  outline: none !important;
+  cursor: pointer !important;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'><path fill='%237eb6e8' d='M0 0h8L4 5z'/></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 8px center !important;
+}
+.gt-minimal-host .goog-te-combo:hover,
+.gt-minimal-host select:hover {
+  color: #7eb6e8 !important;
+}
+.gt-minimal-host .goog-te-combo option,
+.gt-minimal-host select option {
+  background-color: #1a1f2e !important;
+  color: #d0d6df !important;
+}
+[data-user-color-scheme="light"] .gt-minimal-host .goog-te-combo,
+[data-user-color-scheme="light"] .gt-minimal-host select {
+  color: #3c4858 !important;
+}
+[data-user-color-scheme="light"] .gt-minimal-host .goog-te-combo option,
+[data-user-color-scheme="light"] .gt-minimal-host select option {
+  background-color: #fff !important;
+  color: #3c4858 !important;
+}

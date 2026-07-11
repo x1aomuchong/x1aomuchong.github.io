@@ -434,15 +434,29 @@
     var btn=document.getElementById("gt-minimal-btn");
     var host=document.getElementById("gt-minimal-host");
     var loaded=false;
+    function cleanGoogleUI(){
+      var combo=host.querySelector(".goog-te-combo")||host.querySelector("select");
+      if(!combo) return;
+      if(combo.parentNode!==host) host.appendChild(combo);
+      Array.prototype.slice.call(host.childNodes).forEach(function(n){if(n!==combo) host.removeChild(n);});
+    }
+    function watchHost(){
+      var obs=new MutationObserver(function(){
+        obs.disconnect();
+        cleanGoogleUI();
+        setTimeout(function(){obs.observe(host,{childList:true,subtree:true});},0);
+      });
+      obs.observe(host,{childList:true,subtree:true});
+    }
     function init(){
       if(loaded) return; loaded=true;
       window.googleTranslateElementInit=function(){
         new google.translate.TranslateElement({
-          pageLanguage: "zh-CN",
-          includedLanguages: "en,zh-CN,zh-TW,fr,de,es,ru,ja,ko,ar,it,pt,th,vi",
-          autoDisplay:false,
-          layout:google.translate.TranslateElement.InlineLayout.SIMPLE
+          pageLanguage:"zh-CN",
+          includedLanguages:"en,zh-CN,zh-TW,fr,de,es,ru,ja,ko,ar,it,pt,th,vi",
+          autoDisplay:false
         },"gt-minimal-host");
+        watchHost();
       };
       var s=document.createElement("script");
       s.src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
@@ -455,26 +469,12 @@
   })();
 </script>
 <style>
-  /* 隐藏 Google 翻译自带的顶部横幅，修正 body 偏移 */
   .goog-te-banner-frame{display:none !important;}
   body{top:0 !important;}
-  .goog-logo-link,.goog-te-gadget span{display:none !important;}
-  .goog-te-gadget{font-size:0 !important;}
-  /* 调整下拉框样式与博客暗色风适配 */
-  .goog-te-gadget .goog-te-combo{
-    -webkit-appearance:none;-moz-appearance:none;appearance:none;
-    background-color:rgba(58,70,88,0.85) !important;
-    color:#d0d6df !important;
-    border:1px solid rgba(120,140,180,0.25) !important;
-    border-radius:3px !important;
-    padding:4px 24px 4px 8px !important;
-    font-size:12px !important;
-    width:auto !important;
-    outline:none !important;
-  }
-  .goog-te-gadget .goog-te-combo:hover{
-    border-color:rgba(126,182,232,0.5) !important;
-  }
+  .goog-logo-link,.goog-te-gadget span,.goog-te-gadget-icon{display:none !important;}
+  .goog-te-gadget{font-size:0 !important;margin:0 !important;padding:0 !important;}
+  .goog-tooltip,.goog-tooltip:hover{display:none !important;}
+  .goog-text-highlight{box-shadow:none !important;background-color:transparent !important;}
 </style>
 </body>
 </html>
