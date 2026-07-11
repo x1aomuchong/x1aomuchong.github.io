@@ -213,3 +213,100 @@ button,
     transition: none;
   }
 }
+
+/* ============================================================
+ * 8. 文章页：相关文章 + 分享按钮
+ *    延续 geek 风：去卡片，单色描边，无渐变填充
+ * ============================================================ */
+
+.post-related {
+  margin: 2.4rem 0 1.6rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(120, 140, 180, 0.12);
+}
+.post-related-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.8rem;
+  color: inherit;
+}
+.post-related-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.post-related-list li {
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid rgba(120, 140, 180, 0.08);
+}
+.post-related-list li:last-child {
+  border-bottom: none;
+}
+.post-related-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  color: inherit;
+}
+.post-related-list a:hover {
+  color: #7eb6e8 !important;
+  background: none !important;
+  -webkit-text-fill-color: #7eb6e8 !important;
+}
+.post-related-date {
+  flex: 0 0 auto;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  opacity: 0.55;
+}
+.post-related-name {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 分享按钮 */
+.post-share {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.4rem 0 1.6rem;
+}
+.post-share-label {
+  font-size: 0.9rem;
+  opacity: 0.65;
+  margin-right: 0.2rem;
+}
+.post-share-btn {
+  font: inherit;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: inherit;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgba(120, 140, 180, 0.25);
+  border-radius: 3px;
+  padding: 0.22rem 0.7rem;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+.post-share-btn:hover {
+  color: #7eb6e8;
+  border-color: rgba(126, 182, 232, 0.5);
+  background: rgba(126, 182, 232, 0.1);
+}
+.post-share-btn--done {
+  color: #67c08a !important;
+  border-color: rgba(103, 192, 138, 0.5) !important;
+  background: rgba(103, 192, 138, 0.1) !important;
+}
+.post-share-btn--fail {
+  color: #e07b7b !important;
+  border-color: rgba(224, 123, 123, 0.5) !important;
+  background: rgba(224, 123, 123, 0.1) !important;
+}
