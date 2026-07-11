@@ -407,5 +407,56 @@
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
   </noscript>
   
+<div id="gt-minimal" class="gt-minimal" aria-label="翻译此页">
+  <button type="button" id="gt-minimal-btn" class="gt-minimal-btn" title="翻译">🌐</button>
+  <div id="gt-minimal-host" class="gt-minimal-host" hidden></div>
+</div>
+<script>
+  (function(){
+    var btn=document.getElementById("gt-minimal-btn");
+    var host=document.getElementById("gt-minimal-host");
+    var loaded=false;
+    function init(){
+      if(loaded) return; loaded=true;
+      window.googleTranslateElementInit=function(){
+        new google.translate.TranslateElement({
+          pageLanguage: "zh-CN",
+          includedLanguages: "en,zh-CN,zh-TW,fr,de,es,ru,ja,ko,ar,it,pt,th,vi",
+          autoDisplay:false,
+          layout:google.translate.TranslateElement.InlineLayout.SIMPLE
+        },"gt-minimal-host");
+      };
+      var s=document.createElement("script");
+      s.src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      document.body.appendChild(s);
+    }
+    btn.addEventListener("click",function(){
+      if(host.hasAttribute("hidden")){host.removeAttribute("hidden");init();}
+      else{host.setAttribute("hidden","");}
+    });
+  })();
+</script>
+<style>
+  /* 隐藏 Google 翻译自带的顶部横幅，修正 body 偏移 */
+  .goog-te-banner-frame{display:none !important;}
+  body{top:0 !important;}
+  .goog-logo-link,.goog-te-gadget span{display:none !important;}
+  .goog-te-gadget{font-size:0 !important;}
+  /* 调整下拉框样式与博客暗色风适配 */
+  .goog-te-gadget .goog-te-combo{
+    -webkit-appearance:none;-moz-appearance:none;appearance:none;
+    background-color:rgba(58,70,88,0.85) !important;
+    color:#d0d6df !important;
+    border:1px solid rgba(120,140,180,0.25) !important;
+    border-radius:3px !important;
+    padding:4px 24px 4px 8px !important;
+    font-size:12px !important;
+    width:auto !important;
+    outline:none !important;
+  }
+  .goog-te-gadget .goog-te-combo:hover{
+    border-color:rgba(126,182,232,0.5) !important;
+  }
+</style>
 </body>
 </html>

@@ -8,36 +8,60 @@
   }
 
   ready(function () {
-    document.addEventListener('click', function (e) {
-      var btn = e.target.closest && e.target.closest('.post-share-btn');
-      if (!btn) return;
-      var kind = btn.getAttribute('data-share');
-      if (!kind) return;
-      var url = location.href;
-      var title = document.title || '';
-      if (kind === 'twitter') {
-        var u = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
-        window.open(u, '_blank', 'noopener,noreferrer,width=600,height=420');
-      } else if (kind === 'weibo') {
-        var w = 'https://service.weibo.com/share/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
-        window.open(w, '_blank', 'noopener,noreferrer,width=600,height=520');
-      } else if (kind === 'copy') {
-        var done = function () { btn.classList.add('post-share-btn--done'); btn.textContent = '已复制'; setTimeout(resetBtn, 1500, btn); };
-        var fail = function () { btn.classList.add('post-share-btn--fail'); btn.textContent = '复制失败'; setTimeout(resetBtn, 1500, btn); };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(done, fail);
-        } else {
-          try {
-            var ta = document.createElement('textarea');
-            ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
-            document.body.appendChild(ta); ta.select();
-            var ok = document.execCommand && document.execCommand('copy');
-            document.body.removeChild(ta);
-            ok ? done() : fail();
-          } catch (_) { fail(); }
-        }
+    // 1) 把 .post-share 移到 .post-prevnext 之后
+    //    默认位置在 .markdown-body 末尾，紧贴相关文章，视觉上像文章一部分
+    moveShareOutOfContent();
+    // 监听 Hexo 局部刷新（Fluid 的 PJAX）
+    document.addEventListener('pjax:complete', moveShareOutOfContent);
+  });
+
+  function moveShareOutOfContent() {
+    var share = document.querySelector('.post-share');
+    if (!share) return;
+    // 已经移过就不再处理
+    if (share.getAttribute('data-moved') === '1') return;
+    // 找 prevnext 区块作为锚点
+    var prevnext = document.querySelector('.post-prevnext');
+    var anchor = prevnext ? prevnext.parentNode : null;
+    if (anchor) {
+      anchor.appendChild(share);
+    } else {
+      // 兜底：放到 #board 末尾
+      var board = document.querySelector('#board');
+      if (board) board.appendChild(share);
+    }
+    share.setAttribute('data-moved', '1');
+  }
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('.post-share-btn');
+    if (!btn) return;
+    var kind = btn.getAttribute('data-share');
+    if (!kind) return;
+    var url = location.href;
+    var title = document.title || '';
+    if (kind === 'twitter') {
+      var u = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+      window.open(u, '_blank', 'noopener,noreferrer,width=600,height=420');
+    } else if (kind === 'weibo') {
+      var w = 'https://service.weibo.com/share/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+      window.open(w, '_blank', 'noopener,noreferrer,width=600,height=520');
+    } else if (kind === 'copy') {
+      var done = function () { btn.classList.add('post-share-btn--done'); btn.textContent = '已复制'; setTimeout(resetBtn, 1500, btn); };
+      var fail = function () { btn.classList.add('post-share-btn--fail'); btn.textContent = '复制失败'; setTimeout(resetBtn, 1500, btn); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, fail);
+      } else {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          var ok = document.execCommand && document.execCommand('copy');
+          document.body.removeChild(ta);
+          ok ? done() : fail();
+        } catch (_) { fail(); }
       }
-    });
+    }
   });
 
   function resetBtn(btn) {
