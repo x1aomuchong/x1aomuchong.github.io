@@ -1,15 +1,16 @@
 /**
- * custom-fancy.css — 极简 geek 风:噪点 + 扫描线 + 纯分隔线
+ * custom-fancy.css — 极光玻璃风:流光渐变底 + 玻璃拟态面板
  *
- * 暗色为主,瑞士排版克制美学。通过 _config.fluid.yml 的 custom_css 注入,
- * 加载在 main.css 之后。
+ * 暗色为主,柔和极光在深处缓慢流动,内容浮于磨砂玻璃之上。
+ * 通过 _config.fluid.yml 的 custom_css 注入,加载在 main.css 之后。
  *
- * v2 改动:
- *   - §0 设计令牌:所有自定义颜色/字体集中为 CSS 变量,亮暗两套,
- *     改色只动一处;亮色模式细节同步打磨
- *   - §10 排版:CJK 字体栈补全、正文行高、日期等宽化(终端感)
- *   - §11 内容元素:KaTeX 横向滚动、表格描边+斑马纹、引用块
- *   - §12-14 动效:::selection、阅读进度条、滚动淡入(配合 js/motion.js)
+ * v3 改动(极光/玻璃拟态渐进打磨):
+ *   - §0 设计令牌:新增极光色板、玻璃材质、辉光、渐变三重奏变量
+ *   - §1 背景:扫描线退场,改为四层极光光斑缓慢漂移 + 保留噪点
+ *   - §4/5/8 表面:导航栏、标签、按钮升级为磨砂玻璃 + 悬浮辉光
+ *   - §13 阅读进度条:青→靛→紫渐变 + 微光
+ *   - §15 新增:#board 主面板玻璃化、TOC/分类侧栏玻璃卡片、
+ *     banner 底部渐隐融合、页脚渐变发丝线、正文链接下划线生长动画
  *
  * 尊重 prefers-reduced-motion:动画在该设置下自动降级。
  */
@@ -24,6 +25,28 @@
   --fx-accent: #7eb6e8;
   --fx-accent-bg: rgba(126, 182, 232, 0.08);
   --fx-accent-border: rgba(126, 182, 232, 0.5);
+  --fx-accent-glow: rgba(126, 182, 232, 0.28);
+
+  /* 渐变三重奏:青 → 靛 → 紫(进度条、装饰线) */
+  --fx-grad-1: #67e8f9;
+  --fx-grad-2: #818cf8;
+  --fx-grad-3: #c084fc;
+
+  /* 玻璃材质(面板 / 侧栏 / 挂件) */
+  --fx-glass-bg: rgba(23, 29, 44, 0.58);
+  --fx-glass-bg-soft: rgba(23, 29, 44, 0.42);
+  --fx-glass-bg-heavy: rgba(18, 23, 36, 0.78);
+  --fx-glass-border: rgba(140, 165, 210, 0.14);
+  --fx-glass-shadow: 0 16px 48px rgba(0, 0, 0, 0.38);
+  --fx-glass-blur: 18px;
+  --fx-nav-bg: rgba(16, 21, 34, 0.55);
+
+  /* banner 底部渐隐融合色(与 html 底色衔接) */
+  --fx-banner-fade: rgba(11, 15, 26, 0.92);
+  /* banner 白色罩纱(仅亮色模式使用,暗色为透明) */
+  --fx-banner-veil: rgba(255, 255, 255, 0);
+  /* 正文图片投影 */
+  --fx-img-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 
   /* 分隔线三级强度 */
   --fx-line: rgba(120, 140, 180, 0.12);
@@ -70,6 +93,22 @@
   --fx-accent: #2a6ca8;
   --fx-accent-bg: rgba(42, 108, 168, 0.07);
   --fx-accent-border: rgba(42, 108, 168, 0.45);
+  --fx-accent-glow: rgba(42, 108, 168, 0.22);
+
+  --fx-grad-1: #0891b2;
+  --fx-grad-2: #4f46e5;
+  --fx-grad-3: #9333ea;
+
+  --fx-glass-bg: rgba(255, 255, 255, 0.8);
+  --fx-glass-bg-soft: rgba(244, 246, 250, 0.7);
+  --fx-glass-bg-heavy: rgba(250, 251, 253, 0.88);
+  --fx-glass-border: rgba(30, 50, 80, 0.08);
+  --fx-glass-shadow: 0 20px 60px rgba(80, 100, 140, 0.14);
+  --fx-nav-bg: rgba(252, 253, 255, 0.72);
+
+  --fx-banner-fade: rgba(238, 242, 248, 0.96);
+  --fx-banner-veil: rgba(255, 255, 255, 0.1);
+  --fx-img-shadow: 0 10px 30px rgba(80, 100, 140, 0.2);
 
   --fx-line: rgba(40, 60, 90, 0.14);
   --fx-line-subtle: rgba(40, 60, 90, 0.08);
@@ -103,6 +142,22 @@
     --fx-accent: #2a6ca8;
     --fx-accent-bg: rgba(42, 108, 168, 0.07);
     --fx-accent-border: rgba(42, 108, 168, 0.45);
+    --fx-accent-glow: rgba(42, 108, 168, 0.22);
+
+    --fx-grad-1: #0891b2;
+    --fx-grad-2: #4f46e5;
+    --fx-grad-3: #9333ea;
+
+    --fx-glass-bg: rgba(255, 255, 255, 0.8);
+    --fx-glass-bg-soft: rgba(244, 246, 250, 0.7);
+    --fx-glass-bg-heavy: rgba(250, 251, 253, 0.88);
+    --fx-glass-border: rgba(30, 50, 80, 0.08);
+    --fx-glass-shadow: 0 20px 60px rgba(80, 100, 140, 0.14);
+    --fx-nav-bg: rgba(252, 253, 255, 0.72);
+
+    --fx-banner-fade: rgba(238, 242, 248, 0.96);
+    --fx-banner-veil: rgba(255, 255, 255, 0.1);
+    --fx-img-shadow: 0 10px 30px rgba(80, 100, 140, 0.2);
 
     --fx-line: rgba(40, 60, 90, 0.14);
     --fx-line-subtle: rgba(40, 60, 90, 0.08);
@@ -132,13 +187,16 @@
 }
 
 /* ============================================================
- * 1. 背景:暗色渐变底 + 噪点 + 扫描线纹理
- *    html 承载底色,body 透明让伪元素纹理浮在其上
+ * 1. 背景:深空渐变底 + 极光光斑缓慢漂移 + 噪点
+ *    html 承载底色;body::before = 极光层(大尺寸 + 模糊 + 位移动画,
+ *    transform 走 GPU 合成,不会每帧重算模糊);body::after = 噪点
  * ============================================================ */
 
 html {
-  background-color: #141821;
-  background-image: linear-gradient(180deg, #1a2030 0%, #0f131c 100%);
+  background-color: #0b0f1a;
+  background-image:
+    radial-gradient(140% 100% at 50% -10%, rgba(99, 102, 241, 0.1), transparent 60%),
+    linear-gradient(180deg, #131a2c 0%, #0b0f1a 100%);
   background-attachment: fixed;
   transition: background-color 0.4s ease;
 }
@@ -148,8 +206,36 @@ body {
   font-family: var(--fx-sans);
 }
 
-/* 噪点纹理层:SVG fractalNoise,极淡,打破纯色平面 */
+/* 极光层:四层色光斑,超出视口 30% 以便漂移不露边 */
 body::before {
+  content: "";
+  position: fixed;
+  inset: -30%;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(40% 44% at 20% 26%, rgba(99, 102, 241, 0.3), transparent 70%),
+    radial-gradient(36% 40% at 80% 20%, rgba(34, 211, 238, 0.22), transparent 70%),
+    radial-gradient(44% 48% at 66% 80%, rgba(168, 85, 247, 0.22), transparent 70%),
+    radial-gradient(32% 34% at 28% 84%, rgba(59, 130, 246, 0.18), transparent 70%);
+  filter: blur(56px);
+  will-change: transform;
+  animation: fx-aurora 36s ease-in-out infinite alternate;
+}
+@keyframes fx-aurora {
+  0% {
+    transform: translate3d(-2.5%, -1.5%, 0) rotate(-1.2deg) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, 1.5%, 0) rotate(1deg) scale(1.04);
+  }
+  100% {
+    transform: translate3d(-1%, 2.5%, 0) rotate(-0.6deg) scale(1.02);
+  }
+}
+
+/* 噪点纹理层:SVG fractalNoise,极淡,给极光与玻璃增加纸感 */
+body::after {
   content: "";
   position: fixed;
   inset: 0;
@@ -159,58 +245,38 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* 扫描线纹理层:极细横线,CRT 终端感 */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent 0,
-    transparent 2px,
-    rgba(140, 170, 220, 0.07) 2px,
-    rgba(140, 170, 220, 0.07) 3px
-  );
-}
-
-/* 亮色模式(用户手动切亮时也干净) */
+/* 亮色模式:冷蓝调浅底 + 减法极光(同色系、约束在顶部区域) */
 [data-user-color-scheme="light"] {
-  background-color: #f6f7f9;
-  background-image: linear-gradient(180deg, #f6f7f9 0%, #e8eaef 100%);
+  background-color: #f3f6fa;
+  background-image: linear-gradient(180deg, #f7f9fc 0%, #eef2f8 100%);
   background-attachment: fixed;
 }
 [data-user-color-scheme="light"] body::before {
-  opacity: 0.025;
+  background-image:
+    radial-gradient(52% 46% at 18% 6%, rgba(147, 197, 253, 0.34), transparent 70%),
+    radial-gradient(46% 42% at 82% 2%, rgba(196, 181, 253, 0.24), transparent 70%),
+    radial-gradient(44% 38% at 55% 24%, rgba(186, 230, 253, 0.2), transparent 70%);
+  filter: blur(72px);
 }
 [data-user-color-scheme="light"] body::after {
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent 0,
-    transparent 2px,
-    rgba(40, 60, 90, 0.022) 2px,
-    rgba(40, 60, 90, 0.022) 3px
-  );
+  opacity: 0.025;
 }
 /* auto 模式下系统为亮色时的兜底 */
 @media (prefers-color-scheme: light) {
   :root:not([data-user-color-scheme]) {
-    background-color: #f6f7f9;
-    background-image: linear-gradient(180deg, #f6f7f9 0%, #e8eaef 100%);
+    background-color: #f3f6fa;
+    background-image: linear-gradient(180deg, #f7f9fc 0%, #eef2f8 100%);
     background-attachment: fixed;
   }
   :root:not([data-user-color-scheme]) body::before {
-    opacity: 0.025;
+    background-image:
+      radial-gradient(52% 46% at 18% 6%, rgba(147, 197, 253, 0.34), transparent 70%),
+      radial-gradient(46% 42% at 82% 2%, rgba(196, 181, 253, 0.24), transparent 70%),
+      radial-gradient(44% 38% at 55% 24%, rgba(186, 230, 253, 0.2), transparent 70%);
+    filter: blur(72px);
   }
   :root:not([data-user-color-scheme]) body::after {
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent 0,
-      transparent 2px,
-      rgba(40, 60, 90, 0.022) 2px,
-      rgba(40, 60, 90, 0.022) 3px
-    );
+    opacity: 0.025;
   }
 }
 
@@ -263,11 +329,12 @@ button,
   display: none !important;
   content: none !important;
 }
-/* hover 不上浮,标题变色 + 箭头从左侧滑入 */
+/* hover 不上浮,标题变色 + 箭头滑入 + 底部分隔线染色 */
 .index-card:hover {
   transform: none !important;
   background: transparent !important;
   box-shadow: none !important;
+  border-bottom-color: var(--fx-accent-border) !important;
 }
 .index-header a {
   text-decoration: none;
@@ -292,16 +359,24 @@ button,
 }
 
 /* ============================================================
- * 4. 导航栏:去阴影渐变线,只留细底线
+ * 4. 导航栏:滚动后进入磨砂玻璃态(模糊 + 饱和 + 细底线)
  * ============================================================ */
 
 .navbar.scrolling-navbar {
   border-bottom: 1px solid transparent !important;
   box-shadow: none !important;
 }
-.navbar.top-nav-collapse {
-  border-bottom: 1px solid var(--fx-line) !important;
-  box-shadow: none !important;
+#navbar.top-nav-collapse,
+#navbar.navbar-col-show {
+  background-color: var(--fx-nav-bg) !important;
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  border-bottom: 1px solid var(--fx-glass-border) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18) !important;
+}
+[data-user-color-scheme="light"] #navbar.top-nav-collapse,
+[data-user-color-scheme="light"] #navbar.navbar-col-show {
+  box-shadow: 0 8px 30px rgba(80, 100, 140, 0.14) !important;
 }
 .navbar .nav-link:hover,
 .navbar .navbar-brand:hover {
@@ -309,38 +384,46 @@ button,
 }
 
 /* ============================================================
- * 5. 标签 / 按钮:单色描边,去渐变填充
+ * 5. 标签 / 按钮:磨砂玻璃小件,hover 泛起强调色辉光
  * ============================================================ */
 
 .post-meta a {
-  border-radius: 3px !important;
-  padding: 2px 8px !important;
-  background: transparent !important;
-  border: 1px solid var(--fx-line-strong) !important;
+  border-radius: 999px !important;
+  padding: 2px 10px !important;
+  background: var(--fx-glass-bg-soft) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--fx-glass-border) !important;
 }
 .post-meta a:hover {
   background: var(--fx-accent-bg) !important;
   color: var(--fx-accent) !important;
   border-color: var(--fx-accent-border) !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 0 1px var(--fx-accent-border),
+    0 4px 16px var(--fx-accent-glow) !important;
 }
 
 #scroll-top-button {
-  background: var(--fx-btn-bg) !important;
-  border: 1px solid var(--fx-line-strong) !important;
+  background: var(--fx-glass-bg-heavy) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--fx-glass-border) !important;
+  border-radius: 12px !important;
 }
 #scroll-top-button:hover {
   background: var(--fx-btn-bg-hover) !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 0 1px var(--fx-accent-border),
+    0 6px 20px var(--fx-accent-glow) !important;
   transform: none !important;
 }
 
 /* ============================================================
- * 6. 副标题:去柔光
+ * 6. 副标题:极光柔光(远光晕 + 近处压暗保证可读)
  * ============================================================ */
 
 #subtitle {
-  text-shadow: none !important;
+  text-shadow: 0 2px 26px rgba(120, 170, 255, 0.38),
+    0 1px 6px rgba(0, 0, 0, 0.35) !important;
 }
 
 /* ============================================================
@@ -352,6 +435,9 @@ button,
   a,
   button {
     transition: none;
+  }
+  body::before {
+    animation: none;
   }
   .index-header a::after {
     transition: none;
@@ -457,6 +543,8 @@ button,
   color: var(--fx-accent);
   border-color: var(--fx-accent-border);
   background: var(--fx-accent-bg);
+  box-shadow: 0 0 0 1px var(--fx-accent-border),
+    0 4px 16px var(--fx-accent-glow);
 }
 .post-share-btn--done {
   color: var(--fx-ok) !important;
@@ -508,9 +596,11 @@ button,
   background: var(--fx-accent-bg);
 }
 .gt-minimal-host {
-  background: var(--fx-gt-bg);
-  border: 1px solid var(--fx-line);
-  border-radius: 4px;
+  background: var(--fx-glass-bg-heavy);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--fx-glass-border);
+  border-radius: 8px;
   padding: 6px 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
@@ -618,6 +708,28 @@ time[pubdate] {
   margin-bottom: 0;
 }
 
+/* 代码块:细描边 + 大圆角,压进玻璃面板的层次里 */
+.markdown-body pre,
+.markdown-body .highlight {
+  border: 1px solid var(--fx-line);
+  border-radius: 10px;
+}
+
+/* 行内代码:玻璃小片 */
+.markdown-body :not(pre) > code {
+  background: var(--fx-accent-bg);
+  border: 1px solid var(--fx-line);
+  border-radius: 5px;
+  padding: 0.1em 0.38em;
+}
+
+/* 正文图片:圆角 + 描边 + 柔和投影,浮于玻璃之上 */
+.markdown-body img {
+  border-radius: 10px;
+  border: 1px solid var(--fx-line-subtle);
+  box-shadow: var(--fx-img-shadow);
+}
+
 /* ============================================================
  * 12. 选区配色
  * ============================================================ */
@@ -638,8 +750,14 @@ time[pubdate] {
   z-index: 1071; /* 压过 fixed navbar */
   width: 100%;
   height: 2px;
-  background: var(--fx-accent);
-  opacity: 0.85;
+  background: linear-gradient(
+    90deg,
+    var(--fx-grad-1),
+    var(--fx-grad-2) 55%,
+    var(--fx-grad-3)
+  );
+  box-shadow: 0 0 10px var(--fx-accent-glow);
+  opacity: 0.95;
   transform: scaleX(0);
   transform-origin: 0 50%;
   pointer-events: none;
@@ -663,4 +781,152 @@ time[pubdate] {
 .fx-fade.fx-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ============================================================
+ * 15. 玻璃拟态核心:主面板 / 侧栏 / banner 融合 / 细节
+ * ============================================================ */
+
+/* 主面板:磨砂玻璃浮于极光之上 */
+#board {
+  background-color: var(--fx-glass-bg) !important;
+  backdrop-filter: blur(var(--fx-glass-blur)) saturate(1.35);
+  -webkit-backdrop-filter: blur(var(--fx-glass-blur)) saturate(1.35);
+  border: 1px solid var(--fx-glass-border);
+  border-radius: 16px;
+  box-shadow: var(--fx-glass-shadow);
+}
+
+/* 文章页 TOC / 分类侧栏:玻璃小卡片 */
+#toc,
+aside.sidebar.category-bar {
+  background: var(--fx-glass-bg-soft);
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  border: 1px solid var(--fx-glass-border);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+#toc-body .tocbot-active-link {
+  color: var(--fx-accent) !important;
+  font-weight: 600;
+}
+
+/* banner 底部渐隐,融入页面底色,消除硬切边 */
+#banner .mask {
+  background-image: linear-gradient(
+    180deg,
+    transparent 58%,
+    var(--fx-banner-fade) 100%
+  );
+}
+/* 亮色模式:整张图盖白罩纱提亮成"薄雾感",底部渐隐到页面底色 */
+[data-user-color-scheme="light"] #banner .mask {
+  background-image: linear-gradient(
+    180deg,
+    var(--fx-banner-veil) 0%,
+    rgba(255, 255, 255, 0.05) 42%,
+    var(--fx-banner-fade) 96%
+  );
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-user-color-scheme]) #banner .mask {
+    background-image: linear-gradient(
+      180deg,
+      var(--fx-banner-veil) 0%,
+      rgba(255, 255, 255, 0.05) 42%,
+      var(--fx-banner-fade) 96%
+    );
+  }
+}
+
+/* 亮色刷新防闪:亮色头图未替换完成前隐藏 banner,JS 就绪后淡入 */
+#banner {
+  transition: opacity 0.45s ease;
+}
+[data-user-color-scheme="light"] #banner:not([data-fx-ready]) {
+  opacity: 0;
+}
+
+/* 亮色:浅色头图上白色导航字加暗投影保证可读(仅顶部透明态) */
+[data-user-color-scheme="light"] #navbar:not(.top-nav-collapse) .navbar-brand,
+[data-user-color-scheme="light"] #navbar:not(.top-nav-collapse) .navbar-nav .nav-link {
+  text-shadow: 0 1px 10px rgba(35, 50, 75, 0.45);
+}
+
+/* 亮色:罩纱减弱后,头图标题补一道深投影 */
+[data-user-color-scheme="light"] #subtitle {
+  text-shadow: 0 1px 14px rgba(25, 40, 65, 0.55),
+    0 1px 4px rgba(0, 0, 0, 0.35) !important;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-user-color-scheme]) #navbar:not(.top-nav-collapse) .navbar-brand,
+  :root:not([data-user-color-scheme]) #navbar:not(.top-nav-collapse) .navbar-nav .nav-link {
+    text-shadow: 0 1px 10px rgba(35, 50, 75, 0.45);
+  }
+  :root:not([data-user-color-scheme]) #subtitle {
+    text-shadow: 0 1px 14px rgba(25, 40, 65, 0.55),
+      0 1px 4px rgba(0, 0, 0, 0.35) !important;
+  }
+}
+
+/* 页脚:渐变发丝线,两端消隐 */
+.footer-inner {
+  position: relative;
+  padding-top: 2rem;
+}
+.footer-inner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(640px, 80%);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--fx-accent-border),
+    transparent
+  );
+}
+
+/* 归档列表:透明化条目,hover 染上极淡强调色 */
+.list-group-item {
+  background: transparent !important;
+  border-color: var(--fx-line) !important;
+}
+.list-group-item-action:hover {
+  background: var(--fx-accent-bg) !important;
+}
+
+/* 标签云:hover 泛起辉光 */
+.tagcloud a {
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+.tagcloud a:hover {
+  text-shadow: 0 0 18px var(--fx-accent-glow);
+}
+
+/* 键盘导航:清晰可见的焦点环 */
+:focus-visible {
+  outline: 2px solid var(--fx-accent-border);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 正文链接:下划线从左向右生长(排除锚点图标与图片链接) */
+.markdown-body p a:not(.anchorjs-link):not(.fancybox),
+.markdown-body li a:not(.anchorjs-link):not(.fancybox) {
+  text-decoration: none !important;
+  padding-bottom: 1px;
+  background-image: linear-gradient(var(--fx-accent), var(--fx-accent));
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  transition: background-size 0.3s ease, color 0.2s ease;
+}
+.markdown-body p a:not(.anchorjs-link):not(.fancybox):hover,
+.markdown-body li a:not(.anchorjs-link):not(.fancybox):hover {
+  background-size: 100% 1px;
 }
