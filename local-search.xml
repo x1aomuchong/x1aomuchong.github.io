@@ -110,44 +110,11 @@
   
   
   <entry>
-    <title>归档</title>
-    <link href="/"/>
-    <url>/</url>
-    
-    <content type="html"><![CDATA[]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title></title>
-    <link href="/"/>
-    <url>/</url>
-    
-    <content type="html"><![CDATA[/* 文章页分享按钮 — 事件委托，无依赖 */(function () {  'use strict';  function ready(fn) {    if (document.readyState !== 'loading') fn();    else document.addEventListener('DOMContentLoaded', fn);  }  ready(function () {    // 1) 把 .post-share 移到 .post-prevnext 之后    //    默认位置在 .markdown-body 末尾，紧贴相关文章，视觉上像文章一部分    moveShareOutOfContent();    // 监听 Hexo 局部刷新（Fluid 的 PJAX）    document.addEventListener('pjax:complete', moveShareOutOfContent);  });  function moveShareOutOfContent() {    var share = document.querySelector('.post-share');    if (!share) return;    // 已经移过就不再处理    if (share.getAttribute('data-moved') === '1') return;    // 找 prevnext 区块作为锚点    var prevnext = document.querySelector('.post-prevnext');    var anchor = prevnext ? prevnext.parentNode : null;    if (anchor) {      anchor.appendChild(share);    } else {      // 兜底：放到 #board 末尾      var board = document.querySelector('#board');      if (board) board.appendChild(share);    }    share.setAttribute('data-moved', '1');  }  document.addEventListener('click', function (e) {    var btn = e.target.closest && e.target.closest('.post-share-btn');    if (!btn) return;    var kind = btn.getAttribute('data-share');    if (!kind) return;    var url = location.href;    var title = document.title || '';    if (kind === 'twitter') {      var u = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);      window.open(u, '_blank', 'noopener,noreferrer,width=600,height=420');    } else if (kind === 'weibo') {      var w = 'https://service.weibo.com/share/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);      window.open(w, '_blank', 'noopener,noreferrer,width=600,height=520');    } else if (kind === 'copy') {      var done = function () { btn.classList.add('post-share-btn--done'); btn.textContent = '已复制'; setTimeout(resetBtn, 1500, btn); };      var fail = function () { btn.classList.add('post-share-btn--fail'); btn.textContent = '复制失败'; setTimeout(resetBtn, 1500, btn); };      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(url).then(done, fail);      } else {        try {          var ta = document.createElement('textarea');          ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';          document.body.appendChild(ta); ta.select();          var ok = document.execCommand && document.execCommand('copy');          document.body.removeChild(ta);          ok ? done() : fail();        } catch (_) { fail(); }      }    }  });  function resetBtn(btn) {    if (!btn) return;    var name = btn.getAttribute('data-share');    var map = { twitter: 'X', weibo: '微博', copy: '复制链接' };    btn.textContent = map[name] || '';    btn.classList.remove('post-share-btn--done', 'post-share-btn--fail');  }})();]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title></title>
-    <link href="/"/>
-    <url>/</url>
-    
-    <content type="html"><![CDATA[/** * custom-fancy.js — 亮色模式专用头图 * 暗色头图由 _config.fluid.yml 各页面 banner_img 控制; * 亮色模式按 BANNER_LIGHT_MAP 替换 #banner 背景,切回暗色恢复原图。 * 图片先经预加载探测,不存在则保持原图;监听属性变化即时切换;PJAX 安全。 */(function () {  'use strict';  /* 亮色头图映射:图片放入 source/img/banner/ */  var MAP = [    { re: /^\/(page\/\d+\/?)?$/, src: '/img/banner/home-light.jpg' },    { re: /^\/archives\//, src: '/img/banner/archives-light.jpg' },    { re: /^\/tags\//, src: '/img/banner/tags-light.jpg' },    { re: /^\/aboutme\//, src: '/img/banner/about-light.jpg' }  ];  function find(path) {    for (var i = 0; i < MAP.length; i++) {      if (MAP[i].re.test(path)) return MAP[i];    }    return null;  }  function probe(entry, done) {    if (entry.ok !== undefined) return;    var img = new Image();    img.onload = function () { entry.ok = true; done(); };    img.onerror = function () { entry.ok = false; };    img.src = entry.src;  }  function apply() {    var el = document.getElementById('banner');    if (!el) return;    if (!el.getAttribute('data-fx-orig')) {      el.setAttribute('data-fx-orig', el.style.backgroundImage || '');    }    var scheme = document.documentElement.getAttribute('data-user-color-scheme');    var entry = find(window.location.pathname);    var ready = true;    if (scheme === 'light' && entry) {      if (entry.ok === true) {        el.style.backgroundImage = 'url("' + entry.src + '")';      } else {        /* 未探测完成时保持隐藏,避免暗图先闪一帧 */        el.style.backgroundImage = el.getAttribute('data-fx-orig');        if (entry.ok === undefined) {          ready = false;          probe(entry, apply);        }      }    } else {      el.style.backgroundImage = el.getAttribute('data-fx-orig');    }    if (ready) el.setAttribute('data-fx-ready', '');  }  function init() {    var entry = find(window.location.pathname);    if (entry) probe(entry, apply);    apply();    /* 兜底:任何异常也不让头图永久隐藏 */    setTimeout(function () {      var el = document.getElementById('banner');      if (el) el.setAttribute('data-fx-ready', '');    }, 1500);  }  var observer = new MutationObserver(function () { apply(); });  observer.observe(document.documentElement, {    attributes: true,    attributeFilter: ['data-user-color-scheme']  });  /* 脚本在 body 末尾,#banner 与 <html> 属性均已就绪,立即初始化 */  init();  document.addEventListener('DOMContentLoaded', init);  document.addEventListener('pjax:complete', init);})();]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>关于我</title>
     <link href="/"/>
     <url>/</url>
     
-    <content type="html"><![CDATA[<h2 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h2><p>你好，我出生于 2008 年 5 月 11 日，北京。<br>曾就读于北京市第三十一中学，北京师范大学附属实验中学，现就读于香港中文大学。<br>曾经是一个 OIer。  </p><h2 id="信息学竞赛经历"><a href="#信息学竞赛经历" class="headerlink" title="信息学竞赛经历"></a>信息学竞赛经历</h2><p>高中曾获奖项：<br>CSPS2023 325分 一等奖<br>NOIp2023 279分 一等奖<br>CSPS2024 308分 一等奖<br>NOIp2024 284分 一等奖<br>NOIWC2025 174分 铜牌<br>APIO2025 112分 铜牌</p><p>在 NOI2025 北京队选拔中退役。</p><h2 id="教育背景"><a href="#教育背景" class="headerlink" title="教育背景"></a>教育背景</h2><p>2020-2023 北京市第三十一中学（初中部）<br>2023-2026 北京师范大学附属实验中学<br>2026年起 香港中文大学 信息工程学系 信息工程学学士&#x2F;BEng in Information Engineering (IERG) 在读</p><h2 id="联系我"><a href="#联系我" class="headerlink" title="联系我"></a>联系我</h2><p>QQ：1048786793<br>Email：<a href="mailto:&#120;&#49;&#97;&#111;&#x6d;&#117;&#99;&#104;&#x6f;&#110;&#103;&#64;&#x6f;&#x75;&#x74;&#108;&#111;&#x6f;&#x6b;&#x2e;&#99;&#x6f;&#109;">&#120;&#49;&#97;&#111;&#x6d;&#117;&#99;&#104;&#x6f;&#110;&#103;&#64;&#x6f;&#x75;&#x74;&#108;&#111;&#x6f;&#x6b;&#x2e;&#99;&#x6f;&#109;</a></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h2><p>你好，我出生于 2008 年 5 月 11 日，北京。<br>曾就读于北京市第三十一中学，北京师范大学附属实验中学，现就读于香港中文大学。<br>曾经是一个 OIer。  </p><h2 id="信息学竞赛经历"><a href="#信息学竞赛经历" class="headerlink" title="信息学竞赛经历"></a>信息学竞赛经历</h2><p>高中曾获奖项：<br>CSPS2023 325分 一等奖<br>NOIp2023 279分 一等奖<br>CSPS2024 308分 一等奖<br>NOIp2024 284分 一等奖<br>NOIWC2025 174分 铜牌<br>APIO2025 112分 铜牌</p><p>在 NOI2025 北京队选拔中退役。</p><h2 id="教育背景"><a href="#教育背景" class="headerlink" title="教育背景"></a>教育背景</h2><p>2020-2023 北京市第三十一中学（初中部）<br>2023-2026 北京师范大学附属实验中学<br>2026年起 香港中文大学 信息工程学系 信息工程学学士&#x2F;BEng in Information Engineering (IERG) 在读</p><h2 id="联系我"><a href="#联系我" class="headerlink" title="联系我"></a>联系我</h2><p>QQ：1048786793<br>Email：<a href="mailto:&#x78;&#49;&#97;&#111;&#109;&#x75;&#99;&#104;&#111;&#x6e;&#x67;&#x40;&#111;&#117;&#x74;&#x6c;&#x6f;&#111;&#x6b;&#46;&#99;&#x6f;&#109;">&#x78;&#49;&#97;&#111;&#109;&#x75;&#99;&#104;&#111;&#x6e;&#x67;&#x40;&#111;&#117;&#x74;&#x6c;&#x6f;&#111;&#x6b;&#46;&#99;&#x6f;&#109;</a></p>]]></content>
     
   </entry>
   
@@ -180,7 +147,40 @@
     <link href="/"/>
     <url>/</url>
     
+    <content type="html"><![CDATA[/* 文章页分享按钮 — 事件委托，无依赖 */(function () {  'use strict';  function ready(fn) {    if (document.readyState !== 'loading') fn();    else document.addEventListener('DOMContentLoaded', fn);  }  ready(function () {    // 1) 把 .post-share 移到 .post-prevnext 之后    //    默认位置在 .markdown-body 末尾，紧贴相关文章，视觉上像文章一部分    moveShareOutOfContent();    // 监听 Hexo 局部刷新（Fluid 的 PJAX）    document.addEventListener('pjax:complete', moveShareOutOfContent);  });  function moveShareOutOfContent() {    var share = document.querySelector('.post-share');    if (!share) return;    // 已经移过就不再处理    if (share.getAttribute('data-moved') === '1') return;    // 找 prevnext 区块作为锚点    var prevnext = document.querySelector('.post-prevnext');    var anchor = prevnext ? prevnext.parentNode : null;    if (anchor) {      anchor.appendChild(share);    } else {      // 兜底：放到 #board 末尾      var board = document.querySelector('#board');      if (board) board.appendChild(share);    }    share.setAttribute('data-moved', '1');  }  document.addEventListener('click', function (e) {    var btn = e.target.closest && e.target.closest('.post-share-btn');    if (!btn) return;    var kind = btn.getAttribute('data-share');    if (!kind) return;    var url = location.href;    var title = document.title || '';    if (kind === 'twitter') {      var u = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);      window.open(u, '_blank', 'noopener,noreferrer,width=600,height=420');    } else if (kind === 'weibo') {      var w = 'https://service.weibo.com/share/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);      window.open(w, '_blank', 'noopener,noreferrer,width=600,height=520');    } else if (kind === 'copy') {      var done = function () { btn.classList.add('post-share-btn--done'); btn.textContent = '已复制'; setTimeout(resetBtn, 1500, btn); };      var fail = function () { btn.classList.add('post-share-btn--fail'); btn.textContent = '复制失败'; setTimeout(resetBtn, 1500, btn); };      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(url).then(done, fail);      } else {        try {          var ta = document.createElement('textarea');          ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';          document.body.appendChild(ta); ta.select();          var ok = document.execCommand && document.execCommand('copy');          document.body.removeChild(ta);          ok ? done() : fail();        } catch (_) { fail(); }      }    }  });  function resetBtn(btn) {    if (!btn) return;    var name = btn.getAttribute('data-share');    var map = { twitter: 'X', weibo: '微博', copy: '复制链接' };    btn.textContent = map[name] || '';    btn.classList.remove('post-share-btn--done', 'post-share-btn--fail');  }})();]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
     <content type="html"><![CDATA[/** * motion.js — 动效增强 * * 1. 文章页顶部阅读进度条 *    仅在存在 article.post-content 时创建;rAF 节流,transform scaleX *    不触发 layout,滚动开销极小。 * * 2. 滚动淡入(IntersectionObserver) *    首页:   .index-card .index-info(避开 .index-card 自身的 *            opacity/transform !important 覆盖) *    文章页: .markdown-body 的直接子元素 *    初始隐藏态由 JS 添加(.fx-fade),禁用 JS 时内容始终可见; *    prefers-reduced-motion 下完全不启用。 * * 无依赖;PJAX 完成时重新初始化(重复调用安全)。 */(function () {  'use strict';  var reducedMotion =    window.matchMedia &&    window.matchMedia('(prefers-reduced-motion: reduce)').matches;  function ready(fn) {    if (document.readyState !== 'loading') fn();    else document.addEventListener('DOMContentLoaded', fn);  }  /* ---------- 1. 阅读进度条 ---------- */  function initProgress() {    // 已存在则只校准一次(页面高度可能因图片加载变化)    var bar = document.querySelector('.read-progress');    if (bar) {      updateProgress(bar);      return;    }    // 仅文章页    if (!document.querySelector('article.post-content')) return;    bar = document.createElement('div');    bar.className = 'read-progress';    bar.setAttribute('aria-hidden', 'true');    document.body.appendChild(bar);    var ticking = false;    function onScroll() {      if (ticking) return;      ticking = true;      requestAnimationFrame(function () {        ticking = false;        updateProgress(bar);      });    }    window.addEventListener('scroll', onScroll, { passive: true });    window.addEventListener('resize', onScroll, { passive: true });    updateProgress(bar);  }  function updateProgress(bar) {    var doc = document.documentElement;    var total = doc.scrollHeight - window.innerHeight;    var p = total > 0 ? Math.min(window.scrollY / total, 1) : 1;    bar.style.transform = 'scaleX(' + p + ')';  }  /* ---------- 2. 滚动淡入 ---------- */  function initFade() {    if (reducedMotion) return;    if (!('IntersectionObserver' in window)) return;    var targets = [];    // 首页列表    var cards = document.querySelectorAll('.index-card .index-info');    for (var i = 0; i < cards.length; i++) targets.push(cards[i]);    // 文章页正文块    var body = document.querySelector('.markdown-body');    if (body) {      var children = body.children;      for (var j = 0; j < children.length; j++) targets.push(children[j]);    }    // 过滤掉已处理的(PJAX 重进时)    targets = targets.filter(function (el) {      return !el.classList.contains('fx-fade');    });    if (!targets.length) return;    var io = new IntersectionObserver(      function (entries) {        entries.forEach(function (entry) {          if (entry.isIntersecting) {            entry.target.classList.add('fx-visible');            io.unobserve(entry.target);          }        });      },      { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }    );    targets.forEach(function (el, i) {      el.classList.add('fx-fade');      // 克制的阶梯延迟,仅前几项可感知      el.style.transitionDelay = Math.min(i % 8, 4) * 50 + 'ms';      io.observe(el);    });  }  function init() {    initProgress();    initFade();  }  ready(init);  document.addEventListener('pjax:complete', init);})();]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[/** * custom-fancy.js — 亮色模式专用头图 * 暗色头图由 _config.fluid.yml 各页面 banner_img 控制; * 亮色模式按 BANNER_LIGHT_MAP 替换 #banner 背景,切回暗色恢复原图。 * 图片先经预加载探测,不存在则保持原图;监听属性变化即时切换;PJAX 安全。 */(function () {  'use strict';  /* 亮色头图映射:图片放入 source/img/banner/ */  var MAP = [    { re: /^\/(page\/\d+\/?)?$/, src: '/img/banner/home-light.jpg' },    { re: /^\/archives\//, src: '/img/banner/archives-light.jpg' },    { re: /^\/tags\//, src: '/img/banner/tags-light.jpg' },    { re: /^\/aboutme\//, src: '/img/banner/about-light.jpg' }  ];  function find(path) {    for (var i = 0; i < MAP.length; i++) {      if (MAP[i].re.test(path)) return MAP[i];    }    return null;  }  function probe(entry, done) {    if (entry.ok !== undefined) return;    var img = new Image();    img.onload = function () { entry.ok = true; done(); };    img.onerror = function () { entry.ok = false; };    img.src = entry.src;  }  function apply() {    var el = document.getElementById('banner');    if (!el) return;    if (!el.getAttribute('data-fx-orig')) {      el.setAttribute('data-fx-orig', el.style.backgroundImage || '');    }    var scheme = document.documentElement.getAttribute('data-user-color-scheme');    var entry = find(window.location.pathname);    var ready = true;    if (scheme === 'light' && entry) {      if (entry.ok === true) {        el.style.backgroundImage = 'url("' + entry.src + '")';      } else {        /* 未探测完成时保持隐藏,避免暗图先闪一帧 */        el.style.backgroundImage = el.getAttribute('data-fx-orig');        if (entry.ok === undefined) {          ready = false;          probe(entry, apply);        }      }    } else {      el.style.backgroundImage = el.getAttribute('data-fx-orig');    }    if (ready) el.setAttribute('data-fx-ready', '');  }  function init() {    var entry = find(window.location.pathname);    if (entry) probe(entry, apply);    apply();    /* 兜底:任何异常也不让头图永久隐藏 */    setTimeout(function () {      var el = document.getElementById('banner');      if (el) el.setAttribute('data-fx-ready', '');    }, 1500);  }  var observer = new MutationObserver(function () { apply(); });  observer.observe(document.documentElement, {    attributes: true,    attributeFilter: ['data-user-color-scheme']  });  /* 脚本在 body 末尾,#banner 与 <html> 属性均已就绪,立即初始化 */  init();  document.addEventListener('DOMContentLoaded', init);  document.addEventListener('pjax:complete', init);})();]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>归档</title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[]]></content>
     
   </entry>
   
