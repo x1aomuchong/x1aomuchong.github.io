@@ -109,6 +109,12 @@
 
 
   
+  
+  <style>
+    /* 首页杂志封面:隐藏原居中 banner 文字,避免与刊头重复 */
+    #banner.banner-mag .banner-text { display: none; }
+  </style>
+  
 <!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha512-fHwaWebuwA7NSF5Qg/af4UeDx9XqUpYpOGgubo3yWu+b2IQR4UeQwbb42Ti7gVAjNtVoI/I9TEoYeu9omwcC6g==" crossorigin="anonymous" referrerpolicy="no-referrer" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="小木虫的个人主页" type="application/atom+xml">
 </head>
 
@@ -206,19 +212,11 @@
 
   
 
-<div id="banner" class="banner" parallax=true
+<div id="banner" class="banner banner-mag" parallax=true
      style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text=""></span><script>(function(){var m=["Hypotheses non fingo","Amor est vitae essentia","Qui non proficit deficit","Esto quod audes","Homo plus est quam humanitas","Ipsa scientia potestas est","Veritas vos liberabit","Vox populi, vox Dei"];var s=document.getElementById("subtitle");if(s){s.setAttribute("data-typed-text",m[Math.floor(Math.random()*m.length)]);}})();</script>
-          
-        </div>
-
-        
-      </div>
+    <div class="mask mask-mag" style="background-color: rgba(0, 0, 0, 0.3)">
+      
 
       
         <div class="scroll-down-bar">
@@ -231,228 +229,207 @@
 
 </div>
 
+
+<div class="mag-cover" id="mag-cover">
+  <div class="mag-cover-left">
+    <div class="mag-kicker">Personal Journal</div>
+    <h1 class="mag-title">小木虫的个人主页</h1>
+    <div class="mag-slogan"><span id="mag-slogan-text" data-text="Hypotheses non fingo"></span><span class="mag-cursor">_</span></div>
+    <div class="mag-cta">
+      <a class="mag-btn mag-btn-primary" href="#board">阅读本期 ↓</a>
+      <a class="mag-btn" href="/archives/">往期归档</a>
+    </div>
+  </div>
+  <div class="mag-cover-right">
+    <span>VOL.2026</span>
+    <span>NO.08</span>
+    <span>EST. 2023 · HONG KONG</span>
+  </div>
+</div>
+
+
   </header>
 
   <main>
     
-      <div class="container nopadding-x-md">
+      <div class="container nopadding-x-md mag-container">
         <div id="board"
           style="margin-top: 0">
           
-          <div class="container">
+          <div class="container mag-container">
             <div class="row">
-              <div class="col-12 col-md-10 m-auto">
+              <div class="col-12">
                 
 
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
+  <!-- 首页第一页:杂志编辑风(卷首 + 目录式索引 + 右侧栏) -->
+  <div class="mag-grid">
+    <div class="mag-col-main">
+      <section class="mag-featured">
+        <div class="mag-sec-head"><h2>卷首</h2><span class="mag-sec-en">Featured</span></div>
         
-        <a href="/2026/06/05/%E9%94%AE%E7%9B%98%E4%B8%8E%E7%9B%B8%E6%9C%BA/" target="_self">
-          键盘与相机
-        </a>
-      </h2>
+        
+          
+          <a class="mag-feature-item" href="/2026/06/05/%E9%94%AE%E7%9B%98%E4%B8%8E%E7%9B%B8%E6%9C%BA/" target="_self">
+            <span class="mag-f-no">01</span>
+            <div class="mag-f-text">
+              <div class="mag-f-title">键盘与相机</div>
+              
+              <p class="mag-f-excerpt">谨以此文祭奠我逝去的青春。</p>
+              <div class="mag-f-meta">
+                <span>2026-06-05</span>
+                <span>#回忆录</span><span>#OI</span><span>#生活</span>
+              </div>
+            </div>
+          </a>
+        
+          
+          <a class="mag-feature-item" href="/2025/11/29/hello-world/" target="_self">
+            <span class="mag-f-no">02</span>
+            <div class="mag-f-text">
+              <div class="mag-f-title">Hello World</div>
+              
+              <p class="mag-f-excerpt">我是小木虫，刚刚更新了自己的 Blog。   修改了主题。   功能上，右上角加入了切换白天与黑夜模式的按钮和搜索功能（支持标题搜索与内容搜索）按钮。   右下</p>
+              <div class="mag-f-meta">
+                <span>2025-11-29</span>
+                <span>#测试</span>
+              </div>
+            </div>
+          </a>
+        
+          
+          <a class="mag-feature-item" href="/2025/11/27/%E7%A7%AF%E5%88%86%E6%8A%80%E5%B7%A7%E6%80%BB%E7%BB%93/" target="_self">
+            <span class="mag-f-no">03</span>
+            <div class="mag-f-text">
+              <div class="mag-f-title">积分技巧总结</div>
+              
+              <p class="mag-f-excerpt">来自普林斯顿微积分读本。      相关文章2025-04-28关于哈密顿回路的某个性质的证明分享：X微博复制链接</p>
+              <div class="mag-f-meta">
+                <span>2025-11-27</span>
+                <span>#学术</span><span>#数学</span>
+              </div>
+            </div>
+          </a>
+        
+      </section>
 
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/06/05/%E9%94%AE%E7%9B%98%E4%B8%8E%E7%9B%B8%E6%9C%BA/" target="_self">
-        <div>
-          img {   max-width: 600px;   display: block;   margin: 1em auto; } img.keep-size {   max-width: none; }   键盘与相机谨以此文祭奠我逝去的青春。 前传：https://www.luogu.com.cn/article/v87sjy18 张程皓的回忆录：https://www.luogu.com/
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
+      <div class="mag-sec-head mag-gap"><h2>目录</h2><span class="mag-sec-en">Index</span></div>
+      <div class="mag-index-list">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-06-05 21:31" pubdate>
-              2026-06-05
-            </time>
-          </div>
+          <a class="mag-index-row" href="/2026/06/05/%E9%94%AE%E7%9B%98%E4%B8%8E%E7%9B%B8%E6%9C%BA/" target="_self">
+            <span class="mag-i-no">键盘与相机</span>
+            <span class="mag-i-title">键盘与相机</span>
+            <span class="mag-i-dots"></span>
+            <span class="mag-i-date">2026-06-05</span>
+          </a>
         
+          <a class="mag-index-row" href="/2025/11/29/hello-world/" target="_self">
+            <span class="mag-i-no">hello-worl</span>
+            <span class="mag-i-title">Hello World</span>
+            <span class="mag-i-dots"></span>
+            <span class="mag-i-date">2025-11-29</span>
+          </a>
         
+          <a class="mag-index-row" href="/2025/11/27/%E7%A7%AF%E5%88%86%E6%8A%80%E5%B7%A7%E6%80%BB%E7%BB%93/" target="_self">
+            <span class="mag-i-no">积分技巧总结</span>
+            <span class="mag-i-title">积分技巧总结</span>
+            <span class="mag-i-dots"></span>
+            <span class="mag-i-date">2025-11-27</span>
+          </a>
         
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%9B%9E%E5%BF%86%E5%BD%95/">#回忆录</a>
-            
-              <a href="/tags/OI/">#OI</a>
-            
-              <a href="/tags/%E7%94%9F%E6%B4%BB/">#生活</a>
-            
-          </div>
+          <a class="mag-index-row" href="/2025/04/28/%E5%85%B3%E4%BA%8E%E5%93%88%E5%AF%86%E9%A1%BF%E5%9B%9E%E8%B7%AF%E7%9A%84%E6%9F%90%E4%B8%AA%E6%80%A7%E8%B4%A8%E7%9A%84%E8%AF%81%E6%98%8E/" target="_self">
+            <span class="mag-i-no">关于哈密顿回路的某个</span>
+            <span class="mag-i-title">关于哈密顿回路的某个性质的证明</span>
+            <span class="mag-i-dots"></span>
+            <span class="mag-i-date">2025-04-28</span>
+          </a>
+        
+          <a class="mag-index-row" href="/2025/04/28/%E5%BB%BA%E7%AB%99%E6%97%B6%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/" target="_self">
+            <span class="mag-i-no">建站时的碎碎念</span>
+            <span class="mag-i-title">建站时的碎碎念</span>
+            <span class="mag-i-dots"></span>
+            <span class="mag-i-date">2025-04-28</span>
+          </a>
         
       </div>
-    </article>
-  </div>
+    </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/11/29/hello-world/" target="_self">
-          Hello World
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/11/29/hello-world/" target="_self">
-        <div>
-          我是小木虫，刚刚更新了自己的 Blog。   修改了主题。   功能上，右上角加入了切换白天与黑夜模式的按钮和搜索功能（支持标题搜索与内容搜索）按钮。   右下角添加了谷歌翻译插件，支持世界主流语言， 分享：X微博复制链接
+    <aside class="mag-side">
+      <div class="mag-side-card">
+        <div class="mag-side-label">About / 关于</div>
+        <div class="mag-side-about">
+          <img src="https://github.com/x1aomuchong.png" srcset="/img/loading.gif" lazyload alt="avatar">
+          <div>
+            <div class="mag-side-name">MuChen Xiao</div>
+            <div class="mag-side-bio">北京退役 OIer，现居香港</div>
+          </div>
         </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-11-29 18:04" pubdate>
-              2025-11-29
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%B5%8B%E8%AF%95/">#测试</a>
-            
-          </div>
-        
       </div>
-    </article>
-  </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/11/27/%E7%A7%AF%E5%88%86%E6%8A%80%E5%B7%A7%E6%80%BB%E7%BB%93/" target="_self">
-          积分技巧总结
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/11/27/%E7%A7%AF%E5%88%86%E6%8A%80%E5%B7%A7%E6%80%BB%E7%BB%93/" target="_self">
-        <div>
-          来自普林斯顿微积分读本。      相关文章2025-04-28关于哈密顿回路的某个性质的证明分享：X微博复制链接
+      <div class="mag-side-card">
+        <div class="mag-side-label">Tags / 标签</div>
+        <div class="mag-side-tags">
+          
+            <a href="/tags/%E5%AD%A6%E6%9C%AF/">#学术</a>
+          
+            <a href="/tags/%E6%B5%8B%E8%AF%95/">#测试</a>
+          
+            <a href="/tags/%E5%9B%BE%E8%AE%BA/">#图论</a>
+          
+            <a href="/tags/%E5%85%AC%E5%91%8A/">#公告</a>
+          
+            <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+          
+            <a href="/tags/%E5%9B%9E%E5%BF%86%E5%BD%95/">#回忆录</a>
+          
+            <a href="/tags/OI/">#OI</a>
+          
+            <a href="/tags/%E7%94%9F%E6%B4%BB/">#生活</a>
+          
         </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-11-27 17:11" pubdate>
-              2025-11-27
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%AD%A6%E6%9C%AF/">#学术</a>
-            
-              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
-            
-          </div>
-        
       </div>
-    </article>
-  </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/04/28/%E5%85%B3%E4%BA%8E%E5%93%88%E5%AF%86%E9%A1%BF%E5%9B%9E%E8%B7%AF%E7%9A%84%E6%9F%90%E4%B8%AA%E6%80%A7%E8%B4%A8%E7%9A%84%E8%AF%81%E6%98%8E/" target="_self">
-          关于哈密顿回路的某个性质的证明
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/04/28/%E5%85%B3%E4%BA%8E%E5%93%88%E5%AF%86%E9%A1%BF%E5%9B%9E%E8%B7%AF%E7%9A%84%E6%9F%90%E4%B8%AA%E6%80%A7%E8%B4%A8%E7%9A%84%E8%AF%81%E6%98%8E/" target="_self">
-        <div>
-          现有一无向图 GGG，若存在两个顶点 i,ji,ji,j 满足 d(i)+d(j)≥nd(i)+d(j)\geq nd(i)+d(j)≥n 则令 G=G+(i,j)G=G+(i,j)G=G+(i,j)，直到不再有这样的顶点对为止，最终得到的图称为 GGG 的闭合图，记作 C(G)C(G)C(G)。   现在我们已知一个显然结论：对于一个图 GGG，C(G)C(G)C(G) 是唯一的，这个一感觉就对
+      <div class="mag-side-card">
+        <div class="mag-side-label">Recent / 最近活动</div>
+        <div class="mag-act-list">
+          
+          
+            <a class="mag-act-row" href="/2026/06/05/%E9%94%AE%E7%9B%98%E4%B8%8E%E7%9B%B8%E6%9C%BA/" target="_self">
+              <span class="mag-act-kind mag-act-upd">更新</span>
+              <span class="mag-act-title">键盘与相机</span>
+              <span class="mag-act-date">08-20</span>
+            </a>
+          
+            <a class="mag-act-row" href="/2025/04/28/%E5%BB%BA%E7%AB%99%E6%97%B6%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/" target="_self">
+              <span class="mag-act-kind mag-act-upd">更新</span>
+              <span class="mag-act-title">建站时的碎碎念</span>
+              <span class="mag-act-date">08-20</span>
+            </a>
+          
+            <a class="mag-act-row" href="/2025/11/29/hello-world/" target="_self">
+              <span class="mag-act-kind mag-act-pub">发布</span>
+              <span class="mag-act-title">Hello World</span>
+              <span class="mag-act-date">11-29</span>
+            </a>
+          
+            <a class="mag-act-row" href="/2025/11/27/%E7%A7%AF%E5%88%86%E6%8A%80%E5%B7%A7%E6%80%BB%E7%BB%93/" target="_self">
+              <span class="mag-act-kind mag-act-pub">发布</span>
+              <span class="mag-act-title">积分技巧总结</span>
+              <span class="mag-act-date">11-27</span>
+            </a>
+          
+            <a class="mag-act-row" href="/2025/04/28/%E5%85%B3%E4%BA%8E%E5%93%88%E5%AF%86%E9%A1%BF%E5%9B%9E%E8%B7%AF%E7%9A%84%E6%9F%90%E4%B8%AA%E6%80%A7%E8%B4%A8%E7%9A%84%E8%AF%81%E6%98%8E/" target="_self">
+              <span class="mag-act-kind mag-act-pub">发布</span>
+              <span class="mag-act-title">关于哈密顿回路的某个性质的证明</span>
+              <span class="mag-act-date">04-28</span>
+            </a>
+          
         </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-04-28 21:53" pubdate>
-              2025-04-28
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%AD%A6%E6%9C%AF/">#学术</a>
-            
-              <a href="/tags/%E5%9B%BE%E8%AE%BA/">#图论</a>
-            
-          </div>
-        
       </div>
-    </article>
+    </aside>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/04/28/%E5%BB%BA%E7%AB%99%E6%97%B6%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/" target="_self">
-          建站时的碎碎念
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/04/28/%E5%BB%BA%E7%AB%99%E6%97%B6%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/" target="_self">
-        <div>
-          其实搭建博客的这个想法并不是最近才有的，早在 2023 年 10 月份我就开始尝试搭建博客，也同样是基于 Hexo 和 Github 的，那为什么现在才建成呢，原因是因为当时我完全对这个东西一窍不通，不可能总是问同学，而且搭建出来的博客也没有后台，再加上当时竞赛的压力也就把这个项目烂尾了。   前两天我想要重启这个项目，同时发现 LLM 很厉害，于是在 LLM 的帮助下成功搭建起了自己的博客，也在
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-04-28 13:12" pubdate>
-              2025-04-28
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%85%AC%E5%91%8A/">#公告</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
+  
 
 
 
@@ -589,6 +566,7 @@
 
 
   
+<script src="/js/slogan-random.js"></script>
 <script src="/js/post-share.js"></script>
 <script src="/js/motion.js"></script>
 <script src="/js/custom-fancy.js"></script>

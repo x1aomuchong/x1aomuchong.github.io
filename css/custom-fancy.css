@@ -64,6 +64,10 @@
   /* 选区 */
   --fx-selection-bg: rgba(126, 182, 232, 0.28);
 
+  /* 杂志区块文字色(标题 / 次级) */
+  --fx-heading: #e9edf5;
+  --fx-sec: #8a93a5;
+
   /* 滚动条 */
   --fx-scrollbar: #3a4658;
   --fx-scrollbar-hover: #5a6a82;
@@ -123,6 +127,9 @@
 
   --fx-selection-bg: rgba(42, 108, 168, 0.22);
 
+  --fx-heading: #1a2433;
+  --fx-sec: #5c6a80;
+
   --fx-scrollbar: #b8bfca;
   --fx-scrollbar-hover: #98a2b0;
 
@@ -171,6 +178,9 @@
     --fx-err-border: rgba(179, 58, 58, 0.45);
 
     --fx-selection-bg: rgba(42, 108, 168, 0.22);
+
+    --fx-heading: #1a2433;
+    --fx-sec: #5c6a80;
 
     --fx-scrollbar: #b8bfca;
     --fx-scrollbar-hover: #98a2b0;
@@ -929,4 +939,482 @@ aside.sidebar.category-bar {
 .markdown-body p a:not(.anchorjs-link):not(.fancybox):hover,
 .markdown-body li a:not(.anchorjs-link):not(.fancybox):hover {
   background-size: 100% 1px;
+}
+
+/* ============================================================
+ * 16. 首页杂志编辑风(方案 C 落地)
+ *     封面:左下刊头 + 右下刊期栏(覆盖在满屏头图上)
+ *     封面之下:卷首 Featured + 目录式索引 + 右侧栏
+ *     全部 .mag- 前缀;仅首页第一页生效(注入模板已限制)
+ * ============================================================ */
+
+/* ---------- 封面刊头 ---------- */
+
+.mag-cover {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2.5rem;
+  padding: 0 3rem 4.8rem;
+  pointer-events: none; /* 文字不挡头图滚动;按钮单独放开 */
+}
+.mag-cover-left { max-width: 640px; }
+.mag-cover-left > * { pointer-events: auto; }
+
+.mag-kicker {
+  font-family: var(--fx-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
+}
+.mag-kicker::before {
+  content: "";
+  display: inline-block;
+  width: 30px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--fx-grad-1), var(--fx-grad-2));
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.mag-title {
+  margin-top: 0.9rem;
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: 0.01em;
+  color: #fff;
+  text-shadow: 0 2px 34px rgba(0, 0, 0, 0.55);
+}
+.mag-title::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  margin-top: 1.1rem;
+  background: linear-gradient(90deg, var(--fx-grad-1), var(--fx-grad-2), var(--fx-grad-3));
+}
+
+.mag-slogan {
+  margin-top: 1rem;
+  font-family: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
+  font-style: italic;
+  font-size: 1.08rem;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.55);
+}
+.mag-cursor {
+  color: var(--fx-accent);
+  animation: mag-blink 1s steps(1) infinite;
+}
+@keyframes mag-blink {
+  50% { opacity: 0; }
+}
+
+.mag-cta {
+  margin-top: 1.7rem;
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.mag-btn {
+  font-size: 0.82rem;
+  padding: 0.55rem 1.3rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+.mag-btn:hover {
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+  color: #fff;
+}
+.mag-btn-primary {
+  background: linear-gradient(
+    120deg,
+    rgba(103, 232, 249, 0.24),
+    rgba(129, 140, 248, 0.24),
+    rgba(192, 132, 252, 0.24)
+  );
+  border-color: rgba(174, 226, 255, 0.55);
+}
+
+.mag-cover-right {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  text-align: right;
+  font-family: var(--fx-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.72);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+.mag-cover-right::before {
+  content: "";
+  align-self: flex-end;
+  width: 44px;
+  height: 1px;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, var(--fx-grad-1), var(--fx-grad-3));
+}
+
+/* 封面载入渐入:JS 加 .mag-in 后逐块浮现 */
+.mag-cover .mag-kicker,
+.mag-cover .mag-title,
+.mag-cover .mag-slogan,
+.mag-cover .mag-cta,
+.mag-cover .mag-cover-right {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.mag-cover.mag-in .mag-kicker { transition-delay: 0.05s; }
+.mag-cover.mag-in .mag-title { transition-delay: 0.15s; }
+.mag-cover.mag-in .mag-slogan { transition-delay: 0.25s; }
+.mag-cover.mag-in .mag-cta { transition-delay: 0.35s; }
+.mag-cover.mag-in .mag-cover-right { transition-delay: 0.45s; }
+.mag-cover.mag-in .mag-kicker,
+.mag-cover.mag-in .mag-title,
+.mag-cover.mag-in .mag-slogan,
+.mag-cover.mag-in .mag-cta,
+.mag-cover.mag-in .mag-cover-right {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mag-cover .mag-kicker, .mag-cover .mag-title, .mag-cover .mag-slogan,
+  .mag-cover .mag-cta, .mag-cover .mag-cover-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- 封面之下的杂志正文 ---------- */
+
+/* 首页杂志版加宽容器:突破 Bootstrap .container 的 1140px 与 col-md-10 */
+@media (min-width: 768px) {
+  .mag-container {
+    max-width: min(1560px, calc(100vw - 8rem)) !important;
+    width: 100%;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .mag-container {
+    max-width: calc(100vw - 4rem) !important;
+  }
+}
+
+.mag-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 3.2rem;
+  margin-top: 2.8rem;
+}
+
+.mag-sec-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.4rem;
+}
+.mag-sec-head h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--fx-heading, #e9edf5);
+  margin: 0;
+}
+.mag-sec-en {
+  font-family: var(--fx-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fx-sec, #8a93a5);
+}
+.mag-sec-head::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--fx-line-strong), transparent);
+}
+.mag-gap { margin-top: 2.6rem; }
+
+/* 卷首 */
+.mag-featured { border-bottom: 1px solid var(--fx-line); padding-bottom: 1.6rem; }
+.mag-feature-item {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 1.4rem;
+  align-items: start;
+  padding: 1.35rem 0.3rem;
+  border-top: 1px solid var(--fx-line-subtle);
+  color: inherit;
+  text-decoration: none !important;
+  background: none !important;
+  border-radius: 8px;
+}
+.mag-f-no {
+  font-family: var(--fx-mono);
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.2;
+  background: linear-gradient(180deg, var(--fx-grad-1), var(--fx-grad-3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.mag-f-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--fx-heading, #e9edf5);
+  transition: color 0.2s ease;
+}
+.mag-feature-item:hover .mag-f-title { color: var(--fx-accent); }
+.mag-feature-item:hover {
+  background: linear-gradient(90deg, var(--fx-accent-bg), transparent 60%) !important;
+}
+.mag-f-excerpt {
+  margin: 0.4rem 0 0;
+  font-size: 0.84rem;
+  color: var(--fx-sec, #8a93a5);
+}
+.mag-f-meta {
+  margin-top: 0.55rem;
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  font-family: var(--fx-mono);
+  font-size: 0.7rem;
+  color: var(--fx-sec, #8a93a5);
+}
+
+/* 目录式索引 */
+.mag-index-list { margin-top: 0.4rem; }
+.mag-index-row {
+  display: grid;
+  grid-template-columns: 92px minmax(0, auto) 1fr 92px;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.9rem 0.3rem;
+  border-bottom: 1px solid var(--fx-line-subtle);
+  color: inherit;
+  text-decoration: none !important;
+  background: none !important;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+.mag-index-row:hover {
+  background: linear-gradient(90deg, var(--fx-accent-bg), transparent 70%) !important;
+}
+.mag-i-no {
+  font-family: var(--fx-mono);
+  font-size: 0.76rem;
+  color: var(--fx-sec, #8a93a5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+.mag-index-row:hover .mag-i-no { color: var(--fx-accent); }
+.mag-i-title {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--fx-heading, #e9edf5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+.mag-index-row:hover .mag-i-title { color: var(--fx-accent); }
+.mag-i-dots {
+  border-bottom: 1px dotted var(--fx-line-strong);
+  transform: translateY(-4px);
+  min-width: 24px;
+}
+.mag-i-date {
+  font-family: var(--fx-mono);
+  font-size: 0.74rem;
+  color: var(--fx-sec, #8a93a5);
+  text-align: right;
+}
+
+/* 右侧栏 */
+.mag-side {
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+.mag-side-card {
+  background: var(--fx-glass-bg-soft);
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  border: 1px solid var(--fx-glass-border);
+  border-radius: 14px;
+  padding: 1.2rem 1.25rem;
+}
+.mag-side-label {
+  font-family: var(--fx-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fx-sec, #8a93a5);
+}
+.mag-side-label::before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 1px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: linear-gradient(90deg, var(--fx-grad-1), var(--fx-grad-2));
+}
+.mag-side-about {
+  margin-top: 0.9rem;
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+}
+.mag-side-about img {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--fx-glass-border);
+  object-fit: cover;
+}
+.mag-side-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--fx-heading, #e9edf5);
+}
+.mag-side-bio {
+  font-size: 0.72rem;
+  color: var(--fx-sec, #8a93a5);
+}
+.mag-side-tags {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.mag-side-tags a {
+  font-size: 0.7rem;
+  padding: 1px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--fx-glass-border);
+  background: rgba(11, 15, 26, 0.25);
+  color: var(--fx-sec, #8a93a5);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.mag-side-tags a:hover {
+  color: var(--fx-accent) !important;
+  border-color: var(--fx-accent-border);
+}
+[data-user-color-scheme="light"] .mag-side-tags a {
+  background: rgba(255, 255, 255, 0.45);
+}
+.mag-side-stats {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--fx-mono);
+  font-size: 0.72rem;
+  color: var(--fx-sec, #8a93a5);
+}
+.mag-side-stats b { color: inherit; font-weight: 600; }
+.mag-side-stats a { color: var(--fx-accent); }
+
+/* 最近活动 */
+.mag-act-list { margin-top: 0.85rem; }
+.mag-act-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  padding: 0.32rem 0;
+  color: inherit;
+  text-decoration: none !important;
+  background: none !important;
+  border-bottom: 1px solid var(--fx-line-subtle);
+}
+.mag-act-row:last-child { border-bottom: none; }
+.mag-act-kind {
+  flex: 0 0 auto;
+  font-size: 0.62rem;
+  line-height: 1.5;
+  padding: 0 6px;
+  border-radius: 999px;
+  border: 1px solid var(--fx-glass-border);
+  font-family: var(--fx-mono);
+}
+.mag-act-pub { color: var(--fx-accent); border-color: var(--fx-accent-border); background: var(--fx-accent-bg); }
+.mag-act-upd { color: var(--fx-sec, #8a93a5); }
+.mag-act-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.78rem;
+  color: var(--fx-heading, #e9edf5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+.mag-act-row:hover .mag-act-title { color: var(--fx-accent); }
+.mag-act-date {
+  flex: 0 0 auto;
+  font-family: var(--fx-mono);
+  font-size: 0.66rem;
+  color: var(--fx-sec, #8a93a5);
+}
+
+/* ---------- 亮色微调 ---------- */
+
+[data-user-color-scheme="light"] .mag-feature-item:hover,
+[data-user-color-scheme="light"] .mag-index-row:hover {
+  background: linear-gradient(90deg, var(--fx-accent-bg), transparent 70%) !important;
+}
+
+/* ---------- 移动端折叠 ---------- */
+
+@media (max-width: 991px) {
+  .mag-cover {
+    padding: 0 1.4rem 3.8rem;
+    gap: 1.6rem;
+  }
+  .mag-cover-right { display: none; }
+  .mag-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2.2rem;
+  }
+  .mag-side { position: static; }
+  .mag-index-row {
+    grid-template-columns: minmax(0, 1fr) 84px;
+  }
+  .mag-index-row .mag-i-no,
+  .mag-index-row .mag-i-dots { display: none; }
+  .mag-i-date { text-align: left; }
+  .mag-feature-item {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 1rem;
+  }
 }
