@@ -21,28 +21,28 @@ window.SHOWCASE_DATA = {
  "concepts": [
   {
    "name": "vibrant tapestry",
-   "utility": 10.25,
-   "steps": "increase saturation by 20% uniformly across the image → boost contrast in the midtones to enhance texture details → apply a subtle glow effect to the edges of the tassels"
+   "utility": 10.7,
+   "steps": "increase saturation of all colors by 20% → boost contrast in the midtones to emphasize texture → apply a subtle sharpening effect to the tassels"
   },
   {
    "name": "pastel dream",
    "utility": 9.25,
-   "steps": "reduce saturation by 30% → apply a light blue tint to the shadows and a pale yellow tint to the highlights → blur the background slightly to enhance depth and focus on the foreground"
+   "steps": "lower overall saturation by 30% → shift the color temperature slightly towards warm yellow → apply a light vignette with a soft edge to frame the subject"
   },
   {
-   "name": "cinematic dusk",
+   "name": "cinematic moody",
    "utility": 9.25,
-   "steps": "add a warm golden hue to the highlights and a cool blue tone to the shadows → deepen the shadows in the lower half of the image and shift them toward brown → apply a subtle vignette to darken the corners and frame the subject"
+   "steps": "darken the shadows in the lower half of the image by 40% → shift the blue tones towards teal and add a slight desaturation → add a subtle film grain overlay for texture"
   },
   {
-   "name": "minimalist monochrome",
+   "name": "retro film glow",
    "utility": 9.25,
-   "steps": "convert the image to black and white → enhance the contrast to emphasize the textures of the tassels and metal hooks → apply a slight sepia tone to add warmth to the grayscale image"
+   "steps": "reduce overall brightness by 15% → apply a warm color cast with a focus on oranges and yellows → add a subtle vignette with a soft, diffused edge"
   },
   {
-   "name": "psychedelic kaleidoscope",
-   "utility": 6.75,
-   "steps": "increase saturation by 50% and apply a radial gradient overlay with bright neon colors → add a subtle ripple distortion effect to the entire image → overlay a faint geometric pattern (e.g., hexagons) with low opacity"
+   "name": "minimalist harmony",
+   "utility": 9.25,
+   "steps": "desaturate all colors except the most prominent ones (reds, blues, yellows) → increase clarity slightly to enhance the structure of the hooks and tassels → apply a subtle vignette to draw focus to the center of the frame"
   }
  ],
  "table": [
@@ -640,24 +640,34 @@ window.SHOWCASE_DATA = {
  ],
  "gallery": [
   {
-   "before": "pair_10-DSC_1329_before.jpg",
-   "after": "pair_10-DSC_1329_after.jpg",
-   "caption": "10-DSC_1329.jpg · 拖动对比：左原图 / 右成品"
-  },
-  {
-   "before": "pair_17-IMG_0961_before.jpg",
-   "after": "pair_17-IMG_0961_after.jpg",
-   "caption": "17-IMG_0961.jpg · 拖动对比：左原图 / 右成品"
-  },
-  {
-   "before": "pair_25-DSC_1085_before.jpg",
-   "after": "pair_25-DSC_1085_after.jpg",
-   "caption": "25-DSC_1085.jpg · 拖动对比：左原图 / 右成品"
+   "before": "pair_3-DSC_1647_before.jpg",
+   "after": "pair_3-DSC_1647_after.jpg",
+   "caption": "3-DSC_1647.jpg · 拖动对比：左原图 / 右成品"
   },
   {
    "before": "pair_9-DSC_1524_before.jpg",
    "after": "pair_9-DSC_1524_after.jpg",
    "caption": "9-DSC_1524.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
+   "before": "pair_12-DSC_1101_before.jpg",
+   "after": "pair_12-DSC_1101_after.jpg",
+   "caption": "12-DSC_1101.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
+   "before": "pair_19-DSC_1835_before.jpg",
+   "after": "pair_19-DSC_1835_after.jpg",
+   "caption": "19-DSC_1835.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
+   "before": "pair_5-DSC_1635_before.jpg",
+   "after": "pair_5-DSC_1635_after.jpg",
+   "caption": "5-DSC_1635.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
+   "before": "pair_6-DSC_1630_before.jpg",
+   "after": "pair_6-DSC_1630_after.jpg",
+   "caption": "6-DSC_1630.jpg · 拖动对比：左原图 / 右成品"
   }
  ]
 }
