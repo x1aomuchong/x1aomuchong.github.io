@@ -22,27 +22,27 @@ window.SHOWCASE_DATA = {
   {
    "name": "vibrant tapestry",
    "utility": 10.25,
-   "steps": "increase saturation by 20% uniformly across the image → apply a subtle texture overlay to add depth to the fabric elements → boost contrast slightly in the foreground to emphasize the tassels"
+   "steps": "increase saturation by 30% in the central tassel area → boost contrast slightly to enhance thread textures → add a subtle film grain overlay"
   },
   {
-   "name": "ethereal mist",
-   "utility": 7.25,
-   "steps": "apply a Gaussian blur with a radius of 3px to the entire image → reduce overall saturation by 40% → shift the color temperature towards cooler tones (blue/green)"
-  },
-  {
-   "name": "cinematic glow",
-   "utility": 9.0,
-   "steps": "add a radial gradient filter centered on the tassels, increasing exposure by 1.5 stops → deepen shadows in the background by reducing exposure by 1 stop → apply a warm color tint to the highlights (yellow/orange)"
-  },
-  {
-   "name": "minimalist monochrome",
+   "name": "pastel serenity",
    "utility": 9.25,
-   "steps": "convert the image to grayscale → selectively reintroduce a cool blue tone to the metal hooks and background structures → increase clarity and sharpness to emphasize textures"
+   "steps": "reduce overall saturation by 40% → apply a light blue pastel tint to the sky and background → blur the background slightly to emphasize foreground detail"
   },
   {
-   "name": "psychedelic kaleidoscope",
-   "utility": 8.5,
-   "steps": "apply a radial blur filter with a strong distortion effect → intensify the saturation of primary colors (red, yellow, blue) by 60% → overlay a faint grid pattern with shifting hues to enhance the kaleidoscopic effect"
+   "name": "cinematic depth",
+   "utility": 9.25,
+   "steps": "darken the top third of the image by reducing exposure by 20% → shift shadows toward deep teal and add a vignette → enhance the golden tones of the hooks and tassels with a warm filter"
+  },
+  {
+   "name": "retro film glow",
+   "utility": 9.25,
+   "steps": "apply a warm yellow-orange tint to the entire image → add a soft glow around the tassels and hooks → simulate film grain and slight vignetting"
+  },
+  {
+   "name": "modern minimalism",
+   "utility": 8.25,
+   "steps": "desaturate the image to near grayscale → enhance the metallic sheen of the hooks with a silver tone → add a subtle sharpening effect to the tassel shapes"
   }
  ],
  "table": [
