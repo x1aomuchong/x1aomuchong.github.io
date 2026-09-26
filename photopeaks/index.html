@@ -102,7 +102,7 @@
       而不是把所有编辑压到一个分数上取最大值。规划阶段一张图都不生成——模型只看原图，判断每个方向值不值得做。
     </p>
     <div class="hero-stats">
-      <div class="hstat"><div class="num" id="stat-speedup">—</div><div class="lbl">整图耗时比（对照论文 470 秒）</div></div>
+      <div class="hstat"><div class="num" id="stat-speedup">—</div><div class="lbl">本实现整图耗时（论文默认配置报告约 470 秒，不同实现）</div></div>
       <div class="hstat"><div class="num">0</div><div class="lbl">规划期生成的图片数（原方法约 60 张）</div></div>
       <div class="hstat"><div class="num" id="stat-peaks">—</div><div class="lbl">每张照片探索的风格方向</div></div>
       <div class="hstat"><div class="num" id="stat-photos">27</div><div class="lbl">真实照片 · 三策略对照</div></div>
@@ -124,7 +124,7 @@
     <div>
       <div class="contrib">
         <h4>C1 · 先预测，再执行</h4>
-        <p>每个候选方向只让视觉模型看一眼原图，给出预测分，不再"跑一遍看看"。规划期生成图片数从约 60 张降到 0，规划耗时 250 秒降到 16.5 秒。</p>
+        <p>每个候选方向只让视觉模型看一眼原图，给出预测分，不再"跑一遍看看"。本实现规划期生成 0 张、规划耗时 16.5 秒（论文报告其默认配置为约 60 次生成、规划约 250 秒）。</p>
       </div>
       <div class="contrib">
         <h4>C2 · 按风格方向搜索，而不是按动作</h4>
@@ -136,7 +136,7 @@
       </div>
     </div>
     <div>
-      <h3 style="margin-top:0">与 PhotoAgent 的关系</h3>
+      <h3 style="margin-top:0">与论文的设计对照</h3>
       <table class="res">
         <thead><tr><th>维度</th><th>PhotoAgent</th><th>PhotoPeaks</th></tr></thead>
         <tbody>
@@ -149,7 +149,7 @@
         </tbody>
       </table>
       <p style="color:var(--dim); font-size:13px; margin-top:10px">
-        左侧数字出自其论文：成本见附录 F，主结果见 Table 1。</p>
+        表内左侧为其论文报告的设计与数字（成本见附录 F），右侧为本实现实测。<b>两者不是同一套代码，本表是设计对照，不是对照实验。</b></p>
     </div>
   </div>
 </section>
@@ -183,7 +183,7 @@
       <figcaption>
         <span class="fignum">Figure 2.</span> <b>时间花在哪。</b>
         上条是 PhotoAgent 论文给出的分解：规划 250 秒里，有 170 秒是在"模拟"——真的把候选编辑执行一遍。
-        下条是这里实测的 75 秒。
+        下条是我自己实现的实测值（约 75 秒）。两者不是同一套实现，仅作量级参考。
       </figcaption>
     </figure>
     <figure class="card">
@@ -561,7 +561,7 @@ python demo.py        # 本地交互 demo</pre>
 <script src="data.js"></script>
 <script>
 const D = window.SHOWCASE_DATA;
-document.getElementById('stat-speedup').textContent = D.speedup + '×';
+document.getElementById('stat-speedup').textContent = (D.race && D.race.photopeaks ? D.race.photopeaks.time : '—') + 's';
 document.getElementById('stat-peaks').textContent = D.nConcepts;
 document.getElementById('stat-photos').textContent = D.nPhotos;
 document.getElementById('score-a').textContent = '美学 ' + D.avgDemo.scoreA;

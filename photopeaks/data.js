@@ -22,27 +22,27 @@ window.SHOWCASE_DATA = {
   {
    "name": "vibrant tapestry",
    "utility": 10.25,
-   "steps": "increase saturation of all colors by 20% → boost contrast slightly to make details pop → apply a subtle sharpening effect to the tassels"
+   "steps": "increase saturation by 20% uniformly across the image → apply a subtle texture overlay to add depth to the fabric elements → boost contrast slightly in the foreground to emphasize the tassels"
   },
   {
-   "name": "pastel dream",
-   "utility": 9.25,
-   "steps": "reduce overall saturation by 30% → shift the color temperature slightly towards cooler tones → apply a light vignette with a soft edge to frame the subject"
+   "name": "ethereal mist",
+   "utility": 7.25,
+   "steps": "apply a Gaussian blur with a radius of 3px to the entire image → reduce overall saturation by 40% → shift the color temperature towards cooler tones (blue/green)"
   },
   {
-   "name": "cinematic depth",
-   "utility": 9.25,
-   "steps": "increase contrast significantly in the midtones → add a subtle film grain effect → deepen shadows in the background while preserving highlights on the tassels"
+   "name": "cinematic glow",
+   "utility": 9.0,
+   "steps": "add a radial gradient filter centered on the tassels, increasing exposure by 1.5 stops → deepen shadows in the background by reducing exposure by 1 stop → apply a warm color tint to the highlights (yellow/orange)"
   },
   {
-   "name": "retro analog",
+   "name": "minimalist monochrome",
    "utility": 9.25,
-   "steps": "desaturate the image by 25% → apply a warm brownish tint to the overall tone → add a medium-strength vignette to focus attention on the center"
+   "steps": "convert the image to grayscale → selectively reintroduce a cool blue tone to the metal hooks and background structures → increase clarity and sharpness to emphasize textures"
   },
   {
-   "name": "minimalist harmony",
-   "utility": 9.25,
-   "steps": "reduce saturation by 40% → shift the color balance towards neutral grays and soft pastels → apply a very subtle blur to the background to emphasize the foreground tassels"
+   "name": "psychedelic kaleidoscope",
+   "utility": 8.5,
+   "steps": "apply a radial blur filter with a strong distortion effect → intensify the saturation of primary colors (red, yellow, blue) by 60% → overlay a faint grid pattern with shifting hues to enhance the kaleidoscopic effect"
   }
  ],
  "table": [
