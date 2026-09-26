@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhotoPeaks — 多峰探索的自主修图智能体</title>
+<title>PhotoPeaks — 基于 PhotoAgent 的实用化改进 Demo</title>
 <style>
   :root {
     --bg: #0a0e17; --bg2: #111827; --panel: #151d2e; --line: #243050;
@@ -96,7 +96,7 @@
   <canvas id="landscape"></canvas>
   <div class="inner">
     <div class="badge">复现并改进 <b>PhotoAgent (ICML 2026 Oral)</b> · 27 张真实照片 · 数字均为实测</div>
-    <h1>美学不是一个坐标轴。<br>是<span style="color:var(--cyan)">很多座山峰</span>。</h1>
+    <h1>PhotoPeaks<br><span style="color:var(--cyan); font-size:.62em">基于 PhotoAgent 的实用化改进 Demo</span></h1>
     <p class="lead" style="margin-top:20px">
       一张照片往往不止一种好法。PhotoPeaks 让模型先写下几个互不相同的风格方向，各自做完，最后挑一张；
       而不是把所有编辑压到一个分数上取最大值。规划阶段一张图都不生成——模型只看原图，判断每个方向值不值得做。
@@ -363,6 +363,33 @@
     （后者惩罚的正是被还原出来的纹理）。"更忠实"和"更抢眼"在当前评分体系下确实会打架。
   </div>
 
+  <h3 style="margin-top:34px">实测：通用编辑模型的指令遵循并不可靠</h3>
+  <p class="body">
+    前面那些约束都是绕路。为了弄清根因，我用同一张照片做了单步对照实验：只改指令措辞，其余不变，看输出的整体色彩偏移。
+  </p>
+  <div class="card" style="margin-top:16px; overflow-x:auto">
+    <table class="res">
+      <thead><tr><th>指令</th><th>Δ(R−B) 暖冷偏移</th><th>Δ 饱和</th><th>Δ 亮度</th></tr></thead>
+      <tbody>
+        <tr><td>"稍微锐化"（不含颜色词）</td><td class="best">≈ 0</td><td class="best">≈ 0</td><td>≈ 0</td></tr>
+        <tr><td>"提高中间调对比"（纯影调）</td><td>+3 ~ +12</td><td>+3 ~ +9</td><td>−34 / +9</td></tr>
+        <tr><td>"整体调冷"</td><td style="color:var(--red)">−57 / −44</td><td style="color:var(--red)">+29 / +35</td><td>±10 内</td></tr>
+        <tr><td>"整体调暖"</td><td style="color:var(--red)">+50 / +83</td><td style="color:var(--red)">+46 / +49</td><td>±10 内</td></tr>
+        <tr><td>"稍微锐化"连做两步</td><td>+0.7 / +4.3</td><td>≈ 0</td><td>≈ 0</td></tr>
+      </tbody>
+    </table>
+    <figcaption style="margin-top:10px">
+      两组数字分别对应两张测试照片（猫、城景）。中性指令下模型几乎是忠实的；
+      一旦出现"暖/冷/色温"，它就会把整幅图推走 50–80 个单位的暖冷偏移，把饱和度抬高三四十，
+      而且完全无视"稍微"这类程度限定。
+    </figcaption>
+  </div>
+  <p class="body">
+    结论很直接：<b>通用编辑模型做不到"理解意图并按合适的幅度修改"</b>——它只会做"大动作"。
+    我们能在规划层禁掉色温类步骤、能用门禁兜底，但这是在躲问题。
+    <b>要让系统稳定，重新训练执行器是必须的，不是优化项。</b>
+  </p>
+
 </section>
 
 <!-- ============ 上生产的条件 ============ -->
@@ -370,7 +397,7 @@
   <div class="kicker">OUTLOOK</div>
   <h2>下一步：换掉执行器，再让它懂人</h2>
   <p class="lead">
-    要让它在真实产品里跑起来，有两件事必须发生，而且都不是工程问题，是模型问题。
+    前面测出来的问题决定了下一步：模型层要重训，数据通路要换到 RAW，编辑的作用范围要从"整幅图"收到"语义区域"。
   </p>
   <div class="grid2" style="margin-top:20px">
     <div class="card">
@@ -382,7 +409,8 @@
       </p>
       <p class="body" style="font-size:14.5px">
         有足量数据之后，正确的做法是训练一个<b>专用调色模型</b>：输入图像和风格向量，直接输出调色参数。
-        参数化的执行器天然可控——不重画，就没有伪色、模糊和鬼影，质量问题一次性解决。
+        参数化的执行器天然可控——不重画，就没有伪色、模糊和鬼影；幅度也可以按参数精确约束，
+        不会像通用模型那样"一说暖就推 80 个点"。这既是保真问题，也是指令遵循问题。
       </p>
     </div>
     <div class="card">
@@ -400,6 +428,34 @@
     <b>两者的关系：</b>决策层的结构（多峰探索、先预测再执行、允许不改）与执行器无关——
     换成参数化执行器后这套框架原样可用，而且执行器可控之后，门禁的负担会小得多。
   </div>
+
+  <div class="card" style="margin-top:20px">
+    <h3 style="margin-top:0">出路三：从 JPEG 转到 RAW——这是实用化的前提</h3>
+    <p class="body" style="font-size:14.5px">
+      JPEG 是相机处理完的结果：8 位、有压缩、高光已经截断、白平衡和影调曲线已经烧进像素。
+      在它上面修图，本质是在改"已经定稿的画"——暗部一拉就出色带和噪点，高光没有可恢复的信息，
+      大范围调色最容易出伪色和后相化。今天看到的大部分瑕疵，根子都在这里。
+    </p>
+    <p class="body" style="font-size:14.5px">
+      要真正实用，必须做 RAW 适配：接 12–14 位线性数据，在去马赛克之后的宽色域空间里做曝光、
+      白平衡和曲线，最后一步才输出 JPEG。这样高光能找回来、肤色不容易崩、调色的余量大一个数量级。
+      我之前的胶片模拟系统就是按 RAW 管线做的，迁移到这里并不需要改决策层，只换输入端与执行器。
+    </p>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3 style="margin-top:0">出路四：智能蒙版——从"整幅图"到"语义区域"</h3>
+    <p class="body" style="font-size:14.5px">
+      现在所有编辑都是对整幅图生效的，所以天空一动，人脸跟着动；要压暗背景，前景一起变暗。
+      这正是"稍微调一下"做不到的结构性原因：<b>模型没有"只改这里"这个动作</b>。
+    </p>
+    <p class="body" style="font-size:14.5px">
+      专业修图从来是局部作业。做实用化必须支持智能蒙版：由分割模型自动给出天空、人物、皮肤、
+      植被、背景等语义区域，编辑指令作用在指定区域上——"天空更蓝一点"只改天空，
+      "皮肤柔和一点"只改皮肤。这既让幅度可控，也让每一步的意图可以被精确表达与验证。
+    </p>
+  </div>
+
   <p class="body" style="margin-top:26px">
     工程上还有两件小事可以并行：按原分辨率分块编辑（瓦片 + 接缝融合），以及让评判模型在动手之前
     就标出高风险步骤，而不是等生成完再拦。

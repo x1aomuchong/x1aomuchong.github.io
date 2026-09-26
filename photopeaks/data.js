@@ -21,28 +21,28 @@ window.SHOWCASE_DATA = {
  "concepts": [
   {
    "name": "vibrant tapestry",
-   "utility": 10.7,
-   "steps": "increase saturation of all colors by 20% → boost contrast in the midtones to emphasize texture → apply a subtle sharpening effect to the tassels"
+   "utility": 9.65,
+   "steps": "increase saturation of all colors by 20% → boost contrast slightly to enhance depth → apply a subtle global light leak effect centered on the frame"
   },
   {
-   "name": "pastel dream",
+   "name": "pastel nostalgia",
    "utility": 9.25,
-   "steps": "lower overall saturation by 30% → shift the color temperature slightly towards warm yellow → apply a light vignette with a soft edge to frame the subject"
+   "steps": "reduce overall saturation by 30% → apply a desaturated blue tint to the sky and shadows → add a gentle vignette with a pale cream border"
   },
   {
    "name": "cinematic moody",
    "utility": 9.25,
-   "steps": "darken the shadows in the lower half of the image by 40% → shift the blue tones towards teal and add a slight desaturation → add a subtle film grain overlay for texture"
+   "steps": "deepen shadows in the lower half of the image, shifting them toward dark teal → add a warm golden glow to the highlights on the tassels → apply a slight film grain texture across the entire frame"
   },
   {
-   "name": "retro film glow",
+   "name": "retro film grain",
    "utility": 9.25,
-   "steps": "reduce overall brightness by 15% → apply a warm color cast with a focus on oranges and yellows → add a subtle vignette with a soft, diffused edge"
+   "steps": "apply a medium-grain film texture overlay → reduce brightness by 15% and increase contrast by 10% → shift the color temperature slightly warmer, adding a hint of orange to the highlights"
   },
   {
-   "name": "minimalist harmony",
-   "utility": 9.25,
-   "steps": "desaturate all colors except the most prominent ones (reds, blues, yellows) → increase clarity slightly to enhance the structure of the hooks and tassels → apply a subtle vignette to draw focus to the center of the frame"
+   "name": "minimalist monochrome",
+   "utility": 9.0,
+   "steps": "convert the image to black and white → enhance mid-tone contrast to emphasize textures in the tassels and hooks → add a subtle sepia tone to the background elements"
   }
  ],
  "table": [
@@ -640,24 +640,14 @@ window.SHOWCASE_DATA = {
  ],
  "gallery": [
   {
+   "before": "pair_24-DSC_1386_before.jpg",
+   "after": "pair_24-DSC_1386_after.jpg",
+   "caption": "24-DSC_1386.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
    "before": "pair_3-DSC_1647_before.jpg",
    "after": "pair_3-DSC_1647_after.jpg",
    "caption": "3-DSC_1647.jpg · 拖动对比：左原图 / 右成品"
-  },
-  {
-   "before": "pair_9-DSC_1524_before.jpg",
-   "after": "pair_9-DSC_1524_after.jpg",
-   "caption": "9-DSC_1524.jpg · 拖动对比：左原图 / 右成品"
-  },
-  {
-   "before": "pair_12-DSC_1101_before.jpg",
-   "after": "pair_12-DSC_1101_after.jpg",
-   "caption": "12-DSC_1101.jpg · 拖动对比：左原图 / 右成品"
-  },
-  {
-   "before": "pair_19-DSC_1835_before.jpg",
-   "after": "pair_19-DSC_1835_after.jpg",
-   "caption": "19-DSC_1835.jpg · 拖动对比：左原图 / 右成品"
   },
   {
    "before": "pair_5-DSC_1635_before.jpg",
@@ -665,9 +655,44 @@ window.SHOWCASE_DATA = {
    "caption": "5-DSC_1635.jpg · 拖动对比：左原图 / 右成品"
   },
   {
+   "before": "pair_22-DSC_1695_before.jpg",
+   "after": "pair_22-DSC_1695_after.jpg",
+   "caption": "22-DSC_1695.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
+   "before": "pair_12-DSC_1101_before.jpg",
+   "after": "pair_12-DSC_1101_after.jpg",
+   "caption": "12-DSC_1101.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
+   "before": "pair_18-DSC_1858_before.jpg",
+   "after": "pair_18-DSC_1858_after.jpg",
+   "caption": "18-DSC_1858.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
+   "before": "pair_19-DSC_1835_before.jpg",
+   "after": "pair_19-DSC_1835_after.jpg",
+   "caption": "19-DSC_1835.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
+   "before": "pair_2-DSC_1689_before.jpg",
+   "after": "pair_2-DSC_1689_after.jpg",
+   "caption": "2-DSC_1689.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
+   "before": "pair_27-DSC_8463_before.jpg",
+   "after": "pair_27-DSC_8463_after.jpg",
+   "caption": "27-DSC_8463.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
    "before": "pair_6-DSC_1630_before.jpg",
    "after": "pair_6-DSC_1630_after.jpg",
    "caption": "6-DSC_1630.jpg · 拖动对比：左原图 / 右成品"
+  },
+  {
+   "before": "pair_9-DSC_1524_before.jpg",
+   "after": "pair_9-DSC_1524_after.jpg",
+   "caption": "9-DSC_1524.jpg · 拖动对比：左原图 / 右成品"
   }
  ]
 }
