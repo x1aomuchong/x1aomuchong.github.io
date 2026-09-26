@@ -3,91 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhotoPeaks — 让美学规划可落地</title>
+<title>PhotoPeaks — 多峰探索的自主修图智能体</title>
 <style>
   :root {
     --bg: #0a0e17; --bg2: #111827; --panel: #151d2e; --line: #243050;
-    --cyan: #22d3ee; --magenta: #f472b6; --gold: #fbbf24; --green: #34d399;
-    --text: #e5e7eb; --dim: #94a3b8;
+    --cyan: #22d3ee; --magenta: #f472b6; --gold: #fbbf24; --green: #34d399; --red: #ef4444;
+    --text: #e5e7eb; --dim: #93a3bd;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; overflow-x: hidden; }
-  section { max-width: 1180px; margin: 0 auto; padding: 90px 28px; }
-  .kicker { color: var(--cyan); font-size: 13px; letter-spacing: .25em; text-transform: uppercase; margin-bottom: 14px; }
-  h1 { font-size: clamp(34px, 6vw, 64px); font-weight: 800; line-height: 1.15; }
-  h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 750; line-height: 1.2; margin-bottom: 18px; }
-  h2 .accent { color: var(--cyan); }
-  p.lead { color: var(--dim); font-size: 17px; line-height: 1.8; max-width: 760px; }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 26px; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: stretch; }
+  body { background: var(--bg); color: var(--text);
+         font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+         overflow-x: hidden; line-height: 1.7; }
+  section { max-width: 1220px; margin: 0 auto; padding: 74px 28px; }
+  .kicker { color: var(--cyan); font-size: 12.5px; letter-spacing: .22em; text-transform: uppercase; margin-bottom: 12px; font-weight: 700; }
+  h1 { font-size: clamp(32px, 5.4vw, 58px); font-weight: 800; line-height: 1.18; }
+  h2 { font-size: clamp(24px, 3.4vw, 34px); font-weight: 750; line-height: 1.25; margin-bottom: 14px; }
+  h3 { font-size: 19px; font-weight: 700; margin: 26px 0 10px; }
+  h2 .accent, h3 .accent { color: var(--cyan); }
+  p.lead { color: var(--dim); font-size: 16.5px; max-width: 900px; }
+  p.body { color: #cbd5e1; font-size: 15.5px; max-width: 900px; margin-top: 12px; }
+  ul.pts { margin: 12px 0 0 20px; color: #cbd5e1; font-size: 15.5px; }
+  ul.pts li { margin: 7px 0; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
   .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  @media (max-width: 860px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+  figure { margin: 0; }
+  figure img, figure object { width: 100%; display: block; border-radius: 12px; }
+  figcaption { color: var(--dim); font-size: 13px; margin-top: 12px; line-height: 1.65; }
+  figcaption b { color: var(--text); }
+  .fignum { color: var(--cyan); font-weight: 700; }
+  code { background: #0d1526; border: 1px solid var(--line); border-radius: 5px;
+         padding: 1px 6px; font-family: 'Cascadia Mono', Consolas, monospace; font-size: 13px; color: var(--gold); }
+  pre { background: #0d1526; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px;
+        overflow-x: auto; font-family: 'Cascadia Mono', Consolas, monospace; font-size: 12.8px;
+        color: #cbd5e1; line-height: 1.6; }
 
   /* hero */
-  #hero { position: relative; min-height: 88vh; display: flex; align-items: center; }
+  #hero { position: relative; min-height: 84vh; display: flex; align-items: center; }
   #landscape { position: absolute; inset: 0; width: 100%; height: 100%; }
-  #hero .inner { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 0 28px; width: 100%; }
-  .badge { display: inline-block; border: 1px solid var(--line); background: rgba(21,29,46,.8); color: var(--dim);
-           border-radius: 999px; padding: 6px 16px; font-size: 13px; margin-bottom: 22px; }
+  #hero .inner { position: relative; z-index: 2; max-width: 1220px; margin: 0 auto; padding: 0 28px; width: 100%; }
+  .badge { display: inline-block; border: 1px solid var(--line); background: rgba(21,29,46,.82);
+           color: var(--dim); border-radius: 999px; padding: 6px 16px; font-size: 13px; margin-bottom: 20px; }
   .badge b { color: var(--gold); font-weight: 600; }
-  .hero-stats { display: flex; gap: 40px; margin-top: 38px; flex-wrap: wrap; }
-  .hstat .num { font-size: 34px; font-weight: 800; color: var(--cyan); }
-  .hstat .lbl { color: var(--dim); font-size: 13px; margin-top: 4px; }
+  .hero-stats { display: flex; gap: 42px; margin-top: 34px; flex-wrap: wrap; }
+  .hstat .num { font-size: 32px; font-weight: 800; color: var(--cyan); }
+  .hstat .lbl { color: var(--dim); font-size: 12.5px; margin-top: 2px; }
 
-  /* figure captions */
-  figure img { width: 100%; border-radius: 12px; display: block; }
-  figcaption { color: var(--dim); font-size: 13px; margin-top: 10px; line-height: 1.6; }
-  .score-pill { display: inline-block; background: var(--bg2); border: 1px solid var(--line); border-radius: 8px;
-                padding: 3px 10px; font-size: 13px; color: var(--gold); margin-left: 6px; }
+  /* contributions */
+  .contrib { border-left: 3px solid var(--cyan); padding: 8px 0 8px 16px; margin: 16px 0; }
+  .contrib h4 { font-size: 15.5px; margin-bottom: 4px; }
+  .contrib p { color: var(--dim); font-size: 14px; }
+
+  /* tables */
+  table.res { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  table.res th, table.res td { padding: 11px 13px; border-bottom: 1px solid var(--line); text-align: right; }
+  table.res th:first-child, table.res td:first-child,
+  table.res th:nth-child(2), table.res td:nth-child(2) { text-align: left; }
+  table.res th { color: var(--dim); font-weight: 500; font-size: 13px; }
+  table.res td.best { color: var(--green); font-weight: 700; }
+  table.res tr.hl td { background: rgba(52,211,153,.07); }
+  table.res td.note, table.res th.note { color: var(--dim); font-size: 13px; text-align: left; }
 
   /* compare slider */
   .compare { position: relative; border-radius: 12px; overflow: hidden; user-select: none; }
   .compare img { width: 100%; display: block; border-radius: 0; }
   .compare .top { position: absolute; inset: 0; clip-path: inset(0 0 0 var(--x, 50%)); }
-  .compare .bar { position: absolute; top: 0; bottom: 0; left: var(--x, 50%); width: 2px; background: #fff; box-shadow: 0 0 12px rgba(255,255,255,.8); }
+  .compare .bar { position: absolute; top: 0; bottom: 0; left: var(--x, 50%); width: 2px;
+                  background: #fff; box-shadow: 0 0 12px rgba(255,255,255,.8); }
   .compare input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: ew-resize; }
-  .compare .tag { position: absolute; top: 10px; font-size: 12px; background: rgba(0,0,0,.55); padding: 3px 10px; border-radius: 6px; }
+  .compare .tag { position: absolute; top: 10px; font-size: 12px; background: rgba(0,0,0,.55);
+                  padding: 3px 10px; border-radius: 6px; }
   .compare .tag.l { left: 10px; } .compare .tag.r { right: 10px; }
 
-  /* race */
-  .race-row { margin: 22px 0; }
-  .race-label { display: flex; justify-content: space-between; font-size: 14px; color: var(--dim); margin-bottom: 8px; }
-  .race-track { height: 26px; background: var(--bg2); border-radius: 8px; overflow: hidden; position: relative; }
-  .race-fill { height: 100%; width: 0; border-radius: 8px; transition: width .12s linear; }
-  .race-fill.red { background: linear-gradient(90deg, #7f1d1d, #ef4444); }
-  .race-fill.green { background: linear-gradient(90deg, #065f46, var(--green)); }
-  .race-meta { font-variant-numeric: tabular-nums; color: var(--text); }
+  .note-box { border: 1px solid var(--line); border-left: 3px solid var(--gold);
+              background: #161f33; border-radius: 0 12px 12px 0; padding: 14px 18px; margin-top: 18px;
+              color: #cbd5e1; font-size: 14.5px; }
+  .note-box b { color: var(--gold); }
 
-  table.res { width: 100%; border-collapse: collapse; font-size: 14.5px; }
-  table.res th, table.res td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: right; }
-  table.res th:first-child, table.res td:first-child { text-align: left; }
-  table.res th { color: var(--dim); font-weight: 500; font-size: 13px; }
-  table.res td.best { color: var(--green); font-weight: 700; }
-  table.res tr.hl td { background: rgba(52,211,153,.06); }
-
-  /* concept cards */
-  .concept { border-left: 3px solid var(--cyan); padding: 10px 16px; margin: 10px 0; background: var(--bg2); border-radius: 0 10px 10px 0; }
-  .concept h4 { font-size: 15px; margin-bottom: 4px; }
-  .concept p { color: var(--dim); font-size: 13px; line-height: 1.6; }
-  .concept .u { color: var(--gold); font-size: 13px; float: right; }
-
-  /* pipeline */
-  .pipe { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; margin: 26px 0; }
-  .pipe .node { flex: 1; min-width: 150px; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 16px; text-align: center; }
-  .pipe .node .t { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
-  .pipe .node .d { color: var(--dim); font-size: 12.5px; line-height: 1.55; }
-  .pipe .arrow { align-self: center; color: var(--cyan); font-size: 20px; }
-  .node.cheap { border-color: var(--green); }
-  .node.exp { border-color: #ef4444; }
-
-  #scatter { width: 100%; border-radius: 12px; background: var(--bg2); }
-  .legend span { display: inline-flex; align-items: center; margin-right: 18px; color: var(--dim); font-size: 13px; }
-  .legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-
-  footer { text-align: center; color: var(--dim); font-size: 13px; padding: 50px 20px 70px; line-height: 2; }
+  footer { text-align: center; color: var(--dim); font-size: 13px; padding: 46px 20px 66px; line-height: 2; }
   a { color: var(--cyan); text-decoration: none; }
-  .fade { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .fade { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
   .fade.on { opacity: 1; transform: none; }
+  .legend span { display: inline-flex; align-items: center; margin-right: 16px; color: var(--dim); font-size: 13px; }
+  .legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
 </style>
 </head>
 <body>
@@ -96,167 +95,344 @@
 <section id="hero">
   <canvas id="landscape"></canvas>
   <div class="inner">
-    <div class="badge">复现并改进 <b>PhotoAgent (ICML 2026 Oral)</b> · 真实照片 × 真实测量</div>
+    <div class="badge">复现并改进 <b>PhotoAgent (ICML 2026 Oral)</b> · 27 张真实照片 · 全部数字为实测</div>
     <h1>美学不是一个坐标轴。<br>是<span style="color:var(--cyan)">很多座山峰</span>。</h1>
-    <p class="lead" style="margin-top:22px">
-      PhotoPeaks 把自主修图从「对着平均分爬山」改为「多峰探索」：
-      概念级规划替代原子动作、VLM 预测式评判替代昂贵的执行式模拟、
-      do-no-harm 门禁保护原图。下方所有数字与图像均来自真实运行。
+    <p class="lead" style="margin-top:20px">
+      PhotoPeaks 把自主修图从「对着平均分爬山」重构为「多峰探索」：概念级规划替代原子动作，
+      VLM 预测式评判替代昂贵的执行式模拟，do-no-harm 门禁保护原图。
+      本文报告完整的模块设计、消息契约、真实基准对照与诚实的失败边界。
     </p>
     <div class="hero-stats">
-      <div class="hstat"><div class="num" id="stat-speedup">—</div><div class="lbl">规划提速（vs 论文 470s）</div></div>
-      <div class="hstat"><div class="num" id="stat-sims">0</div><div class="lbl">规划期扩散生成次数（PhotoAgent 需数十次）</div></div>
+      <div class="hstat"><div class="num" id="stat-speedup">—</div><div class="lbl">整图耗时比（vs 论文 470s）</div></div>
+      <div class="hstat"><div class="num">0</div><div class="lbl">规划期扩散生成次数（原方法约 60 次）</div></div>
       <div class="hstat"><div class="num" id="stat-peaks">—</div><div class="lbl">每张照片探索的风格方向</div></div>
-      <div class="hstat"><div class="num" id="stat-photos">27</div><div class="lbl">真实照片三模式对照实验</div></div>
+      <div class="hstat"><div class="num" id="stat-photos">27</div><div class="lbl">真实照片 · 三策略对照</div></div>
     </div>
   </div>
 </section>
 
-<!-- ============ 视频 ============ -->
-<section class="fade" id="film">
-  <div class="kicker">FILM · 74 秒</div>
-  <h2>模型如何交互、如何<span class="accent">自主探索风格</span></h2>
+<!-- ============ 摘要 ============ -->
+<section class="fade">
+  <div class="kicker">ABSTRACT</div>
+  <h2>本文做了什么</h2>
   <p class="lead">
-    一次真实运行的完整可视化：感知器提出五个互斥方向 → 评判器预测各自落点（规划期零扩散生成）
-    → 两条分支并行执行 → 门禁 → 比较式终选。片中每个数字与图像都来自这一轮真实捕获。
+    PhotoAgent（Yao et al., ICML 2026）把图像编辑建模为闭环美学规划，方向正确，但有两个部署级瓶颈：
+    <b>规划成本</b>（MCTS 的每次模拟都真实执行扩散编辑，论文附录 F 报 470 秒/张）与
+    <b>目标退化</b>（四个指标的加权标量 + 单调接受回退，把高维审美压成一条坐标轴，风格在平均中趋于平庸）。
+    本文给出两处结构性修改与一次 27 张真实照片的对照实验。
   </p>
-  <div class="card" style="margin-top:26px; padding:14px">
-    <video id="filmvideo" controls preload="metadata" playsinline
-           poster="assets/film_poster.jpg" style="width:100%; border-radius:10px; display:block">
-      <source src="assets/photopeaks.mp4" type="video/mp4">
-      你的浏览器不支持 video 标签，可直接下载 assets/photopeaks.mp4
-    </video>
-    <p style="color:var(--dim); font-size:13px; margin:12px 6px 4px">
-      1080p · 30fps · 约 25 MB。想直接跳到结果：<a href="#results-anchor">§04 结果</a>
-    </p>
+  <div class="grid2" style="margin-top:26px">
+    <div>
+      <div class="contrib">
+        <h4>C1 · 预测式评判（Predictive Judge）</h4>
+        <p>用一次 VLM 调用预测候选概念的编辑结果与四维得分，取代"执行后再评估"的 rollout。
+           规划期的扩散生成次数从约 60 次降到 0，规划耗时 250s → 16.5s。</p>
+      </div>
+      <div class="contrib">
+        <h4>C2 · 概念级多峰规划（Concept-level Peaks）</h4>
+        <p>搜索单元从原子动作（更亮/更艳/加对比）改为完整风格方向（胶片暖调/冷调极简/戏剧化…）。
+           分支之间硬隔离、不做任何得分或参数平均；终选允许判定"原图最好"。</p>
+      </div>
+      <div class="contrib">
+        <h4>C3 · do-no-harm 门禁</h4>
+        <p>本地 CLIP 内容保持校验（阈值 0.55）+ 可回滚，配合"原图最好"的终选，杜绝无谓编辑。</p>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-top:0">与 PhotoAgent 的关系</h3>
+      <table class="res">
+        <thead><tr><th>维度</th><th>PhotoAgent</th><th>PhotoPeaks（本文）</th></tr></thead>
+        <tbody>
+          <tr><td>搜索单元</td><td>原子动作，可混合</td><td class="best">完整风格概念，互斥</td></tr>
+          <tr><td>候选评估</td><td>真实执行扩散编辑</td><td class="best">VLM 预测打分</td></tr>
+          <tr><td>规划成本</td><td>250s · 60 次生成</td><td class="best">16.5s · 0 次生成</td></tr>
+          <tr><td>目标形式</td><td>四指标加权标量</td><td class="best">四维打分 + 比较式终选</td></tr>
+          <tr><td>接受策略</td><td>单调不降，否则回滚</td><td class="best">分支保留 + 允许原图</td></tr>
+          <tr><td>安全机制</td><td>标量不降即接受</td><td class="best">内容保持门禁 + 回滚</td></tr>
+        </tbody>
+      </table>
+      <p style="color:var(--dim); font-size:13px; margin-top:10px">
+        引用其论文数字：附录 F 成本剖析；Table 1 主结果；正文 §2 相关工作中的 JarvisArt / MonetGPT 等对比。</p>
+    </div>
   </div>
 </section>
 
-<!-- ============ §1 为什么标量美学会失败 ============ -->
-<section class="fade" id="results-anchor">
-  <div class="kicker">01 · 问题</div>
-  <h2>把高维审美压成一个分数，<span class="accent">argmax 落在谷底</span></h2>
+<!-- ============ 架构大图 ============ -->
+<section class="fade">
+  <div class="kicker">METHOD · FIGURE 1</div>
+  <h2>模块如何通信，<span class="accent">下一个风格节点如何被选中</span></h2>
   <p class="lead">
-    PhotoAgent 的评估器是四个指标的加权和（CLIP×1 + LAION×2 + ImageReward×2 + UGC×0.8），
-    再配合「分数不涨就回滚」的单调接受——所有编辑被迫沿同一坐标轴爬坡，收敛到奖励模型的「平均口味」。
-    下面是一次真实运行：同一张照片的两个风格方向各自成立，而它们的平均反而更差。
+    上图（Panel A）给出四个模块之间的六条消息及其契约与实测成本；下图（Panel B）给出风格节点的搜索过程：
+    五个候选方向带真实预测效用，top-2 展开为两条硬隔离的步骤链，右侧是与 PhotoAgent 执行式试错的对照。
+    图中所有数字与图像均来自本仓库的真实运行。
   </p>
-  <div class="grid3" style="margin-top:34px">
+  <figure class="card" style="margin-top:24px; padding:14px">
+    <object data="assets/fig_arch.svg" type="image/svg+xml" aria-label="架构与风格节点搜索大图"></object>
+    <figcaption>
+      <span class="fignum">Figure 1.</span> <b>消息传递架构与风格节点搜索。</b>
+      Panel A：Perceiver → Judge → Selector → Executor（两条并行步骤链）→ Gate → Comparative Pick → Output；
+      六条消息的 payload 与成本列于下方契约表。Panel B：概念节点携带真实预测效用（10.7 / 9.2×4），
+      仅 top-2 被展开执行；分支之间硬隔离，不存在跨分支的得分或参数平均。
+      虚线动画表示消息流；完整契约字段见表格（如 <code>{aesthetic_gain, style_coherence, feasibility, fidelity_risk}</code>）。
+    </figcaption>
+  </figure>
+</section>
+
+<!-- ============ 动机：两个瓶颈 ============ -->
+<section class="fade">
+  <div class="kicker">MOTIVATION · FIGURE 2 &amp; 3</div>
+  <h2>瓶颈一：规划成本 · 瓶颈二：<span class="accent">标量化把风格平均掉</span></h2>
+
+  <div class="grid2" style="margin-top:24px">
     <figure class="card">
-      <img src="assets/peak_a.jpg" alt="分支 A">
+      <img src="assets/fig_cost.png" alt="成本剖析">
+      <figcaption>
+        <span class="fignum">Figure 2.</span> <b>成本剖析。</b>
+        PhotoAgent（论文附录 F，默认配置）：感知 10s + 规划 250s（其中模拟内执行 170s、评估 80s）
+        + 全分辨率执行 180s + 评估 30s ≈ <b>470s</b>。其规划期的 20 次 MCTS 模拟 × 3 轮 ≈ 60 次扩散生成。
+        本文实现：感知 7.1s + 预测评判 9.4s + 双分支并行执行约 56s + 终选 2s ≈ <b>75s</b>，规划期 0 次生成。
+      </figcaption>
+    </figure>
+    <figure class="card">
+      <img src="assets/fig_timeline.png" alt="单次运行时间线">
+      <figcaption>
+        <span class="fignum">Figure 3.</span> <b>一次真实捕获运行的阶段时间线。</b>
+        真实的每一步延迟（3+3 次编辑各约 18.8s，双分支并行）。红色长条为 PhotoAgent 的 470s 参考。
+        这张图回答一个具体问题：时间花在哪里，以及并行把哪些成本相互隐藏了。
+      </figcaption>
+    </figure>
+  </div>
+
+  <h3 style="margin-top:34px">为什么标量目标会毁掉风格——一个直接实验</h3>
+  <p class="body">
+    PhotoAgent 的评估器是四个指标的加权和（CLIP×1.0 + LAION 美学×2.0 + ImageReward×2.0 + UGC 奖励×0.8，归一化 5.8），
+    再配合"分数不涨就回滚"的单调接受。结果：所有编辑轨迹被迫沿同一坐标轴爬坡。
+    用同一张照片的两个真实分支做一个直观实验：把两个峰做像素平均，看它的美学分落在哪。
+  </p>
+  <div class="grid3" style="margin-top:22px">
+    <figure class="card">
+      <img src="assets/peak_a.jpg" alt="分支A">
       <figcaption><b>方向 A：黑白极简</b>（多峰之一）<span class="score-pill" id="score-a">—</span></figcaption>
     </figure>
     <figure class="card">
-      <img src="assets/peak_b.jpg" alt="分支 B">
+      <img src="assets/peak_b.jpg" alt="分支B">
       <figcaption><b>方向 B：浓郁民族风</b>（多峰之二）<span class="score-pill" id="score-b">—</span></figcaption>
     </figure>
-    <figure class="card" style="border-color:#ef4444">
+    <figure class="card" style="border-color:var(--red)">
       <img src="assets/peak_avg.jpg" alt="平均">
-      <figcaption><b>两者的像素平均</b> = 标量化的落点性质<span class="score-pill" id="score-avg" style="color:#ef4444">—</span></figcaption>
+      <figcaption><b>两者的像素平均</b> = 标量化的落点性质<span class="score-pill" id="score-avg" style="color:var(--red)">—</span></figcaption>
     </figure>
   </div>
-  <p class="lead" style="margin-top:22px; font-size:15px" id="avg-verdict"></p>
+  <div class="note-box" id="avg-verdict"></div>
 </section>
 
-<!-- ============ §2 为什么落不了地 ============ -->
+<!-- ============ 方法细节 ============ -->
 <section class="fade">
-  <div class="kicker">02 · 代价</div>
-  <h2>MCTS 的「模拟」是<span class="accent">真的跑扩散模型</span></h2>
+  <div class="kicker">METHOD · DETAILS</div>
+  <h2>四个模块的设计与三条硬规则</h2>
+  <div class="grid2" style="margin-top:22px">
+    <div class="card">
+      <h3 style="margin-top:0">Perceiver — 概念生成</h3>
+      <p class="body">
+        输入图像 + 可选意图（情绪/氛围级，非具体物体）；输出 3–5 个概念。Prompt 级强约束：
+        概念必须两两互斥，若两个方向会产出相似结果则必须替换其中之一；概念内步骤必须自洽（不混合风格）；
+        人像场景禁止任何改变身份的操作；照片已足够好时允许提出克制方案。
+      </p>
+      <pre>{ "scene_type": "portrait | landscape | ...",
+  "concepts": [
+    { "name": "warm film nostalgia",
+      "rationale": "why this fits THIS photo",
+      "style_keywords": ["warm","grainy","soft"],
+      "steps": ["concrete instruction", "..."] } ] }</pre>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Judge — 预测式评判</h3>
+      <p class="body">
+        对每个概念做一次调用，输出四个维度（1–5）与一句判断：<code>aesthetic_gain</code>、
+        <code>style_coherence</code>、<code>feasibility</code>、<code>fidelity_risk</code>，并按
+        <code>gain + 0.5·coherence + 0.5·feasibility + 0.5·fidelity</code> 合成效用。
+        规则明确要求：对"只提亮/只加饱和"的通用概念严格压分；概念内步骤互相冲突要扣风格一致性。
+      </p>
+      <figure style="margin-top:14px">
+        <img src="assets/fig_judge.png" alt="评判明细">
+        <figcaption><span class="fignum">Figure 4.</span> 一次真实运行的评判明细：五个概念的四维得分与效用，前两名被选中执行。</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:22px">
+    <div class="card">
+      <h3 style="margin-top:0">Executor — 分支并行、链式执行</h3>
+      <p class="body">
+        只执行 top-K（默认 2）概念；每个概念在自己的分支里顺序执行 1–3 步，双分支并发（线程池）。
+        分支之间<b>不交换任何信息</b>——这是"多峰"概念的工程化：没有跨分支的平均，就没有风格折中。
+      </p>
+      <div class="note-box" style="border-left-color:var(--cyan)">
+        <b>可选扩展：</b>执行器是抽象接口，可替换为任意编辑后端（本地模型 / 其他 API），
+        本仓库默认使用 DashScope <code>qwen-image-edit</code>，并预留 OpenAI 兼容端点。
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Gate &amp; Pick — 安全网与终选</h3>
+      <p class="body">
+        门禁用本地 CLIP（ViT-B/32）计算编辑前后内容相似度，低于 0.55 视为破坏内容，分支作废；
+        终选把原图与各分支成品一起交给 VLM 比较，允许输出"0 = 原图最好"。
+        两个机制共同回答"什么时候不该动手"——这正是 PhotoAgent 失败案例（其 Fig.13）暴露的缺口。
+      </p>
+      <div class="note-box" style="border-left-color:var(--green)">
+        <b>契约字段：</b>Gate 输出 <code>{content_sim, aes_in, aes_out, passed}</code>；
+        Pick 输出 <code>{best: 0..K, reason}</code>。全流程无隐藏状态，每步可复现。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 实验 ============ -->
+<section class="fade" id="results-anchor">
+  <div class="kicker">EXPERIMENTS</div>
+  <h2>27 张真实照片，三种策略对照</h2>
   <p class="lead">
-    PhotoAgent 的每次 MCTS rollout 都真实执行一次图像编辑（论文附录 F：默认配置 470 秒/张，规划器占 250 秒）。
-    PhotoPeaks 让 VLM 看着原图 + 概念描述直接<b>预测</b>编辑结果，规划期零生成。
-    点击下方按钮，直观感受两种规划方式的差距（加速回放）：
+    数据全部来自本人拍摄的 27 张随手拍（Lightroom 导出，人物 / 风光 / 城市 / 夜景 / 食物等混合场景），
+    在同一 API 与同一分辨率下跑三种策略：<code>single</code> = 一把梭通用指令；
+    <code>scalar</code> = 原子动作 + 标量打分选优（PhotoAgent 思想的最小复现）；
+    <code>peaks</code> = 本文完整流程。
   </p>
-  <div class="card" style="margin-top:30px">
-    <div class="race-row">
-      <div class="race-label"><span>PhotoAgent：MCTS 执行式模拟（论文默认配置）</span><span class="race-meta" id="race-a-t">0.0s · 0 次生成</span></div>
-      <div class="race-track"><div class="race-fill red" id="race-a"></div></div>
-    </div>
-    <div class="race-row">
-      <div class="race-label"><span>PhotoPeaks：预测式评判（本次实测）</span><span class="race-meta" id="race-b-t">0.0s · 0 次生成</span></div>
-      <div class="race-track"><div class="race-fill green" id="race-b"></div></div>
-    </div>
-    <button id="race-btn" style="margin-top:14px; background:var(--cyan); color:#06202a; border:0; border-radius:8px; padding:10px 26px; font-weight:700; cursor:pointer">▶ 播放对比</button>
-  </div>
-</section>
+  <figure class="card" style="margin-top:22px; padding:14px 20px 20px">
+    <img src="assets/fig_quality.png" alt="质量对照">
+    <figcaption>
+      <span class="fignum">Figure 5.</span> <b>质量对照（每张照片一个点，白线为均值）。</b>
+      美学盲评（VLM 独立打分，不知道来源）：peaks 4.30 &gt; single 4.23 &gt; scalar 4.21；
+      内容保持与 BRISQUE 两项 peaks 更差，因为它的改动幅度最大。
+      中图给出真实的取舍结构：保守型策略落在右上（保内容、少冒险），探索型策略落在左下。
+    </figcaption>
+  </figure>
 
-<!-- ============ §3 方法 ============ -->
-<section class="fade">
-  <div class="kicker">03 · 方法</div>
-  <h2>感知 → <span class="accent">预测</span> → 多分支执行 → 门禁 → 终选</h2>
-  <div class="pipe">
-    <div class="node cheap"><div class="t">Perceiver</div><div class="d">Qwen-VL 提出 5 个<b>互斥</b>风格概念，各带自洽步骤链</div></div>
-    <div class="arrow">→</div>
-    <div class="node cheap"><div class="t">Predictive Judge</div><div class="d">VLM 预判每个概念的收益/一致性/可行性/保真度<br><b>零图像生成</b></div></div>
-    <div class="arrow">→</div>
-    <div class="node"><div class="t">Execute Top-2</div><div class="d">只执行预测最优的两个概念，分支并行，链式编辑</div></div>
-    <div class="arrow">→</div>
-    <div class="node cheap"><div class="t">Do-no-harm Gate</div><div class="d">本地 CLIP 内容保持校验，破坏内容的分支直接回滚</div></div>
-    <div class="arrow">→</div>
-    <div class="node cheap"><div class="t">Comparative Pick</div><div class="d">VLM 比较各分支，允许判定「原图最好」</div></div>
-  </div>
-  <div class="grid2">
+  <div class="grid2" style="margin-top:22px">
+    <figure class="card" style="padding:14px 20px 20px">
+      <img src="assets/fig_diversity.png" alt="多样性">
+      <figcaption>
+        <span class="fignum">Figure 6.</span> <b>探索幅度的量化。</b>
+        左：各策略输出相对原图的语义距离（1−CLIP 余弦）：peaks 0.157±0.071 &gt; scalar 0.106±0.072 &gt; single 0.067±0.032。
+        右：全部 27×4 个输出的 CLIP 嵌入 PCA；星号为示例照片的两个真实分支（紫色）。
+        "多峰"在这里不是一个说法，而是一个可测量的分布差异。
+      </figcaption>
+    </figure>
     <div class="card">
-      <h4 style="margin-bottom:10px; color:var(--dim); font-size:13px">一次真实运行提出的 5 个概念（含预测分）</h4>
-      <div id="concepts"></div>
+      <h3 style="margin-top:0">主结果表（实测均值，n = 27）</h3>
+      <table class="res" id="res-table">
+        <thead><tr><th>策略</th><th>耗时/张</th><th>VLM 调用</th><th>编辑调用</th><th>内容保持↑</th><th>BRISQUE↓</th><th>美学盲评↑</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="note-box" style="margin-top:16px">
+        <b>诚实说明：</b>BRISQUE 与 CLIP 内容相似度是"保守型"指标——改动越小分数越好，所以 single 天然占优；
+        peaks 的改动幅度最大（探索风格方向必然如此），在这两项上反而更差，它只在美学盲评上取胜。
+        三项指标之间的分歧本身，就是"修图质量没有单一标量"的又一证据。
+      </div>
     </div>
+  </div>
+
+  <h3 style="margin-top:36px">案例分析</h3>
+  <p class="body">每张网格为「原图 / single / scalar / peaks」四联对照，全部为真实输出：</p>
+  <div class="grid2" id="gallery" style="margin-top:18px"></div>
+
+  <h3 style="margin-top:36px">终选与门禁的实际行为</h3>
+  <div class="grid2" style="margin-top:16px">
     <div class="card">
-      <h4 style="margin-bottom:14px; color:var(--dim); font-size:13px">拖动对比：原图 vs 最终推荐</h4>
       <div class="compare" id="compare1">
         <img src="assets/cmp_before.jpg" alt="before">
         <div class="top"><img src="assets/cmp_after.jpg" alt="after"></div>
         <div class="bar"></div>
-        <span class="tag l">原图</span><span class="tag r">PhotoPeaks</span>
+        <span class="tag l">原图</span><span class="tag r">PhotoPeaks 终选</span>
         <input type="range" min="0" max="100" value="50">
+      </div>
+      <figcaption style="margin-top:12px">
+        <span class="fignum">Figure 7.</span> 拖动对比：原图与终选分支。本例门禁通过的两条分支内容保持为 0.843 / 0.762，
+        终选选择了"浓郁民族风"方向并给出理由（保留原片生机、增强色彩与清晰度）。
+      </figcaption>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">被判"不该动手"的情况</h3>
+      <p class="body">
+        当所有分支都被门禁否决，或终选判定原图最好时，系统输出原图并说明理由——
+        这在 PhotoAgent 的框架里很难发生（分数不涨即回滚，但仍会保留最后一次"微涨"的编辑）。
+        本次捕获运行中两个分支均通过门禁；而在 27 张对照里，peaks 的保守分支（内容保持更高的一项）
+        多次成为终选，说明"少改"与"改对"并不冲突。
+      </p>
+      <div class="note-box">
+        <b>失败边界（不做粉饰）：</b>暗光与低质量输入仍会失效（VLM 看不清内容、编辑模型放大噪声）；
+        人像的身份保持依赖编辑模型自身能力，门禁只能发现严重破坏而不能保证细节一致；
+        美学评分本身带有的文化偏好未被建模——这是下一步工作（个性化奖励）的入口。
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ §4 结果 ============ -->
+<!-- ============ 讨论 ============ -->
 <section class="fade">
-  <div class="kicker">04 · 结果</div>
-  <h2>27 张真实照片，三种策略对照</h2>
-  <p class="lead">single = 一把梭通用指令；scalar = 原子动作 + 标量打分（PhotoAgent 思想的最小复现）；peaks = 本文完整流程。</p>
-  <div class="card" style="margin-top:28px; overflow-x:auto">
-    <table class="res" id="res-table">
-      <thead><tr><th>策略</th><th>总耗时/张</th><th>VLM 调用</th><th>编辑调用</th><th>内容保持 (CLIP↑)</th><th>BRISQUE↓</th><th>VLM 美学盲评↑</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </div>
-  <p class="lead" style="margin-top:14px; font-size:14px; color:var(--dim)">
-    诚实说明：BRISQUE 与 CLIP 内容相似度是「保守型」指标——改动越小分数越好，所以 single 天然占优。
-    peaks 的改动幅度最大（探索风格方向必然如此），在这两项上反而更差；它在<b>美学盲评</b>（VLM 对成品打分）
-    上取胜。这三项指标的分歧本身，就是"修图质量没有单一标量"的又一个证据。
+  <div class="kicker">DISCUSSION</div>
+  <h2>为什么"多峰"是结构性的，而不是技巧</h2>
+  <p class="body">
+    在进入这个项目之前，我做过一个 RAW 胶片模拟 / 色彩风格迁移系统（106 参数可微调色管线 + 参考集上的核能量风格模型）。
+    它的风格迁移版本因为同一个原因失败：<b>风格空间里的朴素平均会让输出变灰、变脏</b>。
+    我当时的修正与这里一致——把参考集聚成 2–4 个"风格头"，输入稀疏路由到单一头部，
+    头间影调轴差异过大时禁止软混合；而最终稳定可用的形态是逐片种从光谱数据烘焙的单峰 3D LUT，
+    因为它彻底消除了平均。
   </p>
-  <div class="grid2" style="margin-top:26px">
+  <p class="body">
+    因此当我在 PhotoAgent 中看到"加权标量 + 单调接受"时，认出的是同一个失败模式高了一层：
+    从特征空间搬到了决策空间。这也解释了为什么简单的加权和无法替代"多峰"：
+    在奖励模型的平均口味附近，任何两个方向的插值点都不是两个峰中较差的那个，而是谷底。
+  </p>
+</section>
+
+<!-- ============ 复现 ============ -->
+<section class="fade">
+  <div class="kicker">REPRODUCIBILITY</div>
+  <h2>复现与实现细节</h2>
+  <div class="grid2" style="margin-top:22px">
     <div class="card">
-      <h4 style="margin-bottom:6px">输出在语义空间的分布（真实 CLIP 嵌入 + PCA）</h4>
-      <p style="color:var(--dim); font-size:13px; margin-bottom:12px">peaks 的输出整体离原图簇更远、分布更分散（改动幅度最大，内容保持 0.858）；single/scalar 紧贴原图（0.944 / 0.908）——保守但探索不足。两分支风格差异的实例见第 01 节。</p>
-      <canvas id="scatter" height="380"></canvas>
-      <div class="legend" style="margin-top:10px">
-        <span><i style="background:#94a3b8"></i>原图</span>
-        <span><i style="background:#f87171"></i>single</span>
-        <span><i style="background:#fbbf24"></i>scalar</span>
-        <span><i style="background:#22d3ee"></i>peaks 分支</span>
-      </div>
+      <h3 style="margin-top:0">代码结构</h3>
+      <pre>photopeaks/
+├── perceiver.py   概念生成（Qwen-VL，一次调用出 5 个概念）
+├── judge.py       预测式评判 + 比较式终选
+├── executor.py    编辑执行器（DashScope / OpenAI 兼容端点）
+├── gates.py       本地 CLIP 门禁与质量度量
+├── agent.py       主闭环（分支并行、计时与调用计数）
+└── scripts/
+    ├── run_benchmark.py    三策略对照（single / scalar / peaks）
+    ├── make_figdata.py     图表数据（CLIP 嵌入、多样性、逐张指标）
+    ├── make_figures.py     本文所有数据图表
+    └── make_arch_figure.py Figure 1 架构大图（SVG，含 CSS 动画）</pre>
+      <p class="body" style="font-size:14px">演示视频（早期版本）：<code>video/photopeaks.mp4</code>。</p>
     </div>
-    <div class="card" id="gallery-card">
-      <h4 style="margin-bottom:12px">更多对照（原图 / single / scalar / peaks）</h4>
-      <div id="gallery" style="display:grid; grid-template-columns:1fr 1fr; gap:12px"></div>
+    <div class="card">
+      <h3 style="margin-top:0">实验设置</h3>
+      <table class="res">
+        <tbody>
+          <tr><td>感知 / 评判模型</td><td class="note">Qwen-VL（DashScope OpenAI 兼容端点）</td></tr>
+          <tr><td>编辑模型</td><td class="note">qwen-image-edit（每次约 18–20s，1280px 长边）</td></tr>
+          <tr><td>门禁模型</td><td class="note">CLIP ViT-B/32 (laion2b_s34b_b79k)，本地 CPU</td></tr>
+          <tr><td>美学盲评</td><td class="note">同一 VLM 独立打分（1–5），评分时不知来源策略</td></tr>
+          <tr><td>输入规模</td><td class="note">27 张真实照片（本人拍摄），3 策略 × 27 = 81 次运行</td></tr>
+          <tr><td>关键超参</td><td class="note">概念数 5 · 执行 top-2 · 步骤 ≤3 · 门禁阈值 0.55</td></tr>
+        </tbody>
+      </table>
+      <h3>运行</h3>
+      <pre>python -m scripts.run_benchmark --photos data/photos --out results/run1
+python -m scripts.make_figdata &amp;&amp; python -m scripts.make_figures
+python demo.py        # 本地交互 demo</pre>
     </div>
   </div>
 </section>
 
 <footer>
-  PhotoPeaks · 对 <a href="https://arxiv.org/abs/2602.22809">PhotoAgent (ICML 2026)</a> 的复现与改进研究 ·
-  全部实验基于真实照片与公开 API 实测<br>
-  本页面所有数字由 <code>results/run1/results.csv</code> 生成
+  PhotoPeaks · 对 <a href="https://arxiv.org/abs/2602.22809">PhotoAgent (ICML 2026)</a> 的复现与改进研究<br>
+  全部数字与图像来自本仓库的真实运行；页面由 <code>results/run1/results.csv</code> 与 <code>showcase/figdata.json</code> 生成<br>
+  <span style="color:#5b6b86">本页为个人研究记录，非正式发表版本。</span>
 </footer>
 
 <script src="data.js"></script>
 <script>
-/* ================= 数据注入 ================= */
 const D = window.SHOWCASE_DATA;
 document.getElementById('stat-speedup').textContent = D.speedup + '×';
 document.getElementById('stat-peaks').textContent = D.nConcepts;
@@ -264,18 +440,10 @@ document.getElementById('stat-photos').textContent = D.nPhotos;
 document.getElementById('score-a').textContent = '美学 ' + D.avgDemo.scoreA;
 document.getElementById('score-b').textContent = '美学 ' + D.avgDemo.scoreB;
 document.getElementById('score-avg').textContent = '美学 ' + D.avgDemo.scoreAvg;
-document.getElementById('avg-verdict').textContent = D.avgDemo.verdict;
+document.getElementById('avg-verdict').innerHTML =
+  '<b>实测：</b>' + D.avgDemo.verdict;
 
-/* 概念卡片 */
-const cbox = document.getElementById('concepts');
-D.concepts.forEach(c => {
-  const div = document.createElement('div');
-  div.className = 'concept';
-  div.innerHTML = `<span class="u">预测效用 ${c.utility}</span><h4>${c.name}</h4><p>${c.steps}</p>`;
-  cbox.appendChild(div);
-});
-
-/* 结果表 */
+/* 主结果表 */
 const tbody = document.querySelector('#res-table tbody');
 D.table.forEach(row => {
   const tr = document.createElement('tr');
@@ -286,69 +454,41 @@ D.table.forEach(row => {
   tbody.appendChild(tr);
 });
 
-/* 画廊 */
+/* 案例画廊 */
 const gal = document.getElementById('gallery');
 D.gallery.forEach(g => {
   const f = document.createElement('figure');
+  f.className = 'card';
+  f.style.padding = '12px';
   f.innerHTML = `<img src="assets/${g.file}" loading="lazy"><figcaption>${g.caption}</figcaption>`;
   gal.appendChild(f);
 });
 
-/* ================= 对比滑块 ================= */
+/* 对比滑块 */
 document.querySelectorAll('.compare').forEach(box => {
   const input = box.querySelector('input');
   input.addEventListener('input', () => box.style.setProperty('--x', input.value + '%'));
 });
 
-/* ================= 成本竞速 ================= */
-const raceBtn = document.getElementById('race-btn');
-raceBtn.addEventListener('click', () => {
-  const A = D.race.photoagent, B = D.race.photopeaks, T = 8000; // 8s 播完最慢的
-  const t0 = performance.now();
-  raceBtn.disabled = true;
-  (function tick() {
-    const p = Math.min(1, (performance.now() - t0) / T);
-    const aT = p * A.time, bT = p * B.time;
-    document.getElementById('race-a').style.width = (p * 100 * A.time / A.time) + '%';
-    document.getElementById('race-b').style.width = (p * 100 * B.time / A.time) + '%';
-    document.getElementById('race-a-t').textContent = aT.toFixed(1) + 's · ' + Math.floor(p * A.sims) + ' 次生成';
-    document.getElementById('race-b-t').textContent = bT.toFixed(1) + 's · 0 次生成';
-    if (p < 1) requestAnimationFrame(tick); else raceBtn.disabled = false;
-  })();
-});
-
-/* ================= 语义散布图 ================= */
+/* 入场动画：只显示不回退，超长 section 也能正常出现 */
 (function () {
-  const cv = document.getElementById('scatter'), ctx = cv.getContext('2d');
-  const W = cv.width = cv.clientWidth * 2, H = cv.height = 760;
-  const pts = D.scatter, xs = pts.map(p => p.x), ys = pts.map(p => p.y);
-  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
-  const pad = 60;
-  const X = v => pad + (v - x0) / (x1 - x0 + 1e-9) * (W - 2 * pad);
-  const Y = v => H - pad - (v - y0) / (y1 - y0 + 1e-9) * (H - 2 * pad);
-  const colors = { original: '#94a3b8', single: '#f87171', scalar: '#fbbf24', peaks: '#22d3ee' };
-  ctx.fillStyle = '#111827'; ctx.fillRect(0, 0, W, H);
-  // deterministic jitter so overlapping embeddings stay visible
-  const jitter = i => ((Math.sin(i * 12.9898) * 43758.5453) % 1) * 26 - 13;
-  const order = ['original', 'single', 'scalar', 'peaks'];
-  pts.map((p, i) => ({ ...p, i }))
-     .sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind))
-     .forEach((p, k) => {
-    ctx.beginPath();
-    ctx.arc(X(p.x) + jitter(p.i), Y(p.y) + jitter(p.i * 7 + 3),
-            p.kind === 'original' ? 6 : 7.5, 0, 7);
-    ctx.fillStyle = colors[p.kind] || '#fff';
-    ctx.globalAlpha = p.kind === 'peaks' ? 0.9 : 0.62;
-    ctx.fill();
+  const els = Array.from(document.querySelectorAll('.fade'));
+  const show = el => el.classList.add('on');
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) show(e.target); }),
+                                      { threshold: 0.02 });
+  els.forEach(el => {
+    io.observe(el);
+    if (el.getBoundingClientRect().top < window.innerHeight) show(el);
   });
-  ctx.globalAlpha = 1;
+  window.addEventListener('scroll', () => {
+    els.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.92 && r.bottom > 0) show(el);
+    });
+  }, { passive: true });
 })();
 
-/* ================= 入场动画 ================= */
-const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('on', e.isIntersecting)), { threshold: .12 });
-document.querySelectorAll('.fade').forEach(el => io.observe(el));
-
-/* ================= Hero：多峰地貌动画 ================= */
+/* Hero：多峰地貌动画 */
 (function () {
   const cv = document.getElementById('landscape'), ctx = cv.getContext('2d');
   let W, H, t = 0;
@@ -360,7 +500,7 @@ document.querySelectorAll('.fade').forEach(el => io.observe(el));
   function resize() { W = cv.width = cv.clientWidth; H = cv.height = cv.clientHeight; }
   window.addEventListener('resize', resize); resize();
 
-  function height(nx, ny, tt) {   // 归一化坐标 -> 地貌高度
+  function height(nx, ny, tt) {
     let h = 0;
     peaks.forEach((p, i) => {
       const dx = (nx - p.x) * 1.6, dy = (ny - p.y);
@@ -369,32 +509,27 @@ document.querySelectorAll('.fade').forEach(el => io.observe(el));
     return h;
   }
 
-  // 探索者粒子
   const agents = [];
   for (let i = 0; i < 26; i++) {
     const p = peaks[i % peaks.length];
-    agents.push({ px: p.x + (Math.random() - .5) * .3, py: p.y + (Math.random() - .5) * .3,
-                  peak: i % peaks.length, sp: .0004 + Math.random() * .0006, ph: Math.random() * 7 });
+    agents.push({ peak: i % peaks.length, sp: .0004 + Math.random() * .0006, ph: Math.random() * 7 });
   }
 
   function frame(tt) {
     t = tt;
     ctx.clearRect(0, 0, W, H);
-    // 背景网格等高线
     const step = 26;
     for (let gy = 0; gy < H; gy += step) {
       ctx.beginPath();
       for (let gx = 0; gx <= W; gx += 8) {
         const nx = gx / W, ny = gy / H;
-        const h = height(nx, ny, tt);
-        const y = gy - h * 130;
+        const y = gy - height(nx, ny, tt) * 130;
         gx === 0 ? ctx.moveTo(gx, y) : ctx.lineTo(gx, y);
       }
       ctx.strokeStyle = 'rgba(36,48,80,.5)';
       ctx.lineWidth = 1;
       ctx.stroke();
     }
-    // 峰顶辉光
     peaks.forEach(p => {
       const px = p.x * W, py = p.y * H - height(p.x, p.y, tt) * 130;
       const g = ctx.createRadialGradient(px, py, 0, px, py, p.r * W * .8);
@@ -404,7 +539,6 @@ document.querySelectorAll('.fade').forEach(el => io.observe(el));
       ctx.beginPath(); ctx.arc(px, py, 4 + 2 * Math.sin(tt / 500), 0, 7);
       ctx.fillStyle = p.hue + '0.9)'; ctx.fill();
     });
-    // 探索者
     agents.forEach(a => {
       a.ph += a.sp * 16;
       const p = peaks[a.peak];

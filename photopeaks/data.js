@@ -21,28 +21,28 @@ window.SHOWCASE_DATA = {
  "concepts": [
   {
    "name": "vibrant tapestry",
+   "utility": 9.65,
+   "steps": "increase saturation by 20% uniformly across the image → boost contrast slightly to enhance texture details in the tassels → apply a subtle glow effect around the edges of each tassel for an ethereal quality"
+  },
+  {
+   "name": "pastel nostalgia",
+   "utility": 9.25,
+   "steps": "convert the image to a desaturated pastel color scheme with muted tones → reduce overall brightness by 15% to create a subdued atmosphere → add a light vignette to frame the central tassels softly"
+  },
+  {
+   "name": "cinematic depth",
    "utility": 10.0,
-   "steps": "increase saturation by 20% uniformly across the image → boost contrast in the midtones to enhance texture details → apply a subtle luminance boost to the foreground elements"
+   "steps": "apply a split toning effect: warm highlights and cool shadows → deepen the shadows in the background by shifting them toward deep blue → enhance the mid-tones of the tassels to make them stand out sharply"
   },
   {
-   "name": "nostalgic film grain",
+   "name": "minimalist monochrome",
    "utility": 9.0,
-   "steps": "add a light film grain overlay with low opacity → shift the overall color temperature towards warmer tones → reduce sharpness slightly to mimic older film characteristics"
+   "steps": "convert the image to black and white → increase local contrast to emphasize the textures of the tassels and metal hooks → apply a slight sepia tone to add warmth to the grayscale image"
   },
   {
-   "name": "cool minimalist",
-   "utility": 9.0,
-   "steps": "desaturate the image to near monochrome → deepen shadows in the lower half and shift them toward teal → enhance edge contrast selectively on the hooks and tassels"
-  },
-  {
-   "name": "dreamlike ethereal",
-   "utility": 9.0,
-   "steps": "apply a Gaussian blur to the entire image at 3% → lower saturation and shift hues towards pastel tones → add a subtle vignette with a cool blue tint"
-  },
-  {
-   "name": "dramatic chiaroscuro",
+   "name": "psychedelic kaleidoscope",
    "utility": 8.5,
-   "steps": "increase contrast dramatically, especially in the highlights and shadows → darken the background sky and distant landscape → add a directional light flare from the top left corner"
+   "steps": "mirror the image horizontally and vertically to create a symmetrical pattern → apply a color shift effect: move blues toward purple and reds toward orange → add a subtle ripple distortion to the mirrored sections for a dreamlike quality"
   }
  ],
  "table": [
