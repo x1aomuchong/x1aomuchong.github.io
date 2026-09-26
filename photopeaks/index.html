@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhotoPeaks — 让美学规划可落地</title>
+<style>
+  :root {
+    --bg: #0a0e17; --bg2: #111827; --panel: #151d2e; --line: #243050;
+    --cyan: #22d3ee; --magenta: #f472b6; --gold: #fbbf24; --green: #34d399;
+    --text: #e5e7eb; --dim: #94a3b8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; overflow-x: hidden; }
+  section { max-width: 1180px; margin: 0 auto; padding: 90px 28px; }
+  .kicker { color: var(--cyan); font-size: 13px; letter-spacing: .25em; text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: clamp(34px, 6vw, 64px); font-weight: 800; line-height: 1.15; }
+  h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 750; line-height: 1.2; margin-bottom: 18px; }
+  h2 .accent { color: var(--cyan); }
+  p.lead { color: var(--dim); font-size: 17px; line-height: 1.8; max-width: 760px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 26px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: stretch; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  @media (max-width: 860px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+  /* hero */
+  #hero { position: relative; min-height: 88vh; display: flex; align-items: center; }
+  #landscape { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #hero .inner { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 0 28px; width: 100%; }
+  .badge { display: inline-block; border: 1px solid var(--line); background: rgba(21,29,46,.8); color: var(--dim);
+           border-radius: 999px; padding: 6px 16px; font-size: 13px; margin-bottom: 22px; }
+  .badge b { color: var(--gold); font-weight: 600; }
+  .hero-stats { display: flex; gap: 40px; margin-top: 38px; flex-wrap: wrap; }
+  .hstat .num { font-size: 34px; font-weight: 800; color: var(--cyan); }
+  .hstat .lbl { color: var(--dim); font-size: 13px; margin-top: 4px; }
+
+  /* figure captions */
+  figure img { width: 100%; border-radius: 12px; display: block; }
+  figcaption { color: var(--dim); font-size: 13px; margin-top: 10px; line-height: 1.6; }
+  .score-pill { display: inline-block; background: var(--bg2); border: 1px solid var(--line); border-radius: 8px;
+                padding: 3px 10px; font-size: 13px; color: var(--gold); margin-left: 6px; }
+
+  /* compare slider */
+  .compare { position: relative; border-radius: 12px; overflow: hidden; user-select: none; }
+  .compare img { width: 100%; display: block; border-radius: 0; }
+  .compare .top { position: absolute; inset: 0; clip-path: inset(0 0 0 var(--x, 50%)); }
+  .compare .bar { position: absolute; top: 0; bottom: 0; left: var(--x, 50%); width: 2px; background: #fff; box-shadow: 0 0 12px rgba(255,255,255,.8); }
+  .compare input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: ew-resize; }
+  .compare .tag { position: absolute; top: 10px; font-size: 12px; background: rgba(0,0,0,.55); padding: 3px 10px; border-radius: 6px; }
+  .compare .tag.l { left: 10px; } .compare .tag.r { right: 10px; }
+
+  /* race */
+  .race-row { margin: 22px 0; }
+  .race-label { display: flex; justify-content: space-between; font-size: 14px; color: var(--dim); margin-bottom: 8px; }
+  .race-track { height: 26px; background: var(--bg2); border-radius: 8px; overflow: hidden; position: relative; }
+  .race-fill { height: 100%; width: 0; border-radius: 8px; transition: width .12s linear; }
+  .race-fill.red { background: linear-gradient(90deg, #7f1d1d, #ef4444); }
+  .race-fill.green { background: linear-gradient(90deg, #065f46, var(--green)); }
+  .race-meta { font-variant-numeric: tabular-nums; color: var(--text); }
+
+  table.res { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  table.res th, table.res td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: right; }
+  table.res th:first-child, table.res td:first-child { text-align: left; }
+  table.res th { color: var(--dim); font-weight: 500; font-size: 13px; }
+  table.res td.best { color: var(--green); font-weight: 700; }
+  table.res tr.hl td { background: rgba(52,211,153,.06); }
+
+  /* concept cards */
+  .concept { border-left: 3px solid var(--cyan); padding: 10px 16px; margin: 10px 0; background: var(--bg2); border-radius: 0 10px 10px 0; }
+  .concept h4 { font-size: 15px; margin-bottom: 4px; }
+  .concept p { color: var(--dim); font-size: 13px; line-height: 1.6; }
+  .concept .u { color: var(--gold); font-size: 13px; float: right; }
+
+  /* pipeline */
+  .pipe { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; margin: 26px 0; }
+  .pipe .node { flex: 1; min-width: 150px; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 16px; text-align: center; }
+  .pipe .node .t { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .pipe .node .d { color: var(--dim); font-size: 12.5px; line-height: 1.55; }
+  .pipe .arrow { align-self: center; color: var(--cyan); font-size: 20px; }
+  .node.cheap { border-color: var(--green); }
+  .node.exp { border-color: #ef4444; }
+
+  #scatter { width: 100%; border-radius: 12px; background: var(--bg2); }
+  .legend span { display: inline-flex; align-items: center; margin-right: 18px; color: var(--dim); font-size: 13px; }
+  .legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+
+  footer { text-align: center; color: var(--dim); font-size: 13px; padding: 50px 20px 70px; line-height: 2; }
+  a { color: var(--cyan); text-decoration: none; }
+  .fade { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .fade.on { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <canvas id="landscape"></canvas>
+  <div class="inner">
+    <div class="badge">复现并改进 <b>PhotoAgent (ICML 2026 Oral)</b> · 真实照片 × 真实测量</div>
+    <h1>美学不是一个坐标轴。<br>是<span style="color:var(--cyan)">很多座山峰</span>。</h1>
+    <p class="lead" style="margin-top:22px">
+      PhotoPeaks 把自主修图从「对着平均分爬山」改为「多峰探索」：
+      概念级规划替代原子动作、VLM 预测式评判替代昂贵的执行式模拟、
+      do-no-harm 门禁保护原图。下方所有数字与图像均来自真实运行。
+    </p>
+    <div class="hero-stats">
+      <div class="hstat"><div class="num" id="stat-speedup">—</div><div class="lbl">规划提速（vs 论文 470s）</div></div>
+      <div class="hstat"><div class="num" id="stat-sims">0</div><div class="lbl">规划期扩散生成次数（PhotoAgent 需数十次）</div></div>
+      <div class="hstat"><div class="num" id="stat-peaks">—</div><div class="lbl">每张照片探索的风格方向</div></div>
+      <div class="hstat"><div class="num" id="stat-photos">27</div><div class="lbl">真实照片三模式对照实验</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §1 为什么标量美学会失败 ============ -->
+<section class="fade">
+  <div class="kicker">01 · 问题</div>
+  <h2>把高维审美压成一个分数，<span class="accent">argmax 落在谷底</span></h2>
+  <p class="lead">
+    PhotoAgent 的评估器是四个指标的加权和（CLIP×1 + LAION×2 + ImageReward×2 + UGC×0.8），
+    再配合「分数不涨就回滚」的单调接受——所有编辑被迫沿同一坐标轴爬坡，收敛到奖励模型的「平均口味」。
+    下面是一次真实运行：同一张照片的两个风格方向各自成立，而它们的平均反而更差。
+  </p>
+  <div class="grid3" style="margin-top:34px">
+    <figure class="card">
+      <img src="assets/peak_a.jpg" alt="分支 A">
+      <figcaption><b>方向 A：黑白极简</b>（多峰之一）<span class="score-pill" id="score-a">—</span></figcaption>
+    </figure>
+    <figure class="card">
+      <img src="assets/peak_b.jpg" alt="分支 B">
+      <figcaption><b>方向 B：浓郁民族风</b>（多峰之二）<span class="score-pill" id="score-b">—</span></figcaption>
+    </figure>
+    <figure class="card" style="border-color:#ef4444">
+      <img src="assets/peak_avg.jpg" alt="平均">
+      <figcaption><b>两者的像素平均</b> = 标量化的落点性质<span class="score-pill" id="score-avg" style="color:#ef4444">—</span></figcaption>
+    </figure>
+  </div>
+  <p class="lead" style="margin-top:22px; font-size:15px" id="avg-verdict"></p>
+</section>
+
+<!-- ============ §2 为什么落不了地 ============ -->
+<section class="fade">
+  <div class="kicker">02 · 代价</div>
+  <h2>MCTS 的「模拟」是<span class="accent">真的跑扩散模型</span></h2>
+  <p class="lead">
+    PhotoAgent 的每次 MCTS rollout 都真实执行一次图像编辑（论文附录 F：默认配置 470 秒/张，规划器占 250 秒）。
+    PhotoPeaks 让 VLM 看着原图 + 概念描述直接<b>预测</b>编辑结果，规划期零生成。
+    点击下方按钮，直观感受两种规划方式的差距（加速回放）：
+  </p>
+  <div class="card" style="margin-top:30px">
+    <div class="race-row">
+      <div class="race-label"><span>PhotoAgent：MCTS 执行式模拟（论文默认配置）</span><span class="race-meta" id="race-a-t">0.0s · 0 次生成</span></div>
+      <div class="race-track"><div class="race-fill red" id="race-a"></div></div>
+    </div>
+    <div class="race-row">
+      <div class="race-label"><span>PhotoPeaks：预测式评判（本次实测）</span><span class="race-meta" id="race-b-t">0.0s · 0 次生成</span></div>
+      <div class="race-track"><div class="race-fill green" id="race-b"></div></div>
+    </div>
+    <button id="race-btn" style="margin-top:14px; background:var(--cyan); color:#06202a; border:0; border-radius:8px; padding:10px 26px; font-weight:700; cursor:pointer">▶ 播放对比</button>
+  </div>
+</section>
+
+<!-- ============ §3 方法 ============ -->
+<section class="fade">
+  <div class="kicker">03 · 方法</div>
+  <h2>感知 → <span class="accent">预测</span> → 多分支执行 → 门禁 → 终选</h2>
+  <div class="pipe">
+    <div class="node cheap"><div class="t">Perceiver</div><div class="d">Qwen-VL 提出 5 个<b>互斥</b>风格概念，各带自洽步骤链</div></div>
+    <div class="arrow">→</div>
+    <div class="node cheap"><div class="t">Predictive Judge</div><div class="d">VLM 预判每个概念的收益/一致性/可行性/保真度<br><b>零图像生成</b></div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="t">Execute Top-2</div><div class="d">只执行预测最优的两个概念，分支并行，链式编辑</div></div>
+    <div class="arrow">→</div>
+    <div class="node cheap"><div class="t">Do-no-harm Gate</div><div class="d">本地 CLIP 内容保持校验，破坏内容的分支直接回滚</div></div>
+    <div class="arrow">→</div>
+    <div class="node cheap"><div class="t">Comparative Pick</div><div class="d">VLM 比较各分支，允许判定「原图最好」</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h4 style="margin-bottom:10px; color:var(--dim); font-size:13px">一次真实运行提出的 5 个概念（含预测分）</h4>
+      <div id="concepts"></div>
+    </div>
+    <div class="card">
+      <h4 style="margin-bottom:14px; color:var(--dim); font-size:13px">拖动对比：原图 vs 最终推荐</h4>
+      <div class="compare" id="compare1">
+        <img src="assets/cmp_before.jpg" alt="before">
+        <div class="top"><img src="assets/cmp_after.jpg" alt="after"></div>
+        <div class="bar"></div>
+        <span class="tag l">原图</span><span class="tag r">PhotoPeaks</span>
+        <input type="range" min="0" max="100" value="50">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §4 结果 ============ -->
+<section class="fade">
+  <div class="kicker">04 · 结果</div>
+  <h2>27 张真实照片，三种策略对照</h2>
+  <p class="lead">single = 一把梭通用指令；scalar = 原子动作 + 标量打分（PhotoAgent 思想的最小复现）；peaks = 本文完整流程。</p>
+  <div class="card" style="margin-top:28px; overflow-x:auto">
+    <table class="res" id="res-table">
+      <thead><tr><th>策略</th><th>总耗时/张</th><th>VLM 调用</th><th>编辑调用</th><th>内容保持 (CLIP↑)</th><th>BRISQUE↓</th><th>VLM 美学盲评↑</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p class="lead" style="margin-top:14px; font-size:14px; color:var(--dim)">
+    诚实说明：BRISQUE 与 CLIP 内容相似度是「保守型」指标——改动越小分数越好，所以 single 天然占优。
+    peaks 的改动幅度最大（探索风格方向必然如此），在这两项上反而更差；它在<b>美学盲评</b>（VLM 对成品打分）
+    上取胜。这三项指标的分歧本身，就是"修图质量没有单一标量"的又一个证据。
+  </p>
+  <div class="grid2" style="margin-top:26px">
+    <div class="card">
+      <h4 style="margin-bottom:6px">输出在语义空间的分布（真实 CLIP 嵌入 + PCA）</h4>
+      <p style="color:var(--dim); font-size:13px; margin-bottom:12px">peaks 的输出整体离原图簇更远、分布更分散（改动幅度最大，内容保持 0.858）；single/scalar 紧贴原图（0.944 / 0.908）——保守但探索不足。两分支风格差异的实例见第 01 节。</p>
+      <canvas id="scatter" height="380"></canvas>
+      <div class="legend" style="margin-top:10px">
+        <span><i style="background:#94a3b8"></i>原图</span>
+        <span><i style="background:#f87171"></i>single</span>
+        <span><i style="background:#fbbf24"></i>scalar</span>
+        <span><i style="background:#22d3ee"></i>peaks 分支</span>
+      </div>
+    </div>
+    <div class="card" id="gallery-card">
+      <h4 style="margin-bottom:12px">更多对照（原图 / single / scalar / peaks）</h4>
+      <div id="gallery" style="display:grid; grid-template-columns:1fr 1fr; gap:12px"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  PhotoPeaks · 对 <a href="https://arxiv.org/abs/2602.22809">PhotoAgent (ICML 2026)</a> 的复现与改进研究 ·
+  全部实验基于真实照片与公开 API 实测<br>
+  本页面所有数字由 <code>results/run1/results.csv</code> 生成
+</footer>
+
+<script src="data.js"></script>
+<script>
+/* ================= 数据注入 ================= */
+const D = window.SHOWCASE_DATA;
+document.getElementById('stat-speedup').textContent = D.speedup + '×';
+document.getElementById('stat-peaks').textContent = D.nConcepts;
+document.getElementById('stat-photos').textContent = D.nPhotos;
+document.getElementById('score-a').textContent = '美学 ' + D.avgDemo.scoreA;
+document.getElementById('score-b').textContent = '美学 ' + D.avgDemo.scoreB;
+document.getElementById('score-avg').textContent = '美学 ' + D.avgDemo.scoreAvg;
+document.getElementById('avg-verdict').textContent = D.avgDemo.verdict;
+
+/* 概念卡片 */
+const cbox = document.getElementById('concepts');
+D.concepts.forEach(c => {
+  const div = document.createElement('div');
+  div.className = 'concept';
+  div.innerHTML = `<span class="u">预测效用 ${c.utility}</span><h4>${c.name}</h4><p>${c.steps}</p>`;
+  cbox.appendChild(div);
+});
+
+/* 结果表 */
+const tbody = document.querySelector('#res-table tbody');
+D.table.forEach(row => {
+  const tr = document.createElement('tr');
+  if (row.hl) tr.className = 'hl';
+  tr.innerHTML = `<td>${row.name}</td><td>${row.time}s</td><td>${row.vlm}</td><td>${row.edit}</td>` +
+    `<td class="${row.bestSim?'best':''}">${row.sim}</td><td class="${row.bestBrisque?'best':''}">${row.brisque}</td>` +
+    `<td class="${row.bestAes?'best':''}">${row.aes}</td>`;
+  tbody.appendChild(tr);
+});
+
+/* 画廊 */
+const gal = document.getElementById('gallery');
+D.gallery.forEach(g => {
+  const f = document.createElement('figure');
+  f.innerHTML = `<img src="assets/${g.file}" loading="lazy"><figcaption>${g.caption}</figcaption>`;
+  gal.appendChild(f);
+});
+
+/* ================= 对比滑块 ================= */
+document.querySelectorAll('.compare').forEach(box => {
+  const input = box.querySelector('input');
+  input.addEventListener('input', () => box.style.setProperty('--x', input.value + '%'));
+});
+
+/* ================= 成本竞速 ================= */
+const raceBtn = document.getElementById('race-btn');
+raceBtn.addEventListener('click', () => {
+  const A = D.race.photoagent, B = D.race.photopeaks, T = 8000; // 8s 播完最慢的
+  const t0 = performance.now();
+  raceBtn.disabled = true;
+  (function tick() {
+    const p = Math.min(1, (performance.now() - t0) / T);
+    const aT = p * A.time, bT = p * B.time;
+    document.getElementById('race-a').style.width = (p * 100 * A.time / A.time) + '%';
+    document.getElementById('race-b').style.width = (p * 100 * B.time / A.time) + '%';
+    document.getElementById('race-a-t').textContent = aT.toFixed(1) + 's · ' + Math.floor(p * A.sims) + ' 次生成';
+    document.getElementById('race-b-t').textContent = bT.toFixed(1) + 's · 0 次生成';
+    if (p < 1) requestAnimationFrame(tick); else raceBtn.disabled = false;
+  })();
+});
+
+/* ================= 语义散布图 ================= */
+(function () {
+  const cv = document.getElementById('scatter'), ctx = cv.getContext('2d');
+  const W = cv.width = cv.clientWidth * 2, H = cv.height = 760;
+  const pts = D.scatter, xs = pts.map(p => p.x), ys = pts.map(p => p.y);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const pad = 60;
+  const X = v => pad + (v - x0) / (x1 - x0 + 1e-9) * (W - 2 * pad);
+  const Y = v => H - pad - (v - y0) / (y1 - y0 + 1e-9) * (H - 2 * pad);
+  const colors = { original: '#94a3b8', single: '#f87171', scalar: '#fbbf24', peaks: '#22d3ee' };
+  ctx.fillStyle = '#111827'; ctx.fillRect(0, 0, W, H);
+  // deterministic jitter so overlapping embeddings stay visible
+  const jitter = i => ((Math.sin(i * 12.9898) * 43758.5453) % 1) * 26 - 13;
+  const order = ['original', 'single', 'scalar', 'peaks'];
+  pts.map((p, i) => ({ ...p, i }))
+     .sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind))
+     .forEach((p, k) => {
+    ctx.beginPath();
+    ctx.arc(X(p.x) + jitter(p.i), Y(p.y) + jitter(p.i * 7 + 3),
+            p.kind === 'original' ? 6 : 7.5, 0, 7);
+    ctx.fillStyle = colors[p.kind] || '#fff';
+    ctx.globalAlpha = p.kind === 'peaks' ? 0.9 : 0.62;
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+})();
+
+/* ================= 入场动画 ================= */
+const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('on', e.isIntersecting)), { threshold: .12 });
+document.querySelectorAll('.fade').forEach(el => io.observe(el));
+
+/* ================= Hero：多峰地貌动画 ================= */
+(function () {
+  const cv = document.getElementById('landscape'), ctx = cv.getContext('2d');
+  let W, H, t = 0;
+  const peaks = [
+    { x: .22, y: .62, r: .20, hue: 'rgba(34,211,238,',  amp: 1.0 },
+    { x: .55, y: .48, r: .16, hue: 'rgba(244,114,182,', amp: 0.85 },
+    { x: .82, y: .66, r: .18, hue: 'rgba(251,191,36,',  amp: 0.9 },
+  ];
+  function resize() { W = cv.width = cv.clientWidth; H = cv.height = cv.clientHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  function height(nx, ny, tt) {   // 归一化坐标 -> 地貌高度
+    let h = 0;
+    peaks.forEach((p, i) => {
+      const dx = (nx - p.x) * 1.6, dy = (ny - p.y);
+      h += p.amp * Math.exp(-(dx * dx + dy * dy) / (p.r * p.r)) * (1 + 0.06 * Math.sin(tt / 900 + i * 2));
+    });
+    return h;
+  }
+
+  // 探索者粒子
+  const agents = [];
+  for (let i = 0; i < 26; i++) {
+    const p = peaks[i % peaks.length];
+    agents.push({ px: p.x + (Math.random() - .5) * .3, py: p.y + (Math.random() - .5) * .3,
+                  peak: i % peaks.length, sp: .0004 + Math.random() * .0006, ph: Math.random() * 7 });
+  }
+
+  function frame(tt) {
+    t = tt;
+    ctx.clearRect(0, 0, W, H);
+    // 背景网格等高线
+    const step = 26;
+    for (let gy = 0; gy < H; gy += step) {
+      ctx.beginPath();
+      for (let gx = 0; gx <= W; gx += 8) {
+        const nx = gx / W, ny = gy / H;
+        const h = height(nx, ny, tt);
+        const y = gy - h * 130;
+        gx === 0 ? ctx.moveTo(gx, y) : ctx.lineTo(gx, y);
+      }
+      ctx.strokeStyle = 'rgba(36,48,80,.5)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+    // 峰顶辉光
+    peaks.forEach(p => {
+      const px = p.x * W, py = p.y * H - height(p.x, p.y, tt) * 130;
+      const g = ctx.createRadialGradient(px, py, 0, px, py, p.r * W * .8);
+      g.addColorStop(0, p.hue + '0.28)'); g.addColorStop(1, p.hue + '0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(px - p.r * W, py - p.r * W, p.r * W * 2, p.r * W * 2);
+      ctx.beginPath(); ctx.arc(px, py, 4 + 2 * Math.sin(tt / 500), 0, 7);
+      ctx.fillStyle = p.hue + '0.9)'; ctx.fill();
+    });
+    // 探索者
+    agents.forEach(a => {
+      a.ph += a.sp * 16;
+      const p = peaks[a.peak];
+      const ang = a.ph;
+      const rr = 0.35 + 0.25 * Math.sin(a.ph * .7);
+      const nx = p.x + Math.cos(ang) * p.r * rr;
+      const ny = p.y + Math.sin(ang) * p.r * rr;
+      const x = nx * W, y = ny * H - height(nx, ny, tt) * 130;
+      ctx.beginPath(); ctx.arc(x, y, 1.8, 0, 7);
+      ctx.fillStyle = 'rgba(229,231,235,.75)'; ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

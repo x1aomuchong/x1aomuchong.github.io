@@ -130,6 +130,7 @@
   --fx-heading: #1a2433;
   --fx-sec: #5c6a80;
 
+
   --fx-scrollbar: #b8bfca;
   --fx-scrollbar-hover: #98a2b0;
 
@@ -181,6 +182,7 @@
 
     --fx-heading: #1a2433;
     --fx-sec: #5c6a80;
+
 
     --fx-scrollbar: #b8bfca;
     --fx-scrollbar-hover: #98a2b0;
@@ -738,6 +740,24 @@ time[pubdate] {
   border-radius: 10px;
   border: 1px solid var(--fx-line-subtle);
   box-shadow: var(--fx-img-shadow);
+}
+
+/* 并排图片容器:文章中 <div class="img-pair"> 包裹相邻 asset_img */
+.img-pair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+  justify-content: center;
+  margin: 1em 0;
+}
+.img-pair img {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 50%;
+  height: auto;
+  display: block;
+  margin: 0 !important; /* 压过文章内嵌 style 的 margin: 1em auto */
 }
 
 /* ============================================================
