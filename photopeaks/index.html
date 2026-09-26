@@ -112,8 +112,28 @@
   </div>
 </section>
 
+<!-- ============ 视频 ============ -->
+<section class="fade" id="film">
+  <div class="kicker">FILM · 74 秒</div>
+  <h2>模型如何交互、如何<span class="accent">自主探索风格</span></h2>
+  <p class="lead">
+    一次真实运行的完整可视化：感知器提出五个互斥方向 → 评判器预测各自落点（规划期零扩散生成）
+    → 两条分支并行执行 → 门禁 → 比较式终选。片中每个数字与图像都来自这一轮真实捕获。
+  </p>
+  <div class="card" style="margin-top:26px; padding:14px">
+    <video id="filmvideo" controls preload="metadata" playsinline
+           poster="assets/film_poster.jpg" style="width:100%; border-radius:10px; display:block">
+      <source src="assets/photopeaks.mp4" type="video/mp4">
+      你的浏览器不支持 video 标签，可直接下载 assets/photopeaks.mp4
+    </video>
+    <p style="color:var(--dim); font-size:13px; margin:12px 6px 4px">
+      1080p · 30fps · 约 25 MB。想直接跳到结果：<a href="#results-anchor">§04 结果</a>
+    </p>
+  </div>
+</section>
+
 <!-- ============ §1 为什么标量美学会失败 ============ -->
-<section class="fade">
+<section class="fade" id="results-anchor">
   <div class="kicker">01 · 问题</div>
   <h2>把高维审美压成一个分数，<span class="accent">argmax 落在谷底</span></h2>
   <p class="lead">

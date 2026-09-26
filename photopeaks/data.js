@@ -21,28 +21,28 @@ window.SHOWCASE_DATA = {
  "concepts": [
   {
    "name": "vibrant tapestry",
-   "utility": 10.25,
-   "steps": "increase saturation of all colors by 20% → boost contrast slightly to make details pop → apply a subtle sharpening effect to the tassels"
+   "utility": 10.0,
+   "steps": "increase saturation by 20% uniformly across the image → boost contrast in the midtones to enhance texture details → apply a subtle luminance boost to the foreground elements"
   },
   {
-   "name": "pastel dream",
-   "utility": 9.25,
-   "steps": "reduce overall saturation by 30% → shift the color temperature slightly towards cooler tones → apply a light vignette with a soft edge to frame the subject"
-  },
-  {
-   "name": "cinematic depth",
-   "utility": 10.25,
-   "steps": "apply a shallow depth of field blur to the background → increase the contrast in the foreground tassels → add a subtle film grain texture"
-  },
-  {
-   "name": "monochrome elegance",
+   "name": "nostalgic film grain",
    "utility": 9.0,
-   "steps": "convert the image to black and white → enhance the tonal contrast to highlight textures → apply a slight vignette to draw focus inward"
+   "steps": "add a light film grain overlay with low opacity → shift the overall color temperature towards warmer tones → reduce sharpness slightly to mimic older film characteristics"
   },
   {
-   "name": "fiesta festival",
-   "utility": 8.25,
-   "steps": "increase the brightness and warmth of the image → apply a radial gradient overlay to simulate sunlight → add a subtle shimmer or sparkle effect to the tassels"
+   "name": "cool minimalist",
+   "utility": 9.0,
+   "steps": "desaturate the image to near monochrome → deepen shadows in the lower half and shift them toward teal → enhance edge contrast selectively on the hooks and tassels"
+  },
+  {
+   "name": "dreamlike ethereal",
+   "utility": 9.0,
+   "steps": "apply a Gaussian blur to the entire image at 3% → lower saturation and shift hues towards pastel tones → add a subtle vignette with a cool blue tint"
+  },
+  {
+   "name": "dramatic chiaroscuro",
+   "utility": 8.5,
+   "steps": "increase contrast dramatically, especially in the highlights and shadows → darken the background sky and distant landscape → add a directional light flare from the top left corner"
   }
  ],
  "table": [
