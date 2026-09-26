@@ -21,28 +21,28 @@ window.SHOWCASE_DATA = {
  "concepts": [
   {
    "name": "vibrant tapestry",
-   "utility": 9.65,
-   "steps": "increase saturation by 20% uniformly across the image → boost contrast slightly to enhance texture details in the tassels → apply a subtle glow effect around the edges of each tassel for an ethereal quality"
+   "utility": 10.25,
+   "steps": "increase saturation by 20% uniformly across the image → apply a subtle texture overlay to add depth to the fabric elements → boost contrast slightly in the foreground to emphasize the tassels"
   },
   {
-   "name": "pastel nostalgia",
+   "name": "ethereal mist",
+   "utility": 7.5,
+   "steps": "apply a Gaussian blur with a radius of 3 pixels to the entire image → reduce overall sharpness by 40% → shift the color palette toward pastel tones, especially soft blues and greens"
+  },
+  {
+   "name": "cinematic dusk",
+   "utility": 8.75,
+   "steps": "lower the exposure by 1.5 stops to darken the image → deepen shadows in the lower half of the frame and shift them toward dark blue → add a warm golden glow to the edges of the tassels for a rim-lighting effect"
+  },
+  {
+   "name": "retro film grain",
    "utility": 9.25,
-   "steps": "convert the image to a desaturated pastel color scheme with muted tones → reduce overall brightness by 15% to create a subdued atmosphere → add a light vignette to frame the central tassels softly"
+   "steps": "add a medium level of film grain throughout the image → shift the midtones toward a sepia tone while preserving some color in the tassels → reduce clarity slightly to soften fine details"
   },
   {
-   "name": "cinematic depth",
-   "utility": 10.0,
-   "steps": "apply a split toning effect: warm highlights and cool shadows → deepen the shadows in the background by shifting them toward deep blue → enhance the mid-tones of the tassels to make them stand out sharply"
-  },
-  {
-   "name": "minimalist monochrome",
+   "name": "modern minimalism",
    "utility": 9.0,
-   "steps": "convert the image to black and white → increase local contrast to emphasize the textures of the tassels and metal hooks → apply a slight sepia tone to add warmth to the grayscale image"
-  },
-  {
-   "name": "psychedelic kaleidoscope",
-   "utility": 8.5,
-   "steps": "mirror the image horizontally and vertically to create a symmetrical pattern → apply a color shift effect: move blues toward purple and reds toward orange → add a subtle ripple distortion to the mirrored sections for a dreamlike quality"
+   "steps": "desaturate the image to near-monochrome, leaving only hints of color in the tassels → increase contrast sharply to define the shapes of the tassels and hooks → crop the image slightly inward to tighten the composition and focus on the central cluster of tassels"
   }
  ],
  "table": [
@@ -640,28 +640,24 @@ window.SHOWCASE_DATA = {
  ],
  "gallery": [
   {
-   "file": "grid_1-DSC_1699.jpg",
-   "caption": "1-DSC_1699.jpg：原图 / single / scalar / peaks"
+   "before": "pair_10-DSC_1329_before.jpg",
+   "after": "pair_10-DSC_1329_after.jpg",
+   "caption": "10-DSC_1329.jpg · 拖动对比：左原图 / 右成品"
   },
   {
-   "file": "grid_10-DSC_1329.jpg",
-   "caption": "10-DSC_1329.jpg：原图 / single / scalar / peaks"
+   "before": "pair_17-IMG_0961_before.jpg",
+   "after": "pair_17-IMG_0961_after.jpg",
+   "caption": "17-IMG_0961.jpg · 拖动对比：左原图 / 右成品"
   },
   {
-   "file": "grid_11-DSC_1104.jpg",
-   "caption": "11-DSC_1104.jpg：原图 / single / scalar / peaks"
+   "before": "pair_25-DSC_1085_before.jpg",
+   "after": "pair_25-DSC_1085_after.jpg",
+   "caption": "25-DSC_1085.jpg · 拖动对比：左原图 / 右成品"
   },
   {
-   "file": "grid_12-DSC_1101.jpg",
-   "caption": "12-DSC_1101.jpg：原图 / single / scalar / peaks"
-  },
-  {
-   "file": "grid_13-DSC_0645.jpg",
-   "caption": "13-DSC_0645.jpg：原图 / single / scalar / peaks"
-  },
-  {
-   "file": "grid_14-DSC_0280.jpg",
-   "caption": "14-DSC_0280.jpg：原图 / single / scalar / peaks"
+   "before": "pair_9-DSC_1524_before.jpg",
+   "after": "pair_9-DSC_1524_after.jpg",
+   "caption": "9-DSC_1524.jpg · 拖动对比：左原图 / 右成品"
   }
  ]
 }
