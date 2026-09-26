@@ -21,28 +21,28 @@ window.SHOWCASE_DATA = {
  "concepts": [
   {
    "name": "vibrant tapestry",
-   "utility": 9.65,
-   "steps": "increase saturation of all colors by 20% → boost contrast slightly to enhance depth → apply a subtle global light leak effect centered on the frame"
+   "utility": 10.25,
+   "steps": "increase saturation of all colors by 20% → boost contrast slightly to make details pop → apply a subtle sharpening effect to the tassels"
   },
   {
-   "name": "pastel nostalgia",
+   "name": "pastel dream",
    "utility": 9.25,
-   "steps": "reduce overall saturation by 30% → apply a desaturated blue tint to the sky and shadows → add a gentle vignette with a pale cream border"
+   "steps": "reduce overall saturation by 30% → shift the color temperature slightly towards cooler tones → apply a light vignette with a soft edge to frame the subject"
   },
   {
-   "name": "cinematic moody",
+   "name": "cinematic depth",
    "utility": 9.25,
-   "steps": "deepen shadows in the lower half of the image, shifting them toward dark teal → add a warm golden glow to the highlights on the tassels → apply a slight film grain texture across the entire frame"
+   "steps": "increase contrast significantly in the midtones → add a subtle film grain effect → deepen shadows in the background while preserving highlights on the tassels"
   },
   {
-   "name": "retro film grain",
+   "name": "retro analog",
    "utility": 9.25,
-   "steps": "apply a medium-grain film texture overlay → reduce brightness by 15% and increase contrast by 10% → shift the color temperature slightly warmer, adding a hint of orange to the highlights"
+   "steps": "desaturate the image by 25% → apply a warm brownish tint to the overall tone → add a medium-strength vignette to focus attention on the center"
   },
   {
-   "name": "minimalist monochrome",
-   "utility": 9.0,
-   "steps": "convert the image to black and white → enhance mid-tone contrast to emphasize textures in the tassels and hooks → add a subtle sepia tone to the background elements"
+   "name": "minimalist harmony",
+   "utility": 9.25,
+   "steps": "reduce saturation by 40% → shift the color balance towards neutral grays and soft pastels → apply a very subtle blur to the background to emphasize the foreground tassels"
   }
  ],
  "table": [
