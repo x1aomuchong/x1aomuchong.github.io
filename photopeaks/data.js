@@ -22,27 +22,27 @@ window.SHOWCASE_DATA = {
   {
    "name": "vibrant tapestry",
    "utility": 10.25,
-   "steps": "increase saturation by 30% in the central tassel area → boost contrast slightly to enhance thread textures → add a subtle film grain overlay"
+   "steps": "increase saturation of all colors by 20% → boost contrast slightly to enhance depth → apply a subtle glow effect to the tassels"
   },
   {
-   "name": "pastel serenity",
+   "name": "cinematic moody",
+   "utility": 9.0,
+   "steps": "deepen shadows in the lower half of the image toward dark teal → add a vignette effect to darken corners → shift highlights toward warm orange tones"
+  },
+  {
+   "name": "pastel dream",
    "utility": 9.25,
-   "steps": "reduce overall saturation by 40% → apply a light blue pastel tint to the sky and background → blur the background slightly to emphasize foreground detail"
+   "steps": "reduce overall saturation by 30% → apply a light desaturation to skin tones and neutral areas → add a subtle blue tint to the sky and shadows"
   },
   {
-   "name": "cinematic depth",
+   "name": "retro film grain",
    "utility": 9.25,
-   "steps": "darken the top third of the image by reducing exposure by 20% → shift shadows toward deep teal and add a vignette → enhance the golden tones of the hooks and tassels with a warm filter"
+   "steps": "overlay a fine grain texture across the entire image → desaturate colors slightly and shift them toward sepia → add a slight vignette to frame the central subject"
   },
   {
-   "name": "retro film glow",
-   "utility": 9.25,
-   "steps": "apply a warm yellow-orange tint to the entire image → add a soft glow around the tassels and hooks → simulate film grain and slight vignetting"
-  },
-  {
-   "name": "modern minimalism",
-   "utility": 8.25,
-   "steps": "desaturate the image to near grayscale → enhance the metallic sheen of the hooks with a silver tone → add a subtle sharpening effect to the tassel shapes"
+   "name": "cool minimalist",
+   "utility": 7.25,
+   "steps": "convert the image to black and white → enhance contrast to emphasize shapes and textures → add a subtle blue tint to the remaining color elements"
   }
  ],
  "table": [
