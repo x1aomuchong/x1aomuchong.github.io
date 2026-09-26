@@ -22,27 +22,27 @@ window.SHOWCASE_DATA = {
   {
    "name": "vibrant tapestry",
    "utility": 10.25,
-   "steps": "increase saturation by 20% uniformly across the image → apply a subtle texture overlay to add depth to the fabric elements → boost contrast slightly in the foreground to emphasize the tassels"
+   "steps": "increase saturation by 20% uniformly across the image → boost contrast in the midtones to enhance texture details → apply a subtle glow effect to the edges of the tassels"
   },
   {
-   "name": "ethereal mist",
-   "utility": 7.5,
-   "steps": "apply a Gaussian blur with a radius of 3 pixels to the entire image → reduce overall sharpness by 40% → shift the color palette toward pastel tones, especially soft blues and greens"
+   "name": "pastel dream",
+   "utility": 9.25,
+   "steps": "reduce saturation by 30% → apply a light blue tint to the shadows and a pale yellow tint to the highlights → blur the background slightly to enhance depth and focus on the foreground"
   },
   {
    "name": "cinematic dusk",
-   "utility": 8.75,
-   "steps": "lower the exposure by 1.5 stops to darken the image → deepen shadows in the lower half of the frame and shift them toward dark blue → add a warm golden glow to the edges of the tassels for a rim-lighting effect"
-  },
-  {
-   "name": "retro film grain",
    "utility": 9.25,
-   "steps": "add a medium level of film grain throughout the image → shift the midtones toward a sepia tone while preserving some color in the tassels → reduce clarity slightly to soften fine details"
+   "steps": "add a warm golden hue to the highlights and a cool blue tone to the shadows → deepen the shadows in the lower half of the image and shift them toward brown → apply a subtle vignette to darken the corners and frame the subject"
   },
   {
-   "name": "modern minimalism",
-   "utility": 9.0,
-   "steps": "desaturate the image to near-monochrome, leaving only hints of color in the tassels → increase contrast sharply to define the shapes of the tassels and hooks → crop the image slightly inward to tighten the composition and focus on the central cluster of tassels"
+   "name": "minimalist monochrome",
+   "utility": 9.25,
+   "steps": "convert the image to black and white → enhance the contrast to emphasize the textures of the tassels and metal hooks → apply a slight sepia tone to add warmth to the grayscale image"
+  },
+  {
+   "name": "psychedelic kaleidoscope",
+   "utility": 6.75,
+   "steps": "increase saturation by 50% and apply a radial gradient overlay with bright neon colors → add a subtle ripple distortion effect to the entire image → overlay a faint geometric pattern (e.g., hexagons) with low opacity"
   }
  ],
  "table": [
