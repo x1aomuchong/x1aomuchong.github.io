@@ -103,8 +103,8 @@
     </p>
     <div class="hero-stats">
       <div class="hstat"><div class="num" id="stat-speedup">—</div><div class="lbl">本实现整图耗时（论文默认配置报告约 470 秒，不同实现）</div></div>
-      <div class="hstat"><div class="num">0</div><div class="lbl">规划期生成的图片数（原方法约 60 张）</div></div>
-      <div class="hstat"><div class="num" id="stat-peaks">—</div><div class="lbl">每张照片探索的风格方向</div></div>
+      <div class="hstat"><div class="num">0</div><div class="lbl">规划期生成的图片数（每轮都是 0）</div></div>
+      <div class="hstat"><div class="num" id="stat-peaks">—</div><div class="lbl">每轮提出的风格方向 n（本次运行）</div></div>
       <div class="hstat"><div class="num" id="stat-photos">27</div><div class="lbl">真实照片 · 三策略对照</div></div>
     </div>
   </div>
@@ -128,7 +128,7 @@
       </div>
       <div class="contrib">
         <h4>C2 · 按风格方向搜索，而不是按动作</h4>
-        <p>候选单位从"提亮/加饱和"这类动作，换成"胶片暖调""冷调极简"这类完整方向。两条分支各做各的，分数和参数都不互相混合。</p>
+        <p>候选单位从"提亮/加饱和"这类动作，换成"胶片暖调""冷调极简"这类完整方向。K 条链路各做各的（本次运行 K = 2），分数和参数都不互相混合。</p>
       </div>
       <div class="contrib">
         <h4>C3 · 允许不改</h4>
@@ -157,19 +157,39 @@
 <!-- ============ 架构大图 ============ -->
 <section class="fade">
   <div class="kicker">METHOD · FIGURE 1</div>
-  <h2>模块怎么互相说话，<span class="accent">下一个风格怎么被选中</span></h2>
+  <h2>闭环多峰搜索：<span class="accent">提方向 → 取 Top-K → 并行执行 → 评估 → 继续或退出</span></h2>
   <p class="lead">
-    上半张图是四个模块、六条消息：各自传什么、花多少时间，都标在图上。
-    下半张图是搜索过程：五个候选方向各带一个预测分，只有前两名真正执行，两条分支互不干扰。
+    架构里不写死任何数量：每轮从<b>当前状态</b>提出 <b>n</b> 个互斥风格方向，预测式打分后按效用取 <b>Top-K</b>；
+    K 条链路并行执行（硬隔离，彼此不交换任何信息），过内容门禁后由评估器在「当前状态 + K 个结果」里比较式评优。
+    当前状态胜出就退出——第 1 轮退出即"原图最好，不改"；否则胜者成为下一轮的起点，直到 <b>R</b> 轮上限。
   </p>
   <figure class="card" style="margin-top:24px; padding:14px">
-    <object data="assets/fig_arch.svg" type="image/svg+xml" aria-label="架构与风格节点搜索大图"></object>
+    <object data="assets/fig_method.svg" type="image/svg+xml" aria-label="闭环多峰搜索架构图"></object>
     <figcaption>
-      <span class="fignum">Figure 1.</span> <b>消息传递与风格搜索。</b>
-      Panel A 是流水线：感知 → 预测打分 → 选前两名 → 并行执行 → 门禁 → 比较终选，节点下方是实测耗时。
-      Panel B 中五个候选方向的分数是模型真实给出的（最高 10.7，其余 9.2），虚线表示消息在流动。
+      <span class="fignum">Figure 1.</span> <b>闭环多峰搜索。</b>
+      一轮之内只做一次"提方向 → 排序 → 执行"，多轮才有机会在上一轮的结果上继续收敛；
+      每一轮都允许"当前状态胜出"，所以多轮不会为了有变化而变化。门禁始终对照原图，多轮不会累积漂移。
+      本次对照运行配置：n = 5 · K = 2 · R = 1（单轮）· 概念内步骤链逐步执行（平均 5.8 次编辑 / 张）。
     </figcaption>
   </figure>
+
+  <h3 style="margin-top:34px">消息契约：每条消息传什么、花多少</h3>
+  <p class="body">
+    模块之间传的是结构化字段，不是自由文本；成本是实测的。数量一律用记号（n / K / s），具体取值只出现在"本次运行配置"里。
+  </p>
+  <div class="card" style="margin-top:14px; overflow-x:auto">
+    <table class="res">
+      <thead><tr><th>消息</th><th>payload</th><th>成本（实测）</th></tr></thead>
+      <tbody>
+        <tr><td>Perceiver → Judge</td><td class="note">{name, rationale, style_keywords[], steps[≤ s]}</td><td class="note">每轮 1 次 VLM 调用，产出 n 个互斥方向</td></tr>
+        <tr><td>Judge → Selector</td><td class="note">{aesthetic_gain, style_coherence, feasibility, fidelity_risk}</td><td class="note">每个方向 1 次调用；规划期 0 次生成</td></tr>
+        <tr><td>Selector → Executor</td><td class="note">概念步骤链：有序的文本编辑指令（无掩码、无数值滑杆）</td><td class="note">本地排序，零成本</td></tr>
+        <tr><td>Executor → Gate</td><td class="note">编辑后的图像（1280px 长边，JPEG）</td><td class="note">每次编辑约 18.8 秒</td></tr>
+        <tr><td>Gate → Evaluator</td><td class="note">{content_sim, structure, chroma_ratio, passed}</td><td class="note">本地 CLIP + 结构校验，零成本</td></tr>
+        <tr><td>Evaluator → 出口</td><td class="note">{best: 0..K, reason}　0 = 当前状态（第 1 轮即原图）</td><td class="note">1 次比较式调用</td></tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 
 <!-- ============ 动机：两个瓶颈 ============ -->
@@ -190,7 +210,7 @@
       <img src="assets/fig_timeline.png" alt="单次运行时间线">
       <figcaption>
         <span class="fignum">Figure 3.</span> <b>一次真实运行的时间线。</b>
-        每一步编辑的耗时都是实测（约 18.8 秒一次，两条分支同时跑）。
+        每一步编辑的耗时都是实测（约 18.8 秒一次，两条链路同时跑，本次运行 K = 2）。
         红条是同尺度的 PhotoAgent 参考。
       </figcaption>
     </figure>
@@ -221,23 +241,23 @@
 <!-- ============ 过程 ============ -->
 <section class="fade">
   <div class="kicker">PROCESS</div>
-  <h2>处理一张照片的四步</h2>
+  <h2>处理一张照片的四步<span style="font-size:0.62em; color:var(--dim)">（这是"一轮"的样子，闭环可以走多轮）</span></h2>
   <div class="grid2" style="margin-top:22px">
     <div class="card">
       <h3 style="margin-top:0">1 · 想方向</h3>
-      <p class="body">让模型提出 3–5 个<b>互不相同</b>的风格方向（比如胶片暖调、冷调极简、戏剧化）。
+      <p class="body">让模型提出 <b>n</b> 个<b>互不相同</b>的风格方向（n 是可调参数，示例 n = 5；比如胶片暖调、冷调极简、戏剧化）。
         像"提亮一点"和"再亮一点"这类同义方向会被要求重写；拍人的照片不许改动脸。</p>
       <h3 style="margin-top:22px">2 · 先算不做</h3>
-      <p class="body">每个方向只让模型看一眼原图，给出预测分：值不值得做、会不会伤画面。
+      <p class="body">每个方向只让模型看一眼当前图像，给出预测分：值不值得做、会不会伤画面。
         <b>这一步不生成任何图片</b>，也是成本能降下来的原因。</p>
     </div>
     <div class="card">
       <h3 style="margin-top:0">3 · 各做各的</h3>
-      <p class="body">只做分数最高的两个方向，各自在自己的分支里执行，同时进行，<b>互不交流</b>——
+      <p class="body">只做效用最高的 <b>K</b> 个方向（K ≤ n，示例 K = 2），各自在自己的链路里执行、同时进行，<b>互不交流</b>——
         不混合分数，也不混合参数。中间地带就是这么被绕开的。</p>
       <h3 style="margin-top:22px">4 · 挑一张，或者不改</h3>
-      <p class="body">把原图和两条分支的成品放在一起比较，允许直接判"原图最好"。
-        另有内容保持检查：改动破坏了画面，整条分支作废。</p>
+      <p class="body">把<b>当前状态</b>和 K 个成品放在一起比较，允许直接判"当前状态最好"：第 1 轮就是"原图最好"，直接退出；
+        否则胜者成为下一轮的起点，最多走 <b>R</b> 轮。另有内容保持检查——改动破坏了画面，整条链路作废。</p>
       <figure style="margin-top:16px">
         <img src="assets/fig_judge.png" alt="预测打分">
         <figcaption><span class="fignum">Figure 4.</span> 一次真实运行的打分与选择。</figcaption>
@@ -280,7 +300,9 @@
         <tbody></tbody>
       </table>
       <div class="note-box" style="margin-top:16px">
-        <b>评测口径：</b>盲评模型不参与规划回路，只用于最终打分；即便如此，同一模型族仍带偏差，所以真正严格的判断只能来自人类成对比较。
+        <b>运行配置：</b>n = 5 · K = 2 · R = 1（单轮，即闭环在 R = 1 的特例）；每张平均 7 次 VLM 调用 + 5.8 次编辑调用（概念内的步骤链逐步执行）。
+        表中数字是这一配置下的实测；架构本身是闭环（R 可调，见 Figure 1）。
+        <br><b>评测口径：</b>盲评模型不参与规划回路，只用于最终打分；即便如此，同一模型族仍带偏差，所以真正严格的判断只能来自人类成对比较。
         <br><b>注意怎么读这张表：</b>BRISQUE 和内容保持这两项，改动越小分越高，所以"只发一句话"的 single 天然占优。
         peaks 改得最多，这两项自然最差，它只在盲评上领先。三项指标给不出同一个答案，这件事本身就是结论的一部分。
       </div>
@@ -576,7 +598,7 @@
     <div class="card">
       <h3 style="margin-top:0">代码结构</h3>
       <pre>photopeaks/
-├── perceiver.py   概念生成（Qwen-VL，一次调用出 5 个概念）
+├── perceiver.py   概念生成（Qwen-VL，一次调用出 n 个概念，本次 n = 5）
 ├── judge.py       预测式评判 + 比较式终选
 ├── executor.py    编辑执行器（DashScope / OpenAI 兼容端点）
 ├── gates.py       本地 CLIP 门禁与质量度量
@@ -599,7 +621,7 @@
           <tr><td>门禁模型</td><td class="note">CLIP ViT-B/32，本地 CPU</td></tr>
           <tr><td>盲评做法</td><td class="note">同一个 VLM 打分，不告诉它图是哪套流程出的</td></tr>
           <tr><td>照片</td><td class="note">27 张本人实拍，三套流程各跑一遍，共 81 次</td></tr>
-          <tr><td>主要超参</td><td class="note">5 个候选方向 · 执行前 2 名 · 每个方向不超过 3 步</td></tr>
+          <tr><td>主要超参</td><td class="note">n = 5 个候选方向 · K = 2 条并行链路 · R = 1 轮 · 概念内步骤链逐步执行（平均 5.8 次编辑 / 张）</td></tr>
         </tbody>
       </table>
       <h3>运行</h3>
