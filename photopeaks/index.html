@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhotoPeaks — 基于 PhotoAgent 的实用化改进 Demo</title>
+<title>PhotoPeaks — 同图候选与参数化调色研究</title>
 <style>
   :root {
     /* neutral greys: no hue cast, so the photographs are judged on their own colour */
@@ -113,17 +113,19 @@
     .metric:nth-child(3) { border-left: 0; padding-left: 0; } .metric:nth-child(n+3) { border-top: 1px solid var(--line); } }
 
   /* ---------- before / after ---------- */
-  .compare { position: relative; overflow: hidden; border-radius: 4px; user-select: none; touch-action: pan-y; background: var(--sunken); }
+  .compare { position: relative; overflow: hidden; border-radius: 4px; user-select: none; touch-action: pan-y; cursor: ew-resize; background: var(--sunken); }
   .compare img { width: 100%; display: block; pointer-events: none; }
   .compare .top { position: absolute; inset: 0; clip-path: inset(0 0 0 var(--x, 50%)); }
   .compare .rule { position: absolute; top: 0; bottom: 0; left: var(--x, 50%); width: 1px; background: rgba(255,255,255,.9); transform: translateX(-.5px); }
   .compare .knob { position: absolute; top: 50%; left: var(--x, 50%); width: 38px; height: 38px; margin: -19px 0 0 -19px;
                    border-radius: 50%; background: rgba(18,18,18,.55); border: 1px solid rgba(255,255,255,.85);
-                   backdrop-filter: blur(4px); display: grid; place-items: center; color: #fff; font-size: 13px; letter-spacing: 3px; }
+                   backdrop-filter: blur(4px); display: grid; place-items: center; color: #fff; font-size: 13px; letter-spacing: 3px;
+                   touch-action: none; }
+  .compare .knob::before { content: ""; position: absolute; inset: -8px; border-radius: 50%; }
   .compare .lab { position: absolute; bottom: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
                   text-transform: uppercase; color: #fff; background: rgba(0,0,0,.45); padding: 3px 9px; border-radius: 3px; }
   .compare .lab.l { left: 12px; } .compare .lab.r { right: 12px; }
-  .compare input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+  .compare input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; margin: 0; }
   .compare input:focus-visible ~ .knob { outline: 2px solid var(--accent); outline-offset: 3px; }
 
   .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 24px; }
@@ -175,6 +177,7 @@
   @media (max-width: 900px) { .risk-grid { grid-template-columns: 1fr; } }
 
   .path { display: grid; grid-template-columns: 120px 1fr; gap: 24px; padding: 34px 0; border-top: 1px solid var(--line); }
+  .path > * { min-width: 0; }
   .path .n { font-family: var(--serif); font-size: 56px; line-height: 1; color: var(--line-2); }
   .path h3 { margin: 0 0 6px; }
   @media (max-width: 900px) { .path { grid-template-columns: 1fr; gap: 6px; } .path .n { font-size: 36px; } }
@@ -222,13 +225,13 @@
 <div class="hero" id="top">
   <div class="hero-top">
     <div>
-      <div class="kicker">复现并改进 <b>PhotoAgent · ICML 2026 Oral</b></div>
+      <div class="kicker">受 <b>PhotoAgent</b> 启发的独立研究</div>
       <h1>PhotoPeaks</h1>
-      <div class="sub">基于 PhotoAgent 的实用化改进 Demo</div>
+      <div class="sub">从候选探索到参数化调色</div>
     </div>
     <p class="lead">
-      一张照片往往不止一种好法。PhotoPeaks 让模型先写下几个互不相同的风格方向，各自做完，最后挑一张；
-      而不是把所有编辑压到一个分数上取最大值。规划阶段一张图都不生成——模型只看原图，判断每个方向值不值得做。
+      一张照片可以有几种成立的修法。早期原型让模型提出方向，独立编辑后比较终选；
+      当前研究转向本地参数化候选，先做好 JPEG，再把选择留给用户。
     </p>
   </div>
 
@@ -241,7 +244,7 @@
       <input type="range" min="0" max="100" value="50" aria-label="拖动对比原图与成品">
       <div class="knob">‹›</div>
     </div>
-    <figcaption><span>左右拖动对比 · 本人实拍，完整流程输出（展示用 2× 超分放大）</span><span>27 张真实照片 · 数字均为实测</span></figcaption>
+    <figcaption><span>左右拖动对比 · 本人实拍，早期生成式流程成品（展示用 2× 超分放大）</span><span>27 张真实照片 · 数字均为实测</span></figcaption>
   </figure>
 
   <div class="metrics">
@@ -257,9 +260,10 @@
   <div class="sec-head"><div class="sec-no">01<span>ABSTRACT</span></div><h2>做了什么</h2></div>
   <div class="col">
     <p class="lead">
-      PhotoAgent 把修图当成多步决策来做，方向是对的，但有两个硬伤：<b>贵</b>——
-      规划时每试一个动作都要真的跑一次扩散模型，论文自己报了 470 秒一张；
-      <b>窄</b>——四种评估指标加权成一个分数再取最大，等于逼着所有编辑走同一条路，风格被平均掉。
+      PhotoAgent 把修图当成多步决策。本项目关注两个实用问题：<b>执行成本</b>——
+      执行式搜索需要实际生成候选，论文附录 F 默认配置报告约 470 秒一张；
+      <b>偏好覆盖</b>——希望在每个候选质量合格时，为不同用户保留愿意选择的结果。
+      标量目标本身可以有多个峰；这里关心的是候选是否覆盖了多种有效做法。
     </p>
   </div>
   <div class="wide">
@@ -273,17 +277,17 @@
     </div>
   </div>
   <div class="col">
-    <h3>与论文的设计对照</h3>
+    <h3>早期原型与论文的设计对照</h3>
     <div class="tbl-wrap">
       <table class="tbl">
         <thead><tr><th>维度</th><th>PhotoAgent</th><th>PhotoPeaks</th></tr></thead>
         <tbody>
-          <tr><td>搜索单元</td><td>原子动作，可混合</td><td class="best">完整风格概念，互斥</td></tr>
-          <tr><td>候选评估</td><td>真实执行扩散编辑</td><td class="best">VLM 预测打分</td></tr>
-          <tr><td>规划成本</td><td>250s · 60 次生成</td><td class="best">16.5s · 0 次生成</td></tr>
-          <tr><td>目标形式</td><td>四指标加权标量</td><td class="best">四维打分 + 比较式终选</td></tr>
+          <tr><td>搜索单元</td><td>原子动作组成的多步序列</td><td class="best">完整风格概念，分支隔离</td></tr>
+          <tr><td>候选评估</td><td>模拟执行并评价候选</td><td class="best">VLM 预测打分</td></tr>
+          <tr><td>规划成本</td><td>约 250s · 论文默认配置</td><td class="best">16.5s · 规划期 0 次生成</td></tr>
+          <tr><td>目标形式</td><td>多指标加权标量</td><td class="best">四维预测效用加权排序 + 比较式终选</td></tr>
           <tr><td>接受策略</td><td>单调不降，否则回滚</td><td class="best">分支保留 + 允许原图</td></tr>
-          <tr><td>安全机制</td><td>标量不降即接受</td><td class="best">内容保持门禁 + 回滚</td></tr>
+          <tr><td>安全机制</td><td>多指标评价 + 不提升则回退</td><td class="best">内容保持门禁 + 比较终选</td></tr>
         </tbody>
       </table>
     </div>
@@ -294,7 +298,7 @@
 <!-- ============ 方法 ============ -->
 <section id="method" class="reveal">
   <div class="sec-head"><div class="sec-no">02<span>METHOD</span></div>
-    <h2>闭环多峰搜索<br><em>提方向 → 取 Top-K → 并行执行 → 评估 → 继续或退出</em></h2></div>
+    <h2>闭环候选搜索<br><em>提方向 → 取 Top-K → 并行执行 → 评估 → 继续或退出</em></h2></div>
   <div class="col">
     <p>
       架构里不写死任何数量：每轮从<b>当前状态</b>提出 <b>n</b> 个互斥风格方向，预测式打分后按效用取 <b>Top-K</b>；
@@ -303,9 +307,9 @@
     </p>
   </div>
   <figure class="wide">
-    <div class="frame pan"><object data="assets/fig_method.svg" type="image/svg+xml" aria-label="闭环多峰搜索架构图" style="width:100%;display:block"></object></div>
+    <div class="frame pan"><object data="assets/fig_method.svg" type="image/svg+xml" aria-label="闭环候选搜索架构图" style="width:100%;display:block"></object></div>
     <figcaption>
-      <span class="fig-no">Figure 1</span><b>闭环多峰搜索。</b>
+      <span class="fig-no">Figure 1</span><b>闭环候选搜索。</b>
       一轮之内只做一次"提方向 → 排序 → 执行"，多轮才有机会在上一轮的结果上继续收敛；
       每一轮都允许"当前状态胜出"，所以多轮不会为了有变化而变化。门禁始终对照原图，多轮不会累积漂移。
       本次对照运行配置：n = 5 · K = 2 · R = 1（单轮）· 概念内步骤链逐步执行（平均 5.8 次编辑 / 张）。
@@ -351,15 +355,15 @@
       <figcaption>
         <span class="fig-no">Figure 3</span><b>一次真实运行的时间线。</b>
         每一步编辑的耗时都是实测（约 18.8 秒一次，两条链路同时跑，本次运行 K = 2）。
-        红条是同尺度的 PhotoAgent 参考。
+        红条来自 PhotoAgent 附录 F 的默认配置；不同实现与后端，仅作成本量级参考。
       </figcaption>
     </figure>
   </div>
   <div class="col">
-    <h3>为什么打分会把风格做没：一张图的实验</h3>
+    <h3>两种风格的像素混合：一张图的观察</h3>
     <p>
-      打分是个加权和，还规定"分数不涨就回退"。但同一张照片往往有两种都成立的做法，
-      而它们的中间地带并不好看。把两个方向的结果做一次像素平均就能看到：
+      同一张照片可以有不同的有效做法。这里比较两个分支与它们的像素平均，
+      检查混合是否保留原有风格。像素插值、参数插值和标量选优是不同操作，不能互相等同。
     </p>
   </div>
   <div class="wide">
@@ -386,7 +390,7 @@
         <b>这一步不生成任何图片</b>，也是成本能降下来的原因。</p></div>
       <div class="step"><div class="n">3</div><h4>各做各的</h4>
         <p>只做效用最高的 <b>K</b> 个方向（K ≤ n，示例 K = 2），各自在自己的链路里执行、同时进行，<b>互不交流</b>——
-        不混合分数，也不混合参数。中间地带就是这么被绕开的。</p></div>
+        各方向独立执行，比较输出后选择。这样保留多个候选，不对混合结果作数学保证。</p></div>
       <div class="step"><div class="n">4</div><h4>挑一张，或者不改</h4>
         <p>把<b>当前状态</b>和 K 个成品放在一起比较，允许直接判"当前状态最好"：第 1 轮就是"原图最好"，直接退出；
         否则胜者成为下一轮的起点，最多走 <b>R</b> 轮。另有内容保持检查——改动破坏了画面，整条链路作废。</p></div>
@@ -404,7 +408,7 @@
   <div class="col">
     <p class="lead">
       照片是我自己拍的 27 张（人像、风光、城市、夜景、食物混着来）。三种做法跑同样的 API：
-      <code>single</code> 只发一句"把这张图修好"；<code>scalar</code> 拆成动作逐个打分选一个（PhotoAgent 的最小复现）；
+      <code>single</code> 只发一句"把这张图修好"；<code>scalar</code> 拆成动作逐个打分选一个（内部单动作基线）；
       <code>peaks</code> 是本文的完整流程。
     </p>
   </div>
@@ -413,7 +417,7 @@
     <figcaption>
       <span class="fig-no">Figure 5</span><b>三种做法的质量对比，每个点是一张照片，横线是均值。</b>
       盲评（打分时不告诉模型图从哪来）：peaks 4.30，single 4.23，scalar 4.21。
-      另外两项 peaks 更差，原因见中图：它改得最多，而这两项指标奖励"少改"。
+      peaks 的 CLIP 相似度与 BRISQUE 表现较差；这些指标反映不同侧面，不能把差异仅归因于改动更多。
     </figcaption>
   </figure>
 
@@ -430,20 +434,24 @@
       表中数字是这一配置下的实测；架构本身是闭环（R 可调，见 Figure 1）。
     </div>
     <div class="note">
-      <b>评测口径</b>　盲评模型不参与规划回路，只用于最终打分；即便如此，同一模型族仍带偏差，所以真正严格的判断只能来自人类成对比较。
+      <b>评测口径</b>　每个输出只评分一次；评分不参与当次规划，但仍使用同一模型族，不能视为独立的人类审美证据。
+      按照片配对 bootstrap（2000 次），peaks−single 为 +0.074，95% 区间 [−0.045, +0.193]；
+      peaks−scalar 为 +0.096，区间 [−0.059, +0.259]。两者都跨过零，当前样本尚未建立稳定质量优势。
     </div>
     <div class="note">
-      <b>怎么读这张表</b>　BRISQUE 和内容保持这两项，改动越小分越高，所以"只发一句话"的 single 天然占优。
-      peaks 改得最多，这两项自然最差，它只在盲评上领先。三项指标给不出同一个答案，这件事本身就是结论的一部分。
+      <b>怎么读这张表</b>　peaks 的盲评样本均分略高，但内容保持和 BRISQUE 更差。
+      CLIP 相似度会惩罚部分合法外观变化，也可能漏掉内容损伤；BRISQUE 是自然图像质量代理，不能用改动大小解释全部差异。
+      三种模式的执行预算和门禁也不同，本表是实现内部的探索性比较，尚不能隔离规划方式的因果效果。
     </div>
   </div>
 
   <figure class="col">
-    <div class="frame"><img src="assets/fig_diversity.png" alt="多样性" style="width:100%;display:block"></div>
+    <div class="frame"><img src="assets/fig_diversity.png" alt="相对原图的变化幅度与嵌入分布" style="width:100%;display:block"></div>
     <figcaption>
       <span class="fig-no">Figure 6</span><b>改动幅度。</b>
       左：输出离原图有多远（1−CLIP 相似度），peaks 0.157 &gt; scalar 0.106 &gt; single 0.067。
-      右：全部输出的语义分布，星号是示例照片的两个真实分支。所谓"多峰"，在这里是可以量出来的距离。
+      右：全部输出的嵌入投影，星号是示例照片的两个真实分支。
+      离原图更远不等于候选之间更多样；跨照片的 PCA 也会混入内容差异。候选多样性需在同图的有效候选之间另行测量。
     </figcaption>
   </figure>
 
@@ -471,8 +479,8 @@
     <div>
       <h4 style="margin-top:0; font-family:var(--serif); font-weight:500; font-size:19px">判定"不该动手"的情况</h4>
       <p>
-        所有分支都被门禁否决，或者终选认为原图更好时，系统就交回原图。这在 PhotoAgent 的结构里不容易发生：
-        它只要分数涨一点点就会保留那次编辑。27 张对照里，peaks 多次把保守分支选为最终结果——少改和改对并不矛盾。
+        所有分支都被门禁否决，或者终选认为原图更好时，系统就交回原图。
+        PhotoAgent 也有分数未改善时回退的机制；本实现额外加入内容门禁，并在比较时显式保留原图选项。
       </p>
       <div class="note">
         <b>已知边界</b>　暗光或低质量输入时，判断和编辑都会变难；人像的细节一致性取决于编辑后端的能力；
@@ -494,7 +502,7 @@
         <h4>不锁内容 → 模型会"加戏"</h4>
         <p>指令里出现"氛围""层次"，它就可能真的去画前景、加光晕。
           做法：每条指令带保持性要求，概念层面禁止"添加类"步骤，门禁用边缘结构相关性复核。</p>
-        <div class="delta"><b>0.40 → 0.99</b>结构相关性（1.0 = 画面几何完全没动）</div>
+        <div class="delta"><b>0.40 → 0.99</b>边缘幅值相关性（相似结构的代理，非几何完全一致的证明）</div>
       </div>
       <div class="risk">
         <h4>不锁肤色 → 人像被整体染色</h4>
@@ -539,7 +547,7 @@
     <p class="tbl-note">
       两组数字分别对应两张测试照片（猫、城景）。中性指令下模型几乎是忠实的；
       一旦出现"暖/冷/色温"，它就会把整幅图推走 50–80 个单位的暖冷偏移，把饱和度抬高三四十，
-      而且完全无视"稍微"这类程度限定。
+      在这些样例上，"稍微"没有把修改幅度可靠地限定到预期范围。
     </p>
     <p>
       结论很直接：<b>通用编辑模型做不到"理解意图并按合适的幅度修改"</b>——它只会做"大动作"。
@@ -551,137 +559,80 @@
 
 <!-- ============ 展望 ============ -->
 <section id="outlook" class="reveal">
-  <div class="sec-head"><div class="sec-no">07<span>OUTLOOK</span></div><h2>下一步：换掉执行器，<em>再让它懂人</em></h2></div>
+  <div class="sec-head"><div class="sec-no">07<span>OUTLOOK</span></div><h2>下一步：做好 JPEG<br><em>把选择留给用户</em></h2></div>
   <div class="col">
-    <p class="lead">前面测出来的问题决定了下一步：模型层要重训，数据通路要换到 RAW，编辑的作用范围要从"整幅图"收到"语义区域"。</p>
+    <p class="lead">第一版给同一张 JPEG 提供多个好看的候选，让用户选择。先验证每个候选的质量、差异与可控性，再扩展到 RAW 和局部编辑。</p>
   </div>
-
   <div class="wide">
     <div class="path">
       <div class="n">01</div>
       <div>
-        <h3>重训执行器——把"重画像素"换成"预测参数"</h3>
+        <h3>参数化执行器：保留原图坐标，学习颜色变换</h3>
         <div style="max-width:var(--col)">
-          <p>
-            <b>扩散编辑模型不是必须的。</b>在这套系统里它只是执行器——负责把"想法"落到像素上，
-            换成别的东西也不影响整个流程。而且论保真度，扩散本身是偏差的：伪色、模糊、鬼影是它的固有毛病，
-            靠提示词和门禁只能压制，压不掉。
-          </p>
-          <p>
-            正确的做法是训练一个<b>专用调色模型</b>：输入图像与风格向量，直接输出调色参数
-            （白平衡、曝光曲线、混色、饱和度、分离色调）。参数化的执行器天然可控——不重画就没有伪色、模糊和鬼影，
-            分辨率无损、内容零幻觉，幅度可以按参数精确约束，不会像通用模型那样"一说暖就推 80 个点"。
-            这既是保真问题，也是指令遵循问题。
-          </p>
-          <p>
-            训练不需要人工标注的成对数据，思路是<b>把风格打烂，再按向量复原</b>：收集大量无标注的优秀作品
-            （同一风格的语料只需要好片，不需要坏片）→ 用 VLM 编码出风格向量 v → 在线性空间做可逆扰动、
-            把作品的风格彻底打烂，得到输入 J → 训练执行器从 (J, v) 反推参数。
-            <b>关键在扰动已经把 J 的风格毁掉，所以目标风格的唯一通道就是 v</b>——梯度会强制模型真的用它，
-            它不可能把风格向量学成摆设。
-          </p>
+          <p>让模型根据图像与条件预测白平衡、曝光、曲线、混色和饱和度，并比较小型残差 LUT 是否补足颜色映射能力。
+            每个候选从同一张原图独立渲染，保留原图选项。参数化可以记录完整配方、约束改动幅度，
+            但仍需检查截断、色带与细节损失；它本身不保证好看。</p>
+          <p>先用 <a href="https://data.csail.mit.edu/graphics/fivek/" target="_blank" rel="noopener">MIT-Adobe FiveK</a>
+            的同图五专家配对学习，比较中性输入与已有专家成片作为输入的表现。
+            专家条件用于对应目标，<b>并不等于五个固定的风格标签</b>。
+            可逆扰动作为后续补充，它能检验恢复能力，却不能保证网络会使用风格条件。</p>
         </div>
         <figure>
-          <div class="frame pan"><img src="assets/fig_train.svg" alt="执行器训练方案：把风格打烂，再逼它按向量复原" style="width:100%;display:block"></div>
-          <figcaption>
-            训练数据构造、四条设计规则与验证方案。图中"扰动后输入 J"由左侧成片经该配方<b>真实生成</b>
-            （线性空间软拐点 ＋ 冷偏色）：风格全毁，内容完好——这正是训练数据里"坏输入"的样子。
-          </figcaption>
+          <div class="frame pan"><img src="assets/fig_train.svg" alt="同图多条件候选的训练和验证路径" style="width:100%;display:block"></div>
+          <figcaption>当前验证路径：配对数据验证调色能力，条件对照验证遵循程度，独立评价检验候选质量与偏好覆盖。</figcaption>
         </figure>
         <div style="max-width:var(--col)">
-          <h4>四条设计规则，每条都对应上文一个实测到的失败模式</h4>
-          <div class="tbl-wrap">
-            <table class="tbl">
-              <thead><tr><th>规则</th><th>为什么必须这样</th></tr></thead>
-              <tbody>
-                <tr><td>扰动可逆、且明显坏</td><td>硬裁切丢信息，最优解退化成条件均值——"平庸"会从这扇门回来；在线性空间用软拐点，不硬裁切</td></tr>
-                <tr><td>风格不能与扰动互相冒充</td><td>若某种扰动的样子≈某个合法风格，(J, v) 就有两种自洽解释，解被平均；扰动走"明显坏"，语料走"明显好"</td></tr>
-                <tr><td>掺入 δ = 0 与微扰样本</td><td>恒等是合法输出，"允许不改"免费得到，执行器部署时天然支持"原图最好"</td></tr>
-                <tr><td>参数以中性为原点</td><td>λ·θ 是数学上精确的"稍微"（实测通用模型完全无视"稍微"）；多峰还能在参数层做凸组合</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <h4>风格通道对齐：决定整套系统是否自洽</h4>
-          <p>
-            训练时 v 来自成品图，上线时 v 必须由 perceiver 产出、且落在同一个空间。做法是把语料先做风格聚类，
-            潜空间定义为"簇质心 ＋ 对比学习出的连续维度"，perceiver 只在该空间里输出（分类 ＋ 回归到簇的组合）：
-            多峰天然成立，它的 SFT 监督还能从"照片 ↔ 风格簇"的匹配统计自动 bootstrap。
-            剩下的"哪一簇更好看"才是审美偏好问题——那才是真正需要人类数据的地方，也就是出路二。
-          </p>
-          <h4>怎么验证：三个指标，全部无循环</h4>
-          <p>
-            先用 MIT-Adobe FiveK 做小规模真实配对验证：输入取 RAW 的中性渲染，目标取五位专家各自的成片，
-            v 取该专家的风格向量——5000 张 × 5 种风格，天然是多峰监督，零标注成本；跑通"换 v → 输出真的变"，
-            就证明风格通道被用上了。扰动语料在这之后上，扩的是覆盖面，不是正确性。
-            指标用扰动恢复误差、向量互换灵敏度、参数与真实预设的一致性——<b>全部不碰 reward 模型</b>，
-            正好避开前面批评过的那条循环。
-          </p>
-          <p>
-            训练好的执行器在缩略图上就能预测参数，全分辨率只是渲染：端到端毫秒级、零 API 依赖、参数可解释可回滚，
-            门禁的负担也随之小得多。
-          </p>
+          <h4>四条验证规则</h4>
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>规则</th><th>要回答的问题</th></tr></thead>
+            <tbody>
+              <tr><td>质量与差异分别评价</td><td>候选是否各自成立，而非靠夸张调色凑出差异？</td></tr>
+              <tr><td>匹配与错配条件对照</td><td>匹配条件是否比打乱条件更接近目标？仅有变化还不够。</td></tr>
+              <tr><td>原图与恒等样本</td><td>已经调好的照片，是否被无必要地改坏？</td></tr>
+              <tr><td>强度从零开始</td><td>参数缩放能否提供平滑、可用的感知控制？</td></tr>
+            </tbody>
+          </table></div>
+          <h4>重建、覆盖与偏好</h4>
+          <p>当前计划构建 800 张训练、200 张测试的小集，从训练照片中再划出验证集。
+            同一照片的五位专家成片始终一起划分。PSNR 与色差衡量目标重建，同图候选间差异衡量分离程度；
+            它们都不能替代人类偏好。最终采用不参与训练和选模的人类盲评，比较同预算候选集的质量、可选性与保留原图的比例。</p>
+          <p>模型在缩略图上预测，全分辨率用于渲染。本地候选生成不依赖付费编辑 API，完整配方可以回放；
+            XMP 仅近似保留滑块部分。延迟和质量在正式评测后报告，当前不把训练目标写成已完成结果。</p>
         </div>
       </div>
     </div>
-
     <div class="path">
       <div class="n">02</div>
       <div style="max-width:var(--col)">
-        <h3>用真人反馈微调感知与评判</h3>
-        <p>
-          "想方向"和"打分"现在靠通用模型撑着，审美判断偏平均、也偏保守。
-          <b>这里没有通用解</b>：审美是多元的——同一张照片有好几种都成立的风格，有时互相冲突；
-          审美也是主观的。任何系统能做的最多只是向人类偏好的 ground truth 拟合，偏好数据越多，拟合得越准。
-        </p>
-        <p>
-          这需要大量人类反馈（成对比较最省成本），所以放在第二阶段：先让执行器可控，再让它懂你。
-          两条出路在这里合流：执行器训练里唯一缺的那块监督，就是"哪个方向更好看"。
-        </p>
-        <h4>换掉执行器之后：收益与接口</h4>
-        <ul class="list">
-          <li>推理毫秒级、零 API 依赖，"贵"这个问题从根上消失；</li>
-          <li>参数可解释、可回滚、可审计——每一步都能说清"改了什么、改了多少"；</li>
-          <li>分辨率与结构问题不存在：参数作用于原图，不重画；</li>
-          <li><b>决策层不需要改一行</b>：多峰探索、先预测再执行、允许不改，与执行器无关，原样可用。</li>
-        </ul>
-        <p class="small muted">评测也因此变干净：风格有没有被遵循，可以在参数层直接度量，而不是靠一个同时也在回路里的打分模型。</p>
+        <h3>先让用户选择，再学习偏好</h3>
+        <p>同一张照片可以有几种用户喜欢的修法，偏好也会随场景与用途改变。
+          第一版由用户直接挑选候选，后续反馈用于改善排序与覆盖。
+          配对数据先验证调色能力，偏好数据再验证哪些候选值得呈现。</p>
+        <p>先用离散条件生成候选，不要求用户写提示词。CLIP 图像差分到文本的迁移保留为实验分支：
+          两者并不自动对齐，同图目标差分也不同于任意参考照片。
+          连续风格空间需要另行检验内容泄漏、条件遵循与跨照片一致性。</p>
+        <p class="small muted">参数可复现不等于风格正确；排序、门禁与提示接口都需要重新校准。</p>
       </div>
     </div>
-
     <div class="path">
       <div class="n">03</div>
       <div style="max-width:var(--col)">
-        <h3>从 JPEG 转到 RAW——这是实用化的前提</h3>
-        <p>
-          JPEG 是相机处理完的结果：8 位、有压缩、高光已经截断、白平衡和影调曲线已经烧进像素。
-          在它上面修图，本质是在改"已经定稿的画"——暗部一拉就出色带和噪点，高光没有可恢复的信息，
-          大范围调色最容易出伪色和后相化。今天看到的大部分瑕疵，根子都在这里。
-        </p>
-        <p>
-          要真正实用，必须做 RAW 适配：接 12–14 位线性数据，在去马赛克之后的宽色域空间里做曝光、
-          白平衡和曲线，最后一步才输出 JPEG。这样高光能找回来、肤色不容易崩、调色的余量大一个数量级。
-          我之前的胶片模拟系统就是按 RAW 管线做的，迁移到这里并不需要改决策层，只换输入端与执行器。
-        </p>
+        <h3>先做好 JPEG，再尝试 RAW</h3>
+        <p>JPEG 已带有相机或手机的颜色处理，也可能经过后期。第一版控制改动幅度，
+          单独检验这些常见输入。FiveK 的 RAW 中性解码不能直接代表日常 JPEG，
+          专家成片输入也只是适应性对照，仍需独立照片验证。</p>
+        <p>RAW 可提供不同的曝光、白平衡和颜色处理余量，是后续扩展方向。
+          可恢复的信息取决于原始采集与解码，不能保证已截断的高光恢复。
+          适配时需要重新定义输入、颜色空间与训练目标。</p>
       </div>
     </div>
-
     <div class="path">
       <div class="n">04</div>
       <div style="max-width:var(--col)">
-        <h3>智能蒙版——从"整幅图"到"语义区域"</h3>
-        <p>
-          现在所有编辑都是对整幅图生效的，所以天空一动，人脸跟着动；要压暗背景，前景一起变暗。
-          这正是"稍微调一下"做不到的结构性原因：<b>模型没有"只改这里"这个动作</b>。
-        </p>
-        <p>
-          专业修图从来是局部作业。做实用化必须支持智能蒙版：由分割模型自动给出天空、人物、皮肤、
-          植被、背景等语义区域，编辑指令作用在指定区域上——"天空更蓝一点"只改天空，
-          "皮肤柔和一点"只改皮肤。这既让幅度可控，也让每一步的意图可以被精确表达与验证。
-        </p>
-        <p class="small muted">
-          工程上还有两件小事可以并行：按原分辨率分块编辑（瓦片 + 接缝融合），以及让评判模型在动手之前
-          就标出高风险步骤，而不是等生成完再拦。
-        </p>
+        <h3>在全局候选稳定后，扩展局部控制</h3>
+        <p>当前参数化管线使用全局颜色映射，同样的颜色会受到相同处理，因而独立控制天空与肤色仍有限制。
+          后续可用语义蒙版让不同区域独立调色，同时检查边界与区域间的颜色一致性。</p>
+        <p class="small muted">局部能力以相同数据与预算比较增益；它可能改善控制，也会带来新的误差来源。</p>
       </div>
     </div>
   </div>
@@ -689,56 +640,38 @@
 
 <!-- ============ 讨论 ============ -->
 <section id="discussion" class="reveal">
-  <div class="sec-head"><div class="sec-no">08<span>DISCUSSION</span></div>
-    <h2>为什么"动作级"优化走不通，<em>而"方向级"可行</em></h2></div>
+  <div class="sec-head"><div class="sec-no">08<span>DISCUSSION</span></div><h2>从这些结果，<em>能推到哪里</em></h2></div>
   <div class="col">
-    <p>
-      把美感写成调色参数的函数 A(θ)，它有四个同时存在的坏性质——这正是"一个一个动作地试、分数涨了就保留"
-      注定失败的原因，也是 PhotoAgent 无论怎么调 MCTS 都救不回来的原因。
-    </p>
+    <p>当前结果支持改进动作幅度、减少无效执行，并把候选覆盖作为独立目标。
+      它们不足以证明审美目标的数学形状，也不能证明某一类搜索必然失败。观察与解释需要分开。</p>
   </div>
-  <div class="wide">
-    <div class="tbl-wrap">
-      <table class="tbl">
-        <thead><tr><th>性质</th><th>含义</th><th>本文实测到的对应现象</th></tr></thead>
-        <tbody>
-          <tr><td>崎岖非凸</td><td>局部最优的数量随维度暴涨</td><td>"调冷"一步就把整幅图推 −57；不存在可走的"小步"</td></tr>
-          <tr><td>强不可分</td><td>单个参数单独动就难看，必须成组联动才成立</td><td>只加暖 → 黄雾（+50 ~ +83）；只提亮 → 像过曝</td></tr>
-          <tr><td>梯度不可得</td><td>只能采样，且评判本身是学习模型、带噪</td><td>美学分由 VLM 给出，同一张图两次可差 0.1</td></tr>
-          <tr><td>度量错配</td><td>优化目标与人眼感知不是一回事</td><td>CLIP 相似度 0.89 的图照样凭空画出一片树叶</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <div class="wide"><div class="tbl-wrap"><table class="tbl">
+    <thead><tr><th>观察</th><th>可以支持什么</th><th>尚不能推出什么</th></tr></thead>
+    <tbody>
+      <tr><td>动作幅度未稳定遵循提示</td><td>需要校准文本与执行幅度</td><td>所有原子动作都不存在可用小步</td></tr>
+      <tr><td>颜色、曝光与对比共同影响观感</td><td>成组编辑值得对照</td><td>审美目标必然具有特定的非凸几何</td></tr>
+      <tr><td>模型评分存在噪声</td><td>需要独立评价与不确定性报告</td><td>小样本均值差已经确立审美优势</td></tr>
+      <tr><td>内容相似度不够敏感</td><td>需要额外的保真检查</td><td>高 CLIP 或边缘相关性保证零损伤</td></tr>
+    </tbody>
+  </table></div></div>
   <div class="col">
-    <p>
-      最致命的是第二条：<b>很多操作只有组合起来才不怪异</b>。这意味着好解落在参数空间里一条狭窄的脊线上，
-      而脊线方向不是坐标轴方向——是若干参数同向联动的方向（提亮的同时压高光、加暖的同时抬阴影）。
-      于是单坐标移动几乎必然掉出脊线；脊线上的点之间也不能插值：两个都成立的峰（4.2 / 4.5 分），
-      中点只有 4.2，落在谷底。
-    </p>
-    <p>
-      这解释了 PhotoAgent 的设计为什么与问题本质冲突：<b>原子动作</b>把"成组联动"切成了单个动作，
-      而在这个空间里单个动作只有两极——不可见，或者崩坏（实测：中性锐化 Δ≈0，一带颜色词 Δ 就 ±50~80，
-      中间没有"适中"这一档）；<b>单调接受</b>又禁止了跨鞍点所需的"先变差再变好"。
-      结果它收敛到的不是峰，而是奖励模型平均口味附近那个最宽的盆地：偏暖、过饱和。
-      那是一个典型的"局部优、整体劣"解——任何沿单坐标爬坡的东西都会滑进去。
-    </p>
-    <p>
-      换成<b>方向级</b>搜索，性质就变了：一个风格方向本身就是脊线上的点，落进去基本不会掉出来
-      （实测结构相关性 0.99、色彩中性都发生在"明确约束的成组编辑"里）；而在同一方向内部，
-      只剩强度这一维，目标是局部平滑的——这才可控、可插值。再往前一步是把它彻底学掉：
-      既然脊线方向由"图像 + 风格"决定，就直接学一个映射 θ = f(图像, 风格)，一次前向出参数，
-      把搜索整个消掉。这也是"必须重训执行器"的根本理由：搜索这条路的目标函数性质太差，只有学习映射能绕开它。
-    </p>
-    <p class="muted small">
-      这个结论不是这一件事上得到的。我之前做过一个 RAW 胶片模拟与色彩风格迁移系统（106 个可微参数 +
-      参考集上的风格能量模型），它的风格迁移版本失败的原因完全相同：在风格空间里做平均，输出就变灰变脏。
-      当时的修正是把参考集聚成 2–4 个"风格头"、每张图只路由到一个头、头间差异过大时禁止混合；
-      最终稳定可用的形态是逐片种从光谱数据烘焙的 3D LUT——单峰，压根没有平均这回事。
-      两个项目在两个抽象层级撞到同一堵墙：
-    </p>
-    <blockquote>质量活在"相关的参数组"里，不在单个旋钮上。</blockquote>
+    <p>前面的单图像素平均实验只说明一次混合没有超过两个端点。平均图得分与较低端点相同，
+      不能称为“两峰之间的谷底”，也不能推出参数插值普遍不可行。
+      加权标量目标可以有多个极值，最大化一个分数并不等于把不同风格的像素平均。</p>
+    <p><a href="https://arxiv.org/html/2602.22809v1" target="_blank" rel="noopener">PhotoAgent</a>
+      用 MCTS 探索多步动作序列，并带有回退机制。
+      本文的 scalar 对照只选择一次预测增益最高的原子动作，不能代表它。
+      若研究搜索策略，需要相同执行器、评价器、动作与调用预算下的直接对照。</p>
+    <p>下一阶段以 PhotoAgent 为核心对照：同样数量的候选交由用户盲选，同时检验细节保持、改动过度与总耗时。
+      对完整系统和共享执行器的策略分别比较，并纳入较小搜索预算。
+      当前尚无可核验的 PhotoAgent 直接实测，不能将本页结果表述为对它的性能胜出。</p>
+    <p>参数预测已有 <a href="https://groups.csail.mit.edu/graphics/hdrnet/" target="_blank" rel="noopener">HDRNet</a>、
+      <a href="https://github.com/ImCharlesY/SepLUT" target="_blank" rel="noopener">SepLUT</a> 等工作。
+      我们要验证的是：在每个候选质量合格的前提下，同图多条件是否提供更多有用选择，
+      本地参数化执行是否改善控制与成本。目前不把“预测参数”本身当作新贡献，也不把效率改善当作审美优势。</p>
+    <p class="muted small">前作中的风格混合经验提供研究动机，不能替代这里的对照。
+      专家间差异、多候选分离与用户偏好是三件不同的事，需要分别验证。</p>
+    <blockquote>让候选各自成立，再验证用户是否拥有更好的选择。</blockquote>
   </div>
 </section>
 
@@ -784,7 +717,7 @@ python demo.py        # 本地交互 demo</pre>
 </section>
 
 <footer>
-  <div>PhotoPeaks · 复现并改进 <a href="https://arxiv.org/abs/2602.22809">PhotoAgent (ICML 2026)</a></div>
+  <div>PhotoPeaks · 受 <a href="https://arxiv.org/abs/2602.22809">PhotoAgent</a> 启发的独立实现与调色研究</div>
   <div>页面上的数字与图片都来自真实运行（<code>results/run1</code>、<code>showcase/figdata.json</code>）· 个人研究记录，非正式发表版本</div>
 </footer>
 
@@ -815,7 +748,38 @@ D.table.forEach(r => {
 /* before / after */
 function bindCompare(box) {
   const input = box.querySelector('input');
-  const set = v => box.style.setProperty('--x', v + '%');
+  let activePointer = null;
+  const set = v => {
+    input.value = Math.max(0, Math.min(100, Number(v)));
+    box.style.setProperty('--x', input.value + '%');
+    input.setAttribute('aria-valuetext', `原图 ${input.value}%，成品 ${100 - input.value}%`);
+  };
+  const move = event => {
+    const rect = box.getBoundingClientRect();
+    if (rect.width) set((event.clientX - rect.left) / rect.width * 100);
+  };
+  // The visible knob sits above the accessible range input. Handle pointer
+  // interaction on the whole comparison so the knob cannot swallow a drag.
+  box.addEventListener('pointerdown', event => {
+    if (!event.isPrimary || event.button !== 0 || activePointer !== null) return;
+    activePointer = event.pointerId;
+    box.setPointerCapture(activePointer);
+    input.focus({ preventScroll: true });
+    move(event);
+    event.preventDefault();
+  });
+  box.addEventListener('pointermove', event => {
+    if (event.pointerId === activePointer) move(event);
+  });
+  const release = event => {
+    if (event.pointerId !== activePointer) return;
+    if (event.type === 'pointerup') move(event);
+    if (box.hasPointerCapture(activePointer)) box.releasePointerCapture(activePointer);
+    activePointer = null;
+  };
+  box.addEventListener('pointerup', release);
+  box.addEventListener('pointercancel', release);
+  box.addEventListener('lostpointercapture', () => { activePointer = null; });
   input.addEventListener('input', () => set(input.value));
   set(input.value);
 }
