@@ -132,7 +132,7 @@
   .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 24px; }
   .gallery figure { margin: 0; }
   .gallery figcaption { margin-top: 10px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em; }
-  .assistant-probe { margin: 58px auto 62px; }
+  .assistant-probe { width: calc(100% - 56px); margin: 58px auto 62px; }
   .assistant-probe .compare img { height: auto; }
   .assistant-probe .gallery figcaption { font-family: var(--sans); font-size: 13px; letter-spacing: 0; line-height: 1.9; color: var(--text-2); }
   .assistant-probe .gallery h4 { font-family: var(--serif); font-size: 20px; font-weight: 500; margin: 13px 0 5px; color: var(--text); }
@@ -222,9 +222,8 @@
 <header class="topbar">
   <a class="brand" href="#top">PhotoPeaks</a>
   <nav>
-    <a href="#abstract">摘要</a><a href="#method">方法</a><a href="#motivation">动机</a>
-    <a href="#process">过程</a><a href="#experiments">实验</a><a href="#robustness">稳健性</a>
-    <a href="#outlook">展望</a><a href="#discussion">讨论</a><a href="#repro">复现</a>
+    <a href="#assistant-probe">当前样张</a><a href="#outlook">架构讲解</a><a href="#abstract">早期原型</a>
+    <a href="#experiments">历史实验</a><a href="#discussion">讨论</a><a href="#repro">复现</a>
   </nav>
   <div class="progress" id="progress"></div>
 </header>
@@ -238,41 +237,161 @@
       <div class="sub">从候选探索到参数化调色</div>
     </div>
     <p class="lead">
-      一张照片可以有几种成立的修法。早期原型让模型提出方向，独立编辑后比较终选；
-      当前研究转向本地参数化候选，先做好 JPEG，再把选择留给用户。
+      一张照片可以有几种成立的修法。我们希望从照片提出风格意图，
+      用可解释的颜色与影调控制生成独立候选，再把选择留给用户。
     </p>
   </div>
 
   <figure class="hero-photo">
     <div class="compare" id="hero-compare">
-      <img src="assets/hero_before.jpg" alt="原图">
-      <div class="top"><img src="assets/hero_after.jpg" alt="PhotoPeaks 成品"></div>
+      <img src="assets/assistant-probe/landscape-3-before.jpg" alt="村落原图">
+      <div class="top"><img src="assets/assistant-probe/landscape-3-after.jpg" alt="助手给参后的参数化村落结果"></div>
       <div class="rule"></div>
-      <span class="lab l">原图</span><span class="lab r">成品</span>
+      <span class="lab l">原图</span><span class="lab r">参数化结果</span>
       <input type="range" min="0" max="100" value="50" aria-label="拖动对比原图与成品">
       <div class="knob">‹›</div>
     </div>
-    <figcaption><span>左右拖动对比 · 本人实拍，早期生成式流程成品（展示用 2× 超分放大）</span><span>27 张真实照片 · 数字均为实测</span></figcaption>
+    <figcaption><span>当前参数化渲染 · 助手读图给出 40 个滑块，非训练模型预测</span><span>拖动比较原图与结果</span></figcaption>
   </figure>
 
-  <div class="metrics">
-    <div class="metric"><div class="num" id="stat-speedup">—</div><div class="lbl">本实现整图耗时<br>论文默认配置报告约 470 秒，不同实现</div></div>
-    <div class="metric"><div class="num">0</div><div class="lbl">规划期生成的图片数<br>每轮都是 0</div></div>
-    <div class="metric"><div class="num" id="stat-peaks">—</div><div class="lbl">每轮提出的风格方向 n<br>本次运行</div></div>
-    <div class="metric"><div class="num" id="stat-photos">27</div><div class="lbl">真实照片<br>三策略对照</div></div>
-  </div>
 </div>
+
+  <div class="wide assistant-probe" id="assistant-probe" aria-labelledby="assistant-probe-title">
+    <div class="col">
+      <h3 id="assistant-probe-title">当前样张：在原图上完成调色</h3>
+      <p>四例选自助手读图后首次给参的九组诊断，使用现有 v5b 渲染器、40 个滑块与原图像素，残差 LUT 关闭。
+        完整配方均能精确回放；<b>学习执行器尚未通过质量验收</b>。以下样张展示参数表达能力。</p>
+      <p class="small muted">拖动圆钮比较；展开可查看当时的完整意图。</p>
+    </div>
+    <div class="gallery" id="assistant-probe-gallery">
+      <figure>
+        <div class="compare" id="probe-landscape-3">
+          <img src="assets/assistant-probe/landscape-3-before.jpg" width="1600" height="1067" loading="lazy" alt="村落风景原图">
+          <div class="top"><img src="assets/assistant-probe/landscape-3-after.jpg" width="1600" height="1067" loading="lazy" alt="助手首次给参后的鲜明幻灯片风格结果"></div>
+          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比村落原图与助手首次给参结果"><div class="knob">‹›</div>
+        </div>
+        <figcaption><h4>风景 · 鲜明的幻灯片色彩</h4>增强树木与天空的色彩，形成更有分量的暗部，同时保留云层和屋顶。</figcaption>
+        <details><summary>查看完整意图</summary><p lang="en">Give the village a vivid slide-film palette with intense green trees, cyan-blue sky and dense contrasting shadows. Blend three parts of this treatment with one part of the original, preserving the clouds and roofs.</p></details>
+      </figure>
+      <figure>
+        <div class="compare" id="probe-backlit-portrait-1">
+          <img src="assets/assistant-probe/backlit_portrait-1-before.jpg" width="1600" height="1067" loading="lazy" alt="逆光人像原图">
+          <div class="top"><img src="assets/assistant-probe/backlit_portrait-1-after.jpg" width="1600" height="1067" loading="lazy" alt="助手首次给参后的明亮人像结果"></div>
+          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比逆光人像原图与助手首次给参结果"><div class="knob">‹›</div>
+        </div>
+        <figcaption><h4>人像 · 打开逆光暗部</h4>提亮暗部与中间调，让脸部更容易看清，并柔和处理背景亮部。</figcaption>
+        <details><summary>查看完整意图</summary><p lang="en">Create a bright airy portrait by opening dark midtones and shadows, keeping neutral skin and gently compressing bright tones. The face must stay readable despite the bright background; avoid a grey veil.</p></details>
+      </figure>
+      <figure>
+        <div class="compare" id="probe-indoor-colour-1">
+          <img src="assets/assistant-probe/indoor_cast-1-before.jpg" width="1600" height="1061" loading="lazy" alt="室内演出原图，带黄绿色光照">
+          <div class="top"><img src="assets/assistant-probe/indoor_cast-1-after.jpg" width="1600" height="1061" loading="lazy" alt="助手首次给参后的室内彩色纠偏结果"></div>
+          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比室内彩色原图与助手首次给参结果"><div class="knob">‹›</div>
+        </div>
+        <figcaption><h4>室内 · 恢复颜色关系</h4>减少强烈的黄绿色偏色，保留肤色、吉他的木质色与衣服层次。</figcaption>
+        <details><summary>查看完整意图</summary><p lang="en">Remove the strong green-yellow cast for clean documentary colour, with near-neutral light walls, natural skin and warm guitar wood. Open the midtones moderately and retain separation in the dark clothing.</p></details>
+      </figure>
+      <figure>
+        <div class="compare" id="probe-indoor-mono-2">
+          <img src="assets/assistant-probe/indoor_cast-2-before.jpg" width="1600" height="1061" loading="lazy" alt="室内演出彩色原图">
+          <div class="top"><img src="assets/assistant-probe/indoor_cast-2-after.jpg" width="1600" height="1061" loading="lazy" alt="助手首次给参后的中性黑白演出结果"></div>
+          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比演出原图与助手首次给参的黑白结果"><div class="knob">‹›</div>
+        </div>
+        <figcaption><h4>演出 · 中性黑白</h4>去除颜色，以中间调对比、明亮琴身与深色衣服组织画面。</figcaption>
+        <details><summary>查看完整意图</summary><p lang="en">Create a bold neutral black-and-white performance photograph: rich midtone contrast, bright guitar tones and deep but readable clothing. Keep the face visible and remove the green-yellow colour completely.</p></details>
+      </figure>
+    </div>
+  </div>
+
+<!-- ============ 展望 ============ -->
+<section id="outlook" class="reveal">
+  <div class="sec-head"><div class="sec-no">01<span>CURRENT DESIGN</span></div><h2>当前设计：从完整意图到独立候选</h2></div>
+  <div class="col">
+    <p class="lead">规划器观察照片并自主提出风格，执行器理解完整意图，预测滑块与有界残差 LUT。
+      每个候选从同一原图独立渲染，由用户选择，也可以保留原图。</p>
+    <p>目前优先打磨执行器。页首样张用助手直接给参检验调色能力；本地预览已支持比较、继续调整与原尺寸导出。</p>
+  </div>
+  <div class="wide story-view-switch" role="group" aria-label="选择架构讲解形式">
+    <button type="button" data-story-view="video" aria-pressed="true">观看 38 秒讲解</button>
+    <button type="button" data-story-view="interactive" aria-pressed="false">逐步探索</button>
+  </div>
+  <figure class="wide story-video" id="architecture-video">
+    <video controls playsinline preload="metadata" poster="assets/architecture-story-poster.jpg" aria-label="PhotoPeaks 架构讲解，38 秒，无声字幕视频">
+      <source src="assets/architecture-story.mp4" type="video/mp4">
+      你的浏览器不支持内嵌视频，可下载视频或选择上方的逐步探索。
+    </video>
+    <figcaption>38 秒无声架构讲解 · 图形与候选卡片为流程示意。
+      <a href="assets/architecture-story.mp4" download>下载 MP4</a></figcaption>
+  </figure>
+  <figure class="wide architecture-story" id="architecture-story" aria-labelledby="story-title" hidden>
+    <div class="story-heading">
+      <div><div class="story-eyebrow">DESIGN IN MOTION · 38 SEC</div><h3 id="story-title">从一张照片，到几种可能</h3></div>
+      <span class="story-kind">可交互的架构示意</span>
+    </div>
+    <div class="story-route" aria-label="架构步骤">
+      <button type="button" data-story-step="0"><span>01</span>同一张 JPEG</button>
+      <button type="button" data-story-step="1"><span>02</span>提出完整意图</button>
+      <button type="button" data-story-step="2"><span>03</span>理解与执行</button>
+      <button type="button" data-story-step="3"><span>04</span>滑块与 LUT</button>
+      <button type="button" data-story-step="4"><span>05</span>独立渲染</button>
+      <button type="button" data-story-step="5"><span>06</span>用户选择</button>
+    </div>
+    <div class="story-stage" data-scene="0">
+      <div class="story-art" aria-hidden="true"></div>
+      <div class="story-caption" aria-live="polite"><span class="story-counter">01 / 06</span><h4></h4><p></p></div>
+    </div>
+    <div class="story-controls">
+      <button type="button" class="story-play" aria-label="播放架构讲解">播放</button>
+      <button type="button" class="story-restart" aria-label="从头播放架构讲解">重播</button>
+      <label class="story-seek-label"><span class="story-sr">讲解进度</span><input class="story-seek" type="range" min="0" max="38" step="0.1" value="0" aria-label="架构讲解进度，单位秒"></label>
+      <output class="story-time">00:00 / 00:38</output>
+    </div>
+    <figcaption>同一原图 → 完整意图 → 参数化执行 → 独立候选 → 用户选择。当前开发重点为执行器。</figcaption>
+    <noscript><p class="story-noscript">同一 JPEG → 规划器提出完整开放风格意图 → 执行器理解图像与意图 → 40 个滑块与可选有界残差 LUT → 每个候选从原图独立渲染 → 用户选择，包含保留原图。</p></noscript>
+  </figure>
+  <div class="wide">
+    <div class="path"><div class="n">01</div><div style="max-width:var(--col)">
+      <h3>可解释控制，完整配方</h3>
+      <p>模型根据图像与完整文字预测白平衡、曝光、曲线、混色和饱和度，小型残差 LUT 补充颜色映射。
+        参数作用于原图坐标，完整 JSON 可精确回放；外部 LUT 和 XMP 导出为近似。</p>
+
+    </div></div>
+    <div class="path"><div class="n">02</div><div style="max-width:var(--col)">
+      <h3>先把风格落实到照片上</h3>
+      <p>受控训练改善了部分目标重建和亮部层次，但学习模型仍有暗脸、黑白残色和风格不鲜明的问题，相关新权重尚未采纳。
+        当前结合完整成片与主体细节改进监督，让冷暖、影调和色彩差异真正形成值得选择的结果。</p>
+    </div></div>
+    <div class="path"><div class="n">03</div><div style="max-width:var(--col)">
+      <h3>把最后的选择交给用户</h3>
+      <p>电影、胶片、清透、黑白是可能的方向，最终候选由照片与意图决定。
+        已准备匿名比较工具，计划邀请 3–5 位独立评委先导评价；当前尚无人类偏好实验结论。</p>
+    </div></div>
+    <div class="path"><div class="n">04</div><div style="max-width:var(--col)">
+      <h3>JPEG 优先，再扩展能力</h3>
+      <p>先适应相机、手机和已有后期的 JPEG。RAW 与局部控制留作后续扩展；
+        当前全局颜色映射对相同颜色执行相同处理，独立控制天空与肤色仍有限制。</p>
+    </div></div>
+  </div>
+</section>
 
 <!-- ============ 摘要 ============ -->
 <section id="abstract" class="reveal">
-  <div class="sec-head"><div class="sec-no">01<span>ABSTRACT</span></div><h2>做了什么</h2></div>
+  <div class="sec-head"><div class="sec-no">02<span>EARLIER PROTOTYPE</span></div><h2>早期原型：从哪里出发</h2></div>
   <div class="col">
     <p class="lead">
-      PhotoAgent 把修图当成多步决策。本项目关注两个实用问题：<b>执行成本</b>——
-      执行式搜索需要实际生成候选，论文附录 F 默认配置报告约 470 秒一张；
-      <b>偏好覆盖</b>——希望在每个候选质量合格时，为不同用户保留愿意选择的结果。
-      标量目标本身可以有多个峰；这里关心的是候选是否覆盖了多种有效做法。
+      早期生成式原型研究<b>执行成本</b>与<b>候选选择</b>：先预测方向，再执行少量分支。
+      下列架构、27 张照片实验和历史画廊均来自这一流程，与上方参数化样张分开呈现。
     </p>
+  </div>
+  <div class="metrics">
+    <div class="metric"><div class="num" id="stat-speedup">—</div><div class="lbl">早期原型整图耗时<br>详见下方历史实验</div></div>
+    <div class="metric"><div class="num">0</div><div class="lbl">早期原型规划期<br>生成的图片数</div></div>
+    <div class="metric"><div class="num" id="stat-peaks">—</div><div class="lbl">早期原型每轮<br>提出的风格方向</div></div>
+    <div class="metric"><div class="num" id="stat-photos">27</div><div class="lbl">早期三策略对照<br>本人实拍照片</div></div>
   </div>
   <div class="wide">
     <div class="contribs">
@@ -305,50 +424,27 @@
 
 <!-- ============ 方法 ============ -->
 <section id="method" class="reveal">
-  <div class="sec-head"><div class="sec-no">02<span>METHOD</span></div>
-    <h2>闭环候选搜索<br><em>提方向 → 取 Top-K → 并行执行 → 评估 → 继续或退出</em></h2></div>
+  <div class="sec-head"><div class="sec-no">03<span>METHOD</span></div>
+    <h2>早期流程：闭环候选搜索<br><em>提方向 → 排序 → 独立执行 → 比较终选</em></h2></div>
   <div class="col">
     <p>
-      架构里不写死任何数量：每轮从<b>当前状态</b>提出 <b>n</b> 个互斥风格方向，预测式打分后按效用取 <b>Top-K</b>；
-      K 条链路并行执行（硬隔离，彼此不交换任何信息），过内容门禁后由评估器在「当前状态 + K 个结果」里比较式评优。
-      当前状态胜出就退出——第 1 轮退出即"原图最好，不改"；否则胜者成为下一轮的起点，直到 <b>R</b> 轮上限。
+      从当前照片提出 <b>n</b> 个方向，预测打分后执行 <b>Top-K</b> 条独立分支。
+      内容检查后比较候选与原图，允许保持不变。记录中的实验采用单轮执行。
     </p>
   </div>
   <figure class="wide">
     <div class="frame pan"><object data="assets/fig_method.svg" type="image/svg+xml" aria-label="闭环候选搜索架构图" style="width:100%;display:block"></object></div>
     <figcaption>
       <span class="fig-no">Figure 1</span><b>闭环候选搜索。</b>
-      一轮之内只做一次"提方向 → 排序 → 执行"，多轮才有机会在上一轮的结果上继续收敛；
-      每一轮都允许"当前状态胜出"，所以多轮不会为了有变化而变化。门禁始终对照原图，多轮不会累积漂移。
-      本次对照运行配置：n = 5 · K = 2 · R = 1（单轮）· 概念内步骤链逐步执行（平均 5.8 次编辑 / 张）。
+      历史实验配置：n = 5 · K = 2 · R = 1（单轮），平均 5.8 次编辑 / 张。
+      图中保留多轮接口；内容门禁始终对照原图。
     </figcaption>
   </figure>
-  <div class="col">
-    <details>
-      <summary>模块之间传什么、花多少（实测）</summary>
-      <div>
-        <p class="small">模块之间传的是结构化字段，不是自由文本；成本是实测的。数量一律用记号（n / K / s），具体取值只出现在"本次运行配置"里。</p>
-        <div class="tbl-wrap">
-          <table class="tbl small">
-            <thead><tr><th>消息</th><th>内容</th><th>成本（实测）</th></tr></thead>
-            <tbody>
-              <tr><td>Perceiver → Judge</td><td>{name, rationale, style_keywords[], steps[≤ s]}</td><td>每轮 1 次 VLM 调用，产出 n 个互斥方向</td></tr>
-              <tr><td>Judge → Selector</td><td>{aesthetic_gain, style_coherence, feasibility, fidelity_risk}</td><td>每个方向 1 次调用；规划期 0 次生成</td></tr>
-              <tr><td>Selector → Executor</td><td>概念步骤链：有序的文本编辑指令（无掩码、无数值滑杆）</td><td>本地排序，零成本</td></tr>
-              <tr><td>Executor → Gate</td><td>编辑后的图像（1280px 长边，JPEG）</td><td>每次编辑约 18.8 秒</td></tr>
-              <tr><td>Gate → Evaluator</td><td>{content_sim, structure, chroma_ratio, passed}</td><td>本地 CLIP + 结构校验，零成本</td></tr>
-              <tr><td>Evaluator → 出口</td><td>{best: 0..K, reason}　0 = 当前状态（第 1 轮即原图）</td><td>1 次比较式调用</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </details>
-  </div>
 </section>
 
 <!-- ============ 动机 ============ -->
 <section id="motivation" class="reveal">
-  <div class="sec-head"><div class="sec-no">03<span>MOTIVATION</span></div><h2>两个问题：太贵，<em>而且把风格做没了</em></h2></div>
+  <div class="sec-head"><div class="sec-no">04<span>MOTIVATION</span></div><h2>动机：降低执行成本，<em>保留不同选择</em></h2></div>
   <div class="wide">
     <figure style="margin:0 0 40px">
       <div class="frame"><img src="assets/fig_cost.png" alt="成本剖析" style="width:100%;display:block"></div>
@@ -368,11 +464,8 @@
     </figure>
   </div>
   <div class="col">
-    <h3>两种风格的像素混合：一张图的观察</h3>
-    <p>
-      同一张照片可以有不同的有效做法。这里比较两个分支与它们的像素平均，
-      检查混合是否保留原有风格。像素插值、参数插值和标量选优是不同操作，不能互相等同。
-    </p>
+    <h3>早期分支样例：两种风格与像素平均</h3>
+    <p>同一张挂饰照片的两个生成式分支及其像素平均，仅作单图观察。</p>
   </div>
   <div class="wide">
     <div class="triptych">
@@ -386,7 +479,7 @@
 
 <!-- ============ 过程 ============ -->
 <section id="process" class="reveal">
-  <div class="sec-head"><div class="sec-no">04<span>PROCESS</span></div>
+  <div class="sec-head"><div class="sec-no">05<span>PROCESS</span></div>
     <h2>处理一张照片的四步<br><em>这是"一轮"的样子，闭环可以走多轮</em></h2></div>
   <div class="wide">
     <div class="steps">
@@ -412,7 +505,7 @@
 
 <!-- ============ 实验 ============ -->
 <section id="experiments" class="reveal">
-  <div class="sec-head"><div class="sec-no">05<span>EXPERIMENTS</span></div><h2>27 张真照片，三种做法对比</h2></div>
+  <div class="sec-head"><div class="sec-no">06<span>EXPERIMENTS</span></div><h2>27 张真照片，三种做法对比</h2></div>
   <div class="col">
     <p class="lead">
       照片是我自己拍的 27 张（人像、风光、城市、夜景、食物混着来）。三种做法跑同样的 API：
@@ -464,8 +557,8 @@
   </figure>
 
   <div class="col">
-    <h3>成品样例</h3>
-    <p>完整流程（约束 + 细节融合）的输出。每张都可以左右拖动：左边是原图，右边是成品。</p>
+    <h3>历史画廊：早期生成式编辑</h3>
+    <p>旧生成式流程与细节融合的展示样例，其中四例曾人工调整提示词。左为原图，右为历史成品；当前参数化样张见页首。</p>
   </div>
   <div class="wide"><div class="gallery" id="gallery"></div></div>
 
@@ -482,7 +575,7 @@
         <input type="range" min="0" max="100" value="50" aria-label="拖动对比原图与终选成品">
         <div class="knob">‹›</div>
       </div>
-      <figcaption><span class="fig-no">Figure 7</span>拖动对比：原图与成品（人像样例）。肤色保持原样，分辨率和皮肤纹理也是原片的。</figcaption>
+      <figcaption><span class="fig-no">Figure 7</span>早期生成式样例：挂饰原图与被选中的彩色分支。</figcaption>
     </figure>
     <div>
       <h4 style="margin-top:0; font-family:var(--serif); font-weight:500; font-size:19px">判定"不该动手"的情况</h4>
@@ -492,7 +585,7 @@
       </p>
       <div class="note">
         <b>已知边界</b>　暗光或低质量输入时，判断和编辑都会变难；人像的细节一致性取决于编辑后端的能力；
-        美学评分目前是统一标准，没有个人偏好。这几条会在后面的展望里再展开。
+        统一美学评分也无法代替个人偏好。
       </div>
     </div>
   </div>
@@ -500,9 +593,9 @@
 
 <!-- ============ 稳健性 ============ -->
 <section id="robustness" class="reveal">
-  <div class="sec-head"><div class="sec-no">06<span>ROBUSTNESS</span></div><h2>如果不加约束，会出什么问题</h2></div>
+  <div class="sec-head"><div class="sec-no">07<span>ROBUSTNESS</span></div><h2>如果不加约束，会出什么问题</h2></div>
   <div class="col">
-    <p class="lead">生成式编辑的特点是：你不约束它，它就会自由发挥。有四件事必须提前挡住。</p>
+    <p class="lead">早期生成式编辑中观察到四类问题，并尝试相应约束。</p>
   </div>
   <div class="wide">
     <div class="risk-grid">
@@ -535,11 +628,11 @@
   <div class="col">
     <div class="note">
       <b>代价也说清楚</b>　约束变严之后改动更保守，盲评从 4.22 到 4.18，BRISQUE 从 35.6 到 40.4
-      （后者惩罚的正是被还原出来的纹理）。"更忠实"和"更抢眼"在当前评分体系下确实会打架。
+      。这说明约束与质量指标之间存在取舍，尚不能把分数变化归因于单一处理。
     </div>
 
     <h3>实测：通用编辑模型的指令遵循并不可靠</h3>
-    <p>前面那些约束都是绕路。为了弄清根因，我用同一张照片做了单步对照实验：只改指令措辞，其余不变，看输出的整体色彩偏移。</p>
+    <p>另用猫与城景两张照片检查指令幅度：固定各自输入，改变措辞，观察整体色彩偏移。</p>
     <div class="tbl-wrap">
       <table class="tbl">
         <thead><tr><th>指令</th><th class="num">Δ(R−B) 暖冷偏移</th><th class="num">Δ 饱和</th><th class="num">Δ 亮度</th></tr></thead>
@@ -558,206 +651,10 @@
       在这些样例上，"稍微"没有把修改幅度可靠地限定到预期范围。
     </p>
     <p>
-      这两张照片暴露的是<b>当前模型与提示组合的幅度控制失配</b>，不能据此断言所有通用编辑模型都只能做大动作。
+      这两张照片暴露的是<b>早期生成式模型与提示组合的幅度控制失配</b>，不能据此断言所有通用编辑模型都只能做大动作。
       限制动作和检查输出能减少部分问题，但还需要验证执行器能否稳定遵循调色意图。
       我们因此转向可记录、可调整的参数化执行，并把质量与控制能力分别检验。
     </p>
-  </div>
-</section>
-
-<!-- ============ 展望 ============ -->
-<section id="outlook" class="reveal">
-  <div class="sec-head"><div class="sec-no">07<span>OUTLOOK</span></div><h2>下一步：做好 JPEG<br><em>把选择留给用户</em></h2></div>
-  <div class="col">
-    <p class="lead">第一版给同一张 JPEG 提供多个好看的候选，让用户选择。先验证每个候选的质量、差异与可控性，再扩展到 RAW 和局部编辑。</p>
-    <p>目前已在本地预览版中贯通照片导入、五个候选比较、继续调整与原尺寸导出，也保留不修改原图的选择。
-      新的联合训练让整组候选共同对应不同参考效果，但小样本上的重建改进尚未转化为稳定的整组质量。
-      因此模型仍在验证中；既有画廊来自此前已核验的流程，下方参数化样张单独标明助手给参的诊断来源。</p>
-  </div>
-  <div class="wide story-view-switch" role="group" aria-label="选择架构讲解形式">
-    <button type="button" data-story-view="video" aria-pressed="true">观看 38 秒讲解</button>
-    <button type="button" data-story-view="interactive" aria-pressed="false">逐步探索</button>
-  </div>
-  <figure class="wide story-video" id="architecture-video">
-    <video controls playsinline preload="metadata" poster="assets/architecture-story-poster.jpg" aria-label="PhotoPeaks 架构讲解，38 秒，无声字幕视频">
-      <source src="assets/architecture-story.mp4" type="video/mp4">
-      你的浏览器不支持内嵌视频，可下载视频或选择上方的逐步探索。
-    </video>
-    <figcaption>38 秒无声架构讲解 · 图形与候选卡片为流程示意，不是模型成片。当前开发由人工提供完整意图，尚未验证优于 PhotoAgent。
-      <a href="assets/architecture-story.mp4" download>下载 MP4</a></figcaption>
-  </figure>
-  <figure class="wide architecture-story" id="architecture-story" aria-labelledby="story-title" hidden>
-    <div class="story-heading">
-      <div><div class="story-eyebrow">DESIGN IN MOTION · 38 SEC</div><h3 id="story-title">从一张照片，到几种可能</h3></div>
-      <span class="story-kind">可交互的架构示意</span>
-    </div>
-    <div class="story-route" aria-label="架构步骤">
-      <button type="button" data-story-step="0"><span>01</span>同一张 JPEG</button>
-      <button type="button" data-story-step="1"><span>02</span>提出完整意图</button>
-      <button type="button" data-story-step="2"><span>03</span>理解与执行</button>
-      <button type="button" data-story-step="3"><span>04</span>滑块与 LUT</button>
-      <button type="button" data-story-step="4"><span>05</span>独立渲染</button>
-      <button type="button" data-story-step="5"><span>06</span>用户选择</button>
-    </div>
-    <div class="story-stage" data-scene="0">
-      <div class="story-art" aria-hidden="true"></div>
-      <div class="story-caption" aria-live="polite"><span class="story-counter">01 / 06</span><h4></h4><p></p></div>
-    </div>
-    <div class="story-controls">
-      <button type="button" class="story-play" aria-label="播放架构讲解">播放</button>
-      <button type="button" class="story-restart" aria-label="从头播放架构讲解">重播</button>
-      <label class="story-seek-label"><span class="story-sr">讲解进度</span><input class="story-seek" type="range" min="0" max="38" step="0.1" value="0" aria-label="架构讲解进度，单位秒"></label>
-      <output class="story-time">00:00 / 00:38</output>
-    </div>
-    <figcaption>流程、连线和控制器均为示意，不代表模型预测或成片。最终由规划器自主提出开放风格；<b>当前开发由人工提供完整意图，重点验证执行器</b>。尚未验证优于 PhotoAgent。</figcaption>
-    <noscript><p class="story-noscript">同一 JPEG → 规划器提出完整开放风格意图 → 执行器理解图像与意图 → 40 个滑块与可选有界残差 LUT → 每个候选从原图独立渲染 → 用户选择，包含保留原图。</p></noscript>
-  </figure>
-  <div class="wide assistant-probe" id="assistant-probe" aria-labelledby="assistant-probe-title">
-    <div class="col">
-      <h3 id="assistant-probe-title">先验证，参数能否表达意图</h3>
-      <p>当前助手读图并给出参数，由现有渲染器执行；<b>这是能力诊断，训练模型尚未通过验收</b>。
-        四例均直接来自助手首次给出的 40 个滑块参数，不用残差 LUT，也没有为展示重新调色。
-        调整只作用于原图的颜色与影调，不重新生成场景内容。</p>
-      <p class="small muted">拖动圆钮比较原图与参数化结果。样张来源为当前助手，不是本地训练模型或 Qwen 输出。</p>
-    </div>
-    <div class="gallery" id="assistant-probe-gallery">
-      <figure>
-        <div class="compare" id="probe-landscape-3">
-          <img src="assets/assistant-probe/landscape-3-before.jpg" width="1600" height="1067" loading="lazy" alt="村落风景原图">
-          <div class="top"><img src="assets/assistant-probe/landscape-3-after.jpg" width="1600" height="1067" loading="lazy" alt="助手首次给参后的鲜明幻灯片风格结果"></div>
-          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
-          <input type="range" min="0" max="100" value="50" aria-label="拖动对比村落原图与助手首次给参结果"><div class="knob">‹›</div>
-        </div>
-        <figcaption><h4>风景 · 鲜明的幻灯片色彩</h4>增强树木与天空的色彩，形成更有分量的暗部，同时保留云层和屋顶。</figcaption>
-        <details><summary>查看完整意图</summary><p lang="en">Give the village a vivid slide-film palette with intense green trees, cyan-blue sky and dense contrasting shadows. Blend three parts of this treatment with one part of the original, preserving the clouds and roofs.</p></details>
-      </figure>
-      <figure>
-        <div class="compare" id="probe-backlit-portrait-1">
-          <img src="assets/assistant-probe/backlit_portrait-1-before.jpg" width="1600" height="1067" loading="lazy" alt="逆光人像原图">
-          <div class="top"><img src="assets/assistant-probe/backlit_portrait-1-after.jpg" width="1600" height="1067" loading="lazy" alt="助手首次给参后的明亮人像结果"></div>
-          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
-          <input type="range" min="0" max="100" value="50" aria-label="拖动对比逆光人像原图与助手首次给参结果"><div class="knob">‹›</div>
-        </div>
-        <figcaption><h4>人像 · 打开逆光暗部</h4>提亮暗部与中间调，让脸部更容易看清，并柔和处理背景亮部。</figcaption>
-        <details><summary>查看完整意图</summary><p lang="en">Create a bright airy portrait by opening dark midtones and shadows, keeping neutral skin and gently compressing bright tones. The face must stay readable despite the bright background; avoid a grey veil.</p></details>
-      </figure>
-      <figure>
-        <div class="compare" id="probe-indoor-colour-1">
-          <img src="assets/assistant-probe/indoor_cast-1-before.jpg" width="1600" height="1061" loading="lazy" alt="室内演出原图，带黄绿色光照">
-          <div class="top"><img src="assets/assistant-probe/indoor_cast-1-after.jpg" width="1600" height="1061" loading="lazy" alt="助手首次给参后的室内彩色纠偏结果"></div>
-          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
-          <input type="range" min="0" max="100" value="50" aria-label="拖动对比室内彩色原图与助手首次给参结果"><div class="knob">‹›</div>
-        </div>
-        <figcaption><h4>室内 · 恢复颜色关系</h4>减少强烈的黄绿色偏色，保留肤色、吉他的木质色与衣服层次。</figcaption>
-        <details><summary>查看完整意图</summary><p lang="en">Remove the strong green-yellow cast for clean documentary colour, with near-neutral light walls, natural skin and warm guitar wood. Open the midtones moderately and retain separation in the dark clothing.</p></details>
-      </figure>
-      <figure>
-        <div class="compare" id="probe-indoor-mono-2">
-          <img src="assets/assistant-probe/indoor_cast-2-before.jpg" width="1600" height="1061" loading="lazy" alt="室内演出彩色原图">
-          <div class="top"><img src="assets/assistant-probe/indoor_cast-2-after.jpg" width="1600" height="1061" loading="lazy" alt="助手首次给参后的中性黑白演出结果"></div>
-          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
-          <input type="range" min="0" max="100" value="50" aria-label="拖动对比演出原图与助手首次给参的黑白结果"><div class="knob">‹›</div>
-        </div>
-        <figcaption><h4>演出 · 中性黑白</h4>去除颜色，以中间调对比、明亮琴身与深色衣服组织画面。</figcaption>
-        <details><summary>查看完整意图</summary><p lang="en">Create a bold neutral black-and-white performance photograph: rich midtone contrast, bright guitar tones and deep but readable clothing. Keep the face visible and remove the green-yellow colour completely.</p></details>
-      </figure>
-    </div>
-  </div>
-  <div class="wide">
-    <div class="path">
-      <div class="n">01</div>
-      <div>
-        <h3>参数化执行器：保留原图坐标，学习颜色变换</h3>
-        <div style="max-width:var(--col)">
-          <p>让模型根据图像与条件预测白平衡、曝光、曲线、混色和饱和度，并比较小型残差 LUT 是否补足颜色映射能力。
-            每个候选从同一张原图独立渲染，保留原图选项。参数化可以记录完整配方、约束改动幅度，
-            但仍需检查截断、色带与细节损失；它本身不保证好看。</p>
-          <p>先用 <a href="https://data.csail.mit.edu/graphics/fivek/" target="_blank" rel="noopener">MIT-Adobe FiveK</a>
-            的同图五专家配对学习，比较中性输入与已有专家成片作为输入的表现。
-            专家条件用于对应目标，<b>并不等于五个固定的风格标签</b>。
-            可逆扰动已用于恢复能力对照，当前还未证明能稳定改善已有调色输入，也不能据此保证风格条件被正确使用。</p>
-        </div>
-        <figure>
-          <div class="frame pan"><img src="assets/fig_train.svg" alt="同图多条件候选的训练和验证路径" style="width:100%;display:block"></div>
-          <figcaption>当前验证路径：配对数据验证调色能力，条件对照验证遵循程度，独立评价检验候选质量与偏好覆盖。</figcaption>
-        </figure>
-        <div style="max-width:var(--col)">
-          <h4>四条验证规则</h4>
-          <div class="tbl-wrap"><table class="tbl">
-            <thead><tr><th>规则</th><th>要回答的问题</th></tr></thead>
-            <tbody>
-              <tr><td>质量与差异分别评价</td><td>候选是否各自成立，而非靠夸张调色凑出差异？</td></tr>
-              <tr><td>匹配与错配条件对照</td><td>匹配条件是否比打乱条件更接近目标？仅有变化还不够。</td></tr>
-              <tr><td>原图与恒等样本</td><td>已经调好的照片，是否被无必要地改坏？</td></tr>
-              <tr><td>强度从零开始</td><td>参数缩放能否提供平滑、可用的感知控制？</td></tr>
-            </tbody>
-          </table></div>
-          <h4>重建、覆盖与偏好</h4>
-          <p>本轮 800 张训练池照片与 200 张测试照片已完成构建，八组模型已完成训练。
-            训练池经过几何一致性检查后，739 张用于训练，50 张用于内部验证；同一照片的五位专家成片始终一起划分。
-            PSNR 与色差衡量目标重建，同图候选间差异衡量分离程度；
-            它们都不能替代人类偏好。最终采用不参与训练和选模的人类盲评，比较同预算候选集的质量、可选性与保留原图的比例。</p>
-          <p>模型在缩略图上预测，全分辨率用于渲染。本地候选生成不依赖付费编辑 API，完整配方可以回放；
-            XMP 仅近似保留滑块部分。延迟和质量在正式评测后报告，当前不把训练目标写成已完成结果。</p>
-        </div>
-      </div>
-    </div>
-    <div class="path">
-      <div class="n">02</div>
-      <div style="max-width:var(--col)">
-        <h3>先让用户选择，再学习偏好</h3>
-        <p>同一张照片可以有几种用户喜欢的修法，偏好也会随场景与用途改变。
-          第一版由用户直接挑选候选，后续反馈用于改善排序与覆盖。
-          配对数据先验证调色能力，偏好数据再验证哪些候选值得呈现。</p>
-        <p>目前已准备匿名评价流程：先从两组中分别选出最喜欢的版本，再比较两组选择，并允许保留原图。
-          接下来邀请 3–5 位独立评委做先导评价，同时记录每张候选是否可接受，避免最好的一张掩盖整组中的问题。
-          目前尚无人类偏好实验结论。</p>
-        <p>最终由规划器观察照片，自主提出适合的风格，再交给理解这些意图的执行器生成候选，
-          不要求用户写提示词。电影、胶片、清透、黑白是可能的方向，候选不受固定菜单限制。</p>
-        <p>当前重点是让执行器把风格落实到照片上：既形成清楚可辨的色调与影调，也保持主体可读、肤色自然。
-          最新对照显示，风格目标与输入一致能减轻部分人像的压暗，部分风景的冷暖差异也更清楚。
-          但完整意图下的人像黑白仍会留色，室内偏色与不同表达的一致性也尚未解决。</p>
-        <p>审查过的风格参考已用于训练。补足颜色学习覆盖后，执行器在新的完整描述下更接近目标。
-          进一步加入明确排除相反效果的描述，能减小同一意图换种说法带来的差异，
-          但黑白去色、彩色风格力度和人像质量仍未稳定通过验收。</p>
-        <p>逐张复查还发现，部分清透目标本身就丢失了亮部层次，与保护高光的要求冲突。
-          新的亮部处理在这批目标对照中保留了更多层次。首次修正虽通过数值检查，却产生亮边，
-          经看图否决和再次修正后，已观察到的异常轮廓消失。
-          随后的同条件训练改善了清透亮部与目标的一致性，但完整成片仍有人像变暗、黑白残色等问题，尚未替换当前模型。
-          当前继续把完整风格要求与实际颜色、影调逐项核对，分别检查文字理解与实际执行。</p>
-        <p id="executor-progress">“最终完全去色”和“先去色再染色”要求不同的结果，保留部分原色也不等于黑白。
-          最新的文字适配仍会误判复合要求；补充颜色学习后，干净输入更接近目标，但整组改进还不足，
-          人像可读性、黑白残色与风格力度仍未过关。两项修正均未采纳，完整意图与真实成片必须一起通过检验。</p>
-        <p>更鲜明的外部调色参考也需要逐张审查。新参考虽然带来明显色彩变化，却会压暗部分人像；
-          它们尚未被采纳为训练目标或展示成片。上方助手给参样张用于检查现有调色参数的表达能力，不代表训练模型已达到同等质量。</p>
-        <p>风格目标与主体保护也需要一致：清透应保持明亮可读，黑白与哑光则允许合理的影调变化。
-          我们会结合成片判断这些要求，避免把“更亮”直接等同于“更好看”。
-          对于哑光等需要抬起暗部的风格，我们也在逐张检查暗部颜色，防止微小色差被放大。
-          每项修正都要回到完整成片复核。</p>
-        <p class="small muted">参数可复现不等于风格正确；排序、门禁与提示接口都需要重新校准。</p>
-      </div>
-    </div>
-    <div class="path">
-      <div class="n">03</div>
-      <div style="max-width:var(--col)">
-        <h3>先做好 JPEG，再尝试 RAW</h3>
-        <p>JPEG 已带有相机或手机的颜色处理，也可能经过后期。第一版控制改动幅度，
-          单独检验这些常见输入。FiveK 的 RAW 中性解码不能直接代表日常 JPEG，
-          专家成片输入也只是适应性对照，仍需独立照片验证。</p>
-        <p>RAW 可提供不同的曝光、白平衡和颜色处理余量，是后续扩展方向。
-          可恢复的信息取决于原始采集与解码，不能保证已截断的高光恢复。
-          适配时需要重新定义输入、颜色空间与训练目标。</p>
-      </div>
-    </div>
-    <div class="path">
-      <div class="n">04</div>
-      <div style="max-width:var(--col)">
-        <h3>在全局候选稳定后，扩展局部控制</h3>
-        <p>当前参数化管线使用全局颜色映射，同样的颜色会受到相同处理，因而独立控制天空与肤色仍有限制。
-          后续可用语义蒙版让不同区域独立调色，同时检查边界与区域间的颜色一致性。</p>
-        <p class="small muted">局部能力以相同数据与预算比较增益；它可能改善控制，也会带来新的误差来源。</p>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -765,47 +662,26 @@
 <section id="discussion" class="reveal">
   <div class="sec-head"><div class="sec-no">08<span>DISCUSSION</span></div><h2>从这些结果，<em>能推到哪里</em></h2></div>
   <div class="col">
-    <p>当前结果支持改进动作幅度、减少无效执行，并把候选覆盖作为独立目标。
-      它们不足以证明审美目标的数学形状，也不能证明某一类搜索必然失败。观察与解释需要分开。</p>
-  </div>
-  <div class="wide"><div class="tbl-wrap"><table class="tbl">
-    <thead><tr><th>观察</th><th>可以支持什么</th><th>尚不能推出什么</th></tr></thead>
-    <tbody>
-      <tr><td>动作幅度未稳定遵循提示</td><td>需要校准文本与执行幅度</td><td>所有原子动作都不存在可用小步</td></tr>
-      <tr><td>颜色、曝光与对比共同影响观感</td><td>成组编辑值得对照</td><td>审美目标必然具有特定的非凸几何</td></tr>
-      <tr><td>模型评分存在噪声</td><td>需要独立评价与不确定性报告</td><td>小样本均值差已经确立审美优势</td></tr>
-      <tr><td>内容相似度不够敏感</td><td>需要额外的保真检查</td><td>高 CLIP 或边缘相关性保证零损伤</td></tr>
-    </tbody>
-  </table></div></div>
-  <div class="col">
-    <p>前面的单图像素平均实验只说明一次混合没有超过两个端点。平均图得分与较低端点相同，
-      不能称为“两峰之间的谷底”，也不能推出参数插值普遍不可行。
-      加权标量目标可以有多个极值，最大化一个分数并不等于把不同风格的像素平均。</p>
-    <p><a href="https://arxiv.org/html/2602.22809v1" target="_blank" rel="noopener">PhotoAgent</a>
-      用 MCTS 探索多步动作序列，并带有回退机制。
-      本文的 scalar 对照只选择一次预测增益最高的原子动作，不能代表它。
-      若研究搜索策略，需要相同执行器、评价器、动作与调用预算下的直接对照。</p>
-    <p>评价也应区分指标用途：PhotoAgent 报告的 BRISQUE 未列入其四个奖励项，附录还检验了奖励模型与独立人类评分的相关性。
-      因此不能将它的评价一概称为循环论证；奖励模型是否有效与完整系统是否更受用户喜欢，需要分别检验。</p>
-    <p>下一阶段以 PhotoAgent 为核心对照：同样数量的候选交由用户盲选，同时检验细节保持、改动过度与总耗时。
-      对完整系统和共享执行器的策略分别比较，并纳入较小搜索预算。
-      当前尚无可核验的 PhotoAgent 直接实测，不能将本页结果表述为对它的性能胜出。</p>
+    <p>历史 27 张照片比较发生在本实现内部；模型评分差的置信区间跨过零，尚未建立审美优势。
+      PhotoAgent 的 MCTS、本文单动作基线和像素平均是不同方法；论文成本只作量级参考。</p>
+    <p>PhotoAgent 报告的 BRISQUE 不在其四个奖励项内，附录也检验了奖励模型与人类评分的相关性。
+      后续直接对照需匹配候选数量、执行器与预算，并加入独立偏好评价；当前没有对 PhotoAgent 的性能胜出证据。</p>
     <p>参数预测已有 <a href="https://groups.csail.mit.edu/graphics/hdrnet/" target="_blank" rel="noopener">HDRNet</a>、
       <a href="https://github.com/ImCharlesY/SepLUT" target="_blank" rel="noopener">SepLUT</a> 等工作。
-      我们要验证的是：在每个候选质量合格的前提下，同图多条件是否提供更多有用选择，
-      本地参数化执行是否改善控制与成本。目前不把“预测参数”本身当作新贡献，也不把效率改善当作审美优势。</p>
-    <p class="muted small">前作中的风格混合经验提供研究动机，不能替代这里的对照。
-      专家间差异、多候选分离与用户偏好是三件不同的事，需要分别验证。</p>
+      我们关注候选各自的质量、同图的有效选择，以及本地控制与执行成本。</p>
     <blockquote>让候选各自成立，再验证用户是否拥有更好的选择。</blockquote>
   </div>
 </section>
 
 <!-- ============ 复现 ============ -->
 <section id="repro" class="reveal">
-  <div class="sec-head"><div class="sec-no">09<span>REPRODUCIBILITY</span></div><h2>复现与实现细节</h2></div>
+  <div class="sec-head"><div class="sec-no">09<span>REPRODUCIBILITY</span></div><h2>复现入口与历史设置</h2></div>
   <div class="wide grid2" style="align-items:start">
     <div>
-      <h4 style="margin-top:0">代码结构</h4>
+      <h4 style="margin-top:0">当前本地参数化入口</h4>
+      <pre>python -m photopeaks.local_v5b_cli --help</pre>
+      <p class="small">显式提供本地权重、文本模型、JPEG 与完整意图。自有代码采用 MIT，权重与照片另循其来源条款；源码尚未公开发布。</p>
+      <h4>早期生成式代码</h4>
       <pre>photopeaks/
 ├── perceiver.py   概念生成（Qwen-VL，一次调用出 n 个概念，本次 n = 5）
 ├── judge.py       预测式评判 + 比较式终选
@@ -820,7 +696,7 @@
       <p class="small">图表都由 <code>scripts/make_*.py</code> 生成。</p>
     </div>
     <div>
-      <h4 style="margin-top:0">实验设置</h4>
+      <h4 style="margin-top:0">早期 27 图实验设置</h4>
       <div class="tbl-wrap" style="margin-top:0">
         <table class="tbl small">
           <tbody>
@@ -833,17 +709,18 @@
           </tbody>
         </table>
       </div>
-      <h4>运行</h4>
-      <pre>python -m scripts.run_benchmark --photos data/photos --out results/run1
-python -m scripts.make_figdata &amp;&amp; python -m scripts.make_figures
-python demo.py        # 本地交互 demo</pre>
+      <p class="small">历史数据与脚本保留用于复核。生成式复现会调用付费 API，须另行配置并确认调用预算。</p>
+      <figure style="margin:24px 0">
+        <div class="frame pan"><img src="assets/fig_train.svg" alt="早期离散专家条件训练示意" style="width:100%;display:block"></div>
+        <figcaption>早期离散专家条件训练示意，用于历史对照；当前执行器接收完整文字意图。</figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
 <footer>
   <div>PhotoPeaks · 受 <a href="https://arxiv.org/abs/2602.22809">PhotoAgent</a> 启发的独立实现与调色研究</div>
-  <div>页面上的数字与图片都来自真实运行（<code>results/run1</code>、<code>showcase/figdata.json</code>）· 个人研究记录，非正式发表版本</div>
+  <div>当前样张：助手给参、v5b 原图渲染 · 历史实验：早期生成式原型 · 动画：架构示意 · 个人研究记录</div>
 </footer>
 
 <script src="data.js"></script>
