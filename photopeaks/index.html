@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PhotoPeaks — 同图候选与参数化调色研究</title>
+<link rel="stylesheet" href="assets/architecture-story.css">
 <style>
   :root {
     /* neutral greys: no hue cast, so the photographs are judged on their own colour */
@@ -566,6 +567,44 @@
       新的联合训练让整组候选共同对应不同参考效果，但小样本上的重建改进尚未转化为稳定的整组质量。
       因此模型仍在验证中；本页成片展示来自此前已核验的流程。</p>
   </div>
+  <div class="wide story-view-switch" role="group" aria-label="选择架构讲解形式">
+    <button type="button" data-story-view="video" aria-pressed="true">观看 38 秒讲解</button>
+    <button type="button" data-story-view="interactive" aria-pressed="false">逐步探索</button>
+  </div>
+  <figure class="wide story-video" id="architecture-video">
+    <video controls playsinline preload="metadata" poster="assets/architecture-story-poster.jpg" aria-label="PhotoPeaks 架构讲解，38 秒，无声字幕视频">
+      <source src="assets/architecture-story.mp4" type="video/mp4">
+      你的浏览器不支持内嵌视频，可下载视频或选择上方的逐步探索。
+    </video>
+    <figcaption>38 秒无声架构讲解 · 图形与候选卡片为流程示意，不是模型成片。当前开发由人工提供完整意图，尚未验证优于 PhotoAgent。
+      <a href="assets/architecture-story.mp4" download>下载 MP4</a></figcaption>
+  </figure>
+  <figure class="wide architecture-story" id="architecture-story" aria-labelledby="story-title" hidden>
+    <div class="story-heading">
+      <div><div class="story-eyebrow">DESIGN IN MOTION · 38 SEC</div><h3 id="story-title">从一张照片，到几种可能</h3></div>
+      <span class="story-kind">可交互的架构示意</span>
+    </div>
+    <div class="story-route" aria-label="架构步骤">
+      <button type="button" data-story-step="0"><span>01</span>同一张 JPEG</button>
+      <button type="button" data-story-step="1"><span>02</span>提出完整意图</button>
+      <button type="button" data-story-step="2"><span>03</span>理解与执行</button>
+      <button type="button" data-story-step="3"><span>04</span>滑块与 LUT</button>
+      <button type="button" data-story-step="4"><span>05</span>独立渲染</button>
+      <button type="button" data-story-step="5"><span>06</span>用户选择</button>
+    </div>
+    <div class="story-stage" data-scene="0">
+      <div class="story-art" aria-hidden="true"></div>
+      <div class="story-caption" aria-live="polite"><span class="story-counter">01 / 06</span><h4></h4><p></p></div>
+    </div>
+    <div class="story-controls">
+      <button type="button" class="story-play" aria-label="播放架构讲解">播放</button>
+      <button type="button" class="story-restart" aria-label="从头播放架构讲解">重播</button>
+      <label class="story-seek-label"><span class="story-sr">讲解进度</span><input class="story-seek" type="range" min="0" max="38" step="0.1" value="0" aria-label="架构讲解进度，单位秒"></label>
+      <output class="story-time">00:00 / 00:38</output>
+    </div>
+    <figcaption>流程、连线和控制器均为示意，不代表模型预测或成片。最终由规划器自主提出开放风格；<b>当前开发由人工提供完整意图，重点验证执行器</b>。尚未验证优于 PhotoAgent。</figcaption>
+    <noscript><p class="story-noscript">同一 JPEG → 规划器提出完整开放风格意图 → 执行器理解图像与意图 → 40 个滑块与可选有界残差 LUT → 每个候选从原图独立渲染 → 用户选择，包含保留原图。</p></noscript>
+  </figure>
   <div class="wide">
     <div class="path">
       <div class="n">01</div>
@@ -596,8 +635,9 @@
             </tbody>
           </table></div>
           <h4>重建、覆盖与偏好</h4>
-          <p>当前正在构建 800 张训练、200 张测试的小集，从训练照片中再划出验证集。
-            同一照片的五位专家成片始终一起划分。PSNR 与色差衡量目标重建，同图候选间差异衡量分离程度；
+          <p>本轮 800 张训练池照片与 200 张测试照片已完成构建，八组模型已完成训练。
+            训练池经过几何一致性检查后，739 张用于训练，50 张用于内部验证；同一照片的五位专家成片始终一起划分。
+            PSNR 与色差衡量目标重建，同图候选间差异衡量分离程度；
             它们都不能替代人类偏好。最终采用不参与训练和选模的人类盲评，比较同预算候选集的质量、可选性与保留原图的比例。</p>
           <p>模型在缩略图上预测，全分辨率用于渲染。本地候选生成不依赖付费编辑 API，完整配方可以回放；
             XMP 仅近似保留滑块部分。延迟和质量在正式评测后报告，当前不把训练目标写成已完成结果。</p>
@@ -614,9 +654,28 @@
         <p>目前已准备匿名评价流程：先从两组中分别选出最喜欢的版本，再比较两组选择，并允许保留原图。
           接下来邀请 3–5 位独立评委做先导评价，同时记录每张候选是否可接受，避免最好的一张掩盖整组中的问题。
           目前尚无人类偏好实验结论。</p>
-        <p>先用离散条件生成候选，不要求用户写提示词。CLIP 图像差分到文本的迁移保留为实验分支：
-          两者并不自动对齐，同图目标差分也不同于任意参考照片。
-          连续风格空间需要另行检验内容泄漏、条件遵循与跨照片一致性。</p>
+        <p>最终由规划器观察照片，自主提出适合的风格，再交给理解这些意图的执行器生成候选，
+          不要求用户写提示词。电影、胶片、清透、黑白是可能的方向，候选不受固定菜单限制。</p>
+        <p>当前重点是让执行器把风格落实到照片上：既形成清楚可辨的色调与影调，也保持主体可读、肤色自然。
+          最新对照显示，风格目标与输入一致能减轻部分人像的压暗，部分风景的冷暖差异也更清楚。
+          但完整意图下的人像黑白仍会留色，室内偏色与不同表达的一致性也尚未解决。</p>
+        <p>审查过的风格参考已用于训练。补足颜色学习覆盖后，执行器在新的完整描述下更接近目标。
+          进一步加入明确排除相反效果的描述，能减小同一意图换种说法带来的差异，
+          但黑白去色、彩色风格力度和人像质量仍未稳定通过验收。</p>
+        <p>逐张复查还发现，部分清透目标本身就丢失了亮部层次，与保护高光的要求冲突。
+          新的亮部处理在这批目标对照中保留了更多层次。首次修正虽通过数值检查，却产生亮边，
+          经看图否决和再次修正后，已观察到的异常轮廓消失。
+          随后的同条件训练改善了清透亮部与目标的一致性，但完整成片仍有人像变暗、黑白残色等问题，尚未替换当前模型。
+          当前继续把完整风格要求与实际颜色、影调逐项核对，分别检查文字理解与实际执行。</p>
+        <p id="executor-progress">“最终完全去色”和“先去色再染色”要求不同的结果，保留部分原色也不等于黑白。
+          最新的文字适配仍会误判复合要求；补充颜色学习后，干净输入更接近目标，但整组改进还不足，
+          人像可读性、黑白残色与风格力度仍未过关。两项修正均未采纳，完整意图与真实成片必须一起通过检验。</p>
+        <p>更鲜明的外部调色参考也需要逐张审查。新参考虽然带来明显色彩变化，却会压暗部分人像；
+          它们尚未被采纳为训练目标或展示成片。当前页面的成片仍来自此前标明的流程，不代表新参数执行器已达到同等质量。</p>
+        <p>风格目标与主体保护也需要一致：清透应保持明亮可读，黑白与哑光则允许合理的影调变化。
+          我们会结合成片判断这些要求，避免把“更亮”直接等同于“更好看”。
+          对于哑光等需要抬起暗部的风格，我们也在逐张检查暗部颜色，防止微小色差被放大。
+          每项修正都要回到完整成片复核。</p>
         <p class="small muted">参数可复现不等于风格正确；排序、门禁与提示接口都需要重新校准。</p>
       </div>
     </div>
@@ -668,6 +727,8 @@
       用 MCTS 探索多步动作序列，并带有回退机制。
       本文的 scalar 对照只选择一次预测增益最高的原子动作，不能代表它。
       若研究搜索策略，需要相同执行器、评价器、动作与调用预算下的直接对照。</p>
+    <p>评价也应区分指标用途：PhotoAgent 报告的 BRISQUE 未列入其四个奖励项，附录还检验了奖励模型与独立人类评分的相关性。
+      因此不能将它的评价一概称为循环论证；奖励模型是否有效与完整系统是否更受用户喜欢，需要分别检验。</p>
     <p>下一阶段以 PhotoAgent 为核心对照：同样数量的候选交由用户盲选，同时检验细节保持、改动过度与总耗时。
       对完整系统和共享执行器的策略分别比较，并纳入较小搜索预算。
       当前尚无可核验的 PhotoAgent 直接实测，不能将本页结果表述为对它的性能胜出。</p>
@@ -825,5 +886,6 @@ function onScroll() {
 addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 </script>
+<script src="assets/architecture-story.js" defer></script>
 </body>
 </html>
