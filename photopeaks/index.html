@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhotoPeaks — 同图候选与参数化调色研究</title>
+<title>PhotoPeaks — 同一张照片，几种可能</title>
 <link rel="stylesheet" href="assets/architecture-story.css">
 <style>
   :root {
@@ -103,16 +103,6 @@
     .hero-photo .compare img { height: 100%; object-fit: cover; object-position: 50% 62%; }
   }
   .hero-photo figcaption { max-width: none; display: flex; justify-content: space-between; gap: 20px; }
-  .metrics { max-width: var(--wide); margin: 44px auto 0; display: grid; grid-template-columns: repeat(4, 1fr);
-             border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .metric { padding: 22px 22px 20px 0; }
-  .metric + .metric { border-left: 1px solid var(--line); padding-left: 22px; }
-  .metric .num { font-family: var(--serif); font-size: 40px; line-height: 1.1; color: var(--text); font-variant-numeric: tabular-nums; }
-  .metric .num small { font-size: 18px; color: var(--dim); margin-left: 2px; }
-  .metric .lbl { font-size: 12.5px; color: var(--dim); margin-top: 8px; line-height: 1.55; }
-  @media (max-width: 900px) { .metrics { grid-template-columns: 1fr 1fr; }
-    .metric:nth-child(3) { border-left: 0; padding-left: 0; } .metric:nth-child(n+3) { border-top: 1px solid var(--line); } }
-
   /* ---------- before / after ---------- */
   .compare { position: relative; overflow: hidden; border-radius: 4px; user-select: none; touch-action: pan-y; cursor: ew-resize; background: var(--sunken); }
   .compare img { width: 100%; display: block; pointer-events: none; }
@@ -141,67 +131,6 @@
   .assistant-probe details p { font-size: 12px; line-height: 1.8; color: var(--text-2); margin: 0 0 12px; }
   @media (max-width: 900px) { .gallery { grid-template-columns: 1fr; } }
 
-  /* ---------- tables ---------- */
-  .tbl-wrap { overflow-x: auto; margin: 22px 0; }
-  table.tbl { width: 100%; border-collapse: collapse; font-size: 14.5px; font-variant-numeric: tabular-nums; }
-  table.tbl th, table.tbl td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
-  table.tbl thead th { white-space: nowrap; font-family: var(--mono); font-size: 11.5px; font-weight: 400; letter-spacing: .06em;
-                       text-transform: uppercase; color: var(--dim); border-bottom: 1px solid var(--line-2); }
-  table.tbl td { color: var(--text-2); }
-  table.tbl td:first-child { color: var(--text); }
-  table.tbl td.num, table.tbl th.num { text-align: right; font-family: var(--mono); font-size: 13.5px; }
-  table.tbl td.best { color: var(--accent); }
-  table.tbl td.bad { color: var(--brick); }
-  table.tbl tr.ours td { background: var(--accent-soft); }
-  table.tbl tr.ours td:first-child { box-shadow: inset 2px 0 0 var(--accent); }
-  .tbl-note { font-size: 13px; color: var(--dim); }
-
-  /* ---------- blocks ---------- */
-  .note { border-left: 2px solid var(--accent); padding: 4px 0 4px 18px; margin: 26px 0; color: var(--text-2); font-size: 15px; }
-  .note b { color: var(--accent); font-weight: 500; }
-  .contribs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 40px; border-top: 1px solid var(--line); }
-  .contrib { padding: 22px 24px 4px 0; }
-  .contrib + .contrib { border-left: 1px solid var(--line); padding-left: 24px; }
-  .contrib .tag { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .1em; }
-  .contrib h4 { margin: 8px 0 6px; font-size: 17px; font-family: var(--serif); font-weight: 500; }
-  .contrib p { font-size: 14.5px; margin: 0; }
-  @media (max-width: 900px) { .contribs { grid-template-columns: 1fr; } .contrib + .contrib { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); } }
-
-  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--line);
-           border-bottom: 1px solid var(--line); margin-bottom: 48px; }
-  .step { padding: 22px 22px 26px 0; }
-  .step + .step { border-left: 1px solid var(--line); padding-left: 22px; }
-  .step .n { font-family: var(--serif); font-size: 44px; line-height: 1; color: var(--line-2); }
-  .step h4 { margin: 14px 0 8px; font-family: var(--serif); font-weight: 500; font-size: 18px; }
-  .step p { font-size: 14.5px; margin: 0; }
-  @media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } .step:nth-child(3) { border-left: 0; padding-left: 0; } }
-
-  .risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 28px; }
-  .risk { background: var(--bg); padding: 26px 26px 22px; }
-  .risk h4 { margin: 0 0 10px; font-family: var(--serif); font-weight: 500; font-size: 18px; }
-  .risk p { font-size: 14.5px; margin: 0; }
-  .risk .delta { font-family: var(--mono); font-size: 13px; color: var(--dim); margin-top: 16px; }
-  .risk .delta b { font-family: var(--serif); font-size: 26px; color: var(--accent); font-weight: 400; margin-right: 8px; }
-  @media (max-width: 900px) { .risk-grid { grid-template-columns: 1fr; } }
-
-  .path { display: grid; grid-template-columns: 120px 1fr; gap: 24px; padding: 34px 0; border-top: 1px solid var(--line); }
-  .path > * { min-width: 0; }
-  .path .n { font-family: var(--serif); font-size: 56px; line-height: 1; color: var(--line-2); }
-  .path h3 { margin: 0 0 6px; }
-  @media (max-width: 900px) { .path { grid-template-columns: 1fr; gap: 6px; } .path .n { font-size: 36px; } }
-
-  .triptych { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
-  .triptych figure { margin: 0; }
-  .triptych img { width: 100%; display: block; border-radius: 4px; }
-  .triptych figcaption { display: flex; justify-content: space-between; align-items: baseline; margin-top: 10px; }
-  .triptych .score { font-family: var(--mono); font-size: 13px; color: var(--text); }
-  .triptych .avg .score { color: var(--brick); }
-  .triptych .avg img { outline: 1px solid var(--brick); outline-offset: 4px; }
-  @media (max-width: 700px) { .triptych { grid-template-columns: 1fr; } }
-
-  blockquote { font-family: var(--serif); font-size: clamp(22px, 2.6vw, 30px); line-height: 1.5; color: var(--text);
-               margin: 48px 0; padding-left: 28px; border-left: 2px solid var(--accent); }
-
   details { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 32px 0; }
   details summary { cursor: pointer; padding: 16px 0; color: var(--text-2); font-size: 15px; list-style: none; display: flex; justify-content: space-between; }
   details summary::-webkit-details-marker { display: none; }
@@ -215,61 +144,105 @@
   .reveal { opacity: 0; transform: translateY(16px); transition: opacity .8s ease, transform .8s ease; }
   .reveal.on { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+  .output-card { padding: 22px; border: 1px solid var(--line); border-radius: 6px; background: var(--raised); }
+  .output-card h3 { margin: 0 0 8px; }
+  .output-card p { margin: 0; font-size: 14px; }
+  @media (max-width: 900px) {
+    .topbar { gap: 18px; padding: 0 18px; }
+    .topbar .brand { font-size: 16px; }
+    .topbar nav { display: flex; min-width: 0; gap: 18px; }
+    .topbar nav a { font-size: 12px; }
+  }
+
+  ol.list { padding-left: 22px; color: var(--text-2); }
+  ol.list li { padding-left: 4px; margin: 12px 0; }
+  .research-toc { display: flex; flex-wrap: wrap; gap: 10px 22px; padding: 22px 0; margin-top: 30px; border-top: 1px solid var(--line); font-size: 14px; }
+  .research-toc a { color: var(--text-2); }
+  .research-table { overflow-x: auto; margin: 26px auto; }
+  .research-table table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.8; }
+  .research-table th, .research-table td { padding: 15px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  .research-table th { color: var(--text); font-weight: 500; background: var(--raised); }
+  .research-table td { color: var(--text-2); }
+  .research-table td:first-child { color: var(--text); }
+  .research-table .value { font-family: var(--mono); font-size: 13px; white-space: nowrap; }
+  .pipeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin: 34px auto; }
+  .pipeline > div { position: relative; padding: 20px 16px; border: 1px solid var(--line-2); border-radius: 5px; background: var(--raised); }
+  .pipeline > div:not(:last-child)::after { content: '→'; position: absolute; right: -16px; top: 40%; color: var(--accent); }
+  .pipeline b { display: block; font-size: 15px; margin-bottom: 8px; }
+  .pipeline p { font-size: 13px; line-height: 1.7; margin: 0; }
+  .network { padding: 26px; border: 1px solid var(--line-2); border-radius: 6px; background: var(--sunken); margin-top: 28px; }
+  .network .grid2 > div { padding: 18px; border: 1px solid var(--line); border-radius: 5px; }
+  .network h3 { margin: 0 0 10px; font-size: 20px; }
+  .network p { font-size: 14px; margin: 8px 0; }
+  .network-join { text-align: center; padding-top: 20px; color: var(--accent); font-family: var(--mono); font-size: 14px; }
+  .formula { margin: 24px 0; padding: 20px; border-left: 2px solid var(--accent); background: var(--raised); font-family: var(--mono); font-size: 14px; color: var(--text); overflow-x: auto; }
+  .evidence-note { border-left: 2px solid var(--accent); padding: 2px 0 2px 20px; margin: 28px 0; }
+  .source-details { font-size: 13px; overflow-wrap: anywhere; }
+  @media (max-width: 900px) { .pipeline { grid-template-columns: 1fr; gap: 22px; }
+    .pipeline > div:not(:last-child)::after { content: '↓'; top: auto; bottom: -22px; left: 50%; right: auto; }
+    .research-table table { min-width: 680px; }
+    .research-table::before { content: '左右滑动查看完整表格'; display: block; color: var(--muted); font-size: 12px; margin-bottom: 12px; }
+    .network { padding: 18px; }
+  }
+  .expanded-gallery { padding: 0; }
+  .research-figure { width: calc(100% - 56px); margin: 36px auto; }
+  .research-diagram { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--raised); }
+  .research-figure figcaption { max-width: none; margin: 12px 0 0; }
+  .diagram-scroll-hint { display: none; }
+  @media (max-width: 1136px) {
+    .diagram-scroll-hint { display: block; margin: 0 0 10px; font-size: 12px; color: var(--muted); }
+  }
 </style>
 </head>
 <body>
 
 <header class="topbar">
   <a class="brand" href="#top">PhotoPeaks</a>
-  <nav>
-    <a href="#assistant-probe">当前样张</a><a href="#outlook">架构讲解</a><a href="#abstract">早期原型</a>
-    <a href="#experiments">历史实验</a><a href="#discussion">讨论</a><a href="#repro">复现</a>
+  <nav aria-label="页面导航">
+    <a href="#assistant-probe">样张</a><a href="#motivation">研究问题</a><a href="#outlook">架构</a><a href="#executor">执行器</a><a href="#training">训练</a><a href="#experiments">实测</a><a href="#workflow">导出</a><a href="#repro">复现</a>
   </nav>
   <div class="progress" id="progress"></div>
 </header>
-
-<!-- ============ HERO ============ -->
 <div class="hero" id="top">
   <div class="hero-top">
     <div>
-      <div class="kicker">受 <b>PhotoAgent</b> 启发的独立研究</div>
+      <div class="kicker">完整风格意图 · 原图参数化调色</div>
       <h1>PhotoPeaks</h1>
-      <div class="sub">从候选探索到参数化调色</div>
+      <div class="sub">同一张照片，几种可能</div>
     </div>
     <p class="lead">
-      一张照片可以有几种成立的修法。我们希望从照片提出风格意图，
-      用可解释的颜色与影调控制生成独立候选，再把选择留给用户。
+      从照片提出完整风格意图，用可解释的颜色与影调控制生成独立候选。
+      保留原图细节，把最终选择留给你。
     </p>
   </div>
 
   <figure class="hero-photo">
     <div class="compare" id="hero-compare">
       <img src="assets/assistant-probe/landscape-3-before.jpg" alt="村落原图">
-      <div class="top"><img src="assets/assistant-probe/landscape-3-after.jpg" alt="助手给参后的参数化村落结果"></div>
+      <div class="top"><img src="assets/assistant-probe/landscape-3-after.jpg" alt="参数化调色的村落结果"></div>
       <div class="rule"></div>
       <span class="lab l">原图</span><span class="lab r">参数化结果</span>
       <input type="range" min="0" max="100" value="50" aria-label="拖动对比原图与成品">
       <div class="knob">‹›</div>
     </div>
-    <figcaption><span>当前参数化渲染 · 助手读图给出 40 个滑块，非训练模型预测</span><span>拖动比较原图与结果</span></figcaption>
+    <figcaption><span>同一原图 · 参数化调色</span><span>拖动比较原图与结果</span></figcaption>
   </figure>
 
 </div>
 
   <div class="wide assistant-probe" id="assistant-probe" aria-labelledby="assistant-probe-title">
     <div class="col">
-      <h3 id="assistant-probe-title">当前样张：在原图上完成调色</h3>
-      <p>四例选自助手读图后首次给参的九组诊断，使用现有 v5b 渲染器、40 个滑块与原图像素，残差 LUT 关闭。
-        完整配方均能精确回放；<b>学习执行器尚未通过质量验收</b>。以下样张展示参数表达能力。</p>
-      <p class="small muted">拖动圆钮比较；展开可查看当时的完整意图。</p>
+      <h2 id="assistant-probe-title">让每一种选择都有自己的风格</h2>
+      <p>本节展示参数化渲染器的颜色与影调表达能力；学习模型实验见下文。</p>
+      <p class="small muted">拖动圆钮比较；展开查看完整风格意图。<a href="#expanded-gallery">更多场景样张</a></p>
     </div>
     <div class="gallery" id="assistant-probe-gallery">
       <figure>
         <div class="compare" id="probe-landscape-3">
           <img src="assets/assistant-probe/landscape-3-before.jpg" width="1600" height="1067" loading="lazy" alt="村落风景原图">
-          <div class="top"><img src="assets/assistant-probe/landscape-3-after.jpg" width="1600" height="1067" loading="lazy" alt="助手首次给参后的鲜明幻灯片风格结果"></div>
+          <div class="top"><img src="assets/assistant-probe/landscape-3-after.jpg" width="1600" height="1067" loading="lazy" alt="参数化调色的鲜明幻灯片风格结果"></div>
           <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
-          <input type="range" min="0" max="100" value="50" aria-label="拖动对比村落原图与助手首次给参结果"><div class="knob">‹›</div>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比村落原图与参数化渲染结果"><div class="knob">‹›</div>
         </div>
         <figcaption><h4>风景 · 鲜明的幻灯片色彩</h4>增强树木与天空的色彩，形成更有分量的暗部，同时保留云层和屋顶。</figcaption>
         <details><summary>查看完整意图</summary><p lang="en">Give the village a vivid slide-film palette with intense green trees, cyan-blue sky and dense contrasting shadows. Blend three parts of this treatment with one part of the original, preserving the clouds and roofs.</p></details>
@@ -277,9 +250,9 @@
       <figure>
         <div class="compare" id="probe-backlit-portrait-1">
           <img src="assets/assistant-probe/backlit_portrait-1-before.jpg" width="1600" height="1067" loading="lazy" alt="逆光人像原图">
-          <div class="top"><img src="assets/assistant-probe/backlit_portrait-1-after.jpg" width="1600" height="1067" loading="lazy" alt="助手首次给参后的明亮人像结果"></div>
+          <div class="top"><img src="assets/assistant-probe/backlit_portrait-1-after.jpg" width="1600" height="1067" loading="lazy" alt="参数化调色的明亮人像结果"></div>
           <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
-          <input type="range" min="0" max="100" value="50" aria-label="拖动对比逆光人像原图与助手首次给参结果"><div class="knob">‹›</div>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比逆光人像原图与参数化渲染结果"><div class="knob">‹›</div>
         </div>
         <figcaption><h4>人像 · 打开逆光暗部</h4>提亮暗部与中间调，让脸部更容易看清，并柔和处理背景亮部。</figcaption>
         <details><summary>查看完整意图</summary><p lang="en">Create a bright airy portrait by opening dark midtones and shadows, keeping neutral skin and gently compressing bright tones. The face must stay readable despite the bright background; avoid a grey veil.</p></details>
@@ -287,33 +260,210 @@
       <figure>
         <div class="compare" id="probe-indoor-colour-1">
           <img src="assets/assistant-probe/indoor_cast-1-before.jpg" width="1600" height="1061" loading="lazy" alt="室内演出原图，带黄绿色光照">
-          <div class="top"><img src="assets/assistant-probe/indoor_cast-1-after.jpg" width="1600" height="1061" loading="lazy" alt="助手首次给参后的室内彩色纠偏结果"></div>
+          <div class="top"><img src="assets/assistant-probe/indoor_cast-1-after.jpg" width="1600" height="1061" loading="lazy" alt="参数化调色的室内彩色纠偏结果"></div>
           <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
-          <input type="range" min="0" max="100" value="50" aria-label="拖动对比室内彩色原图与助手首次给参结果"><div class="knob">‹›</div>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比室内彩色原图与参数化渲染结果"><div class="knob">‹›</div>
         </div>
         <figcaption><h4>室内 · 恢复颜色关系</h4>减少强烈的黄绿色偏色，保留肤色、吉他的木质色与衣服层次。</figcaption>
         <details><summary>查看完整意图</summary><p lang="en">Remove the strong green-yellow cast for clean documentary colour, with near-neutral light walls, natural skin and warm guitar wood. Open the midtones moderately and retain separation in the dark clothing.</p></details>
       </figure>
-      <figure>
-        <div class="compare" id="probe-indoor-mono-2">
-          <img src="assets/assistant-probe/indoor_cast-2-before.jpg" width="1600" height="1061" loading="lazy" alt="室内演出彩色原图">
-          <div class="top"><img src="assets/assistant-probe/indoor_cast-2-after.jpg" width="1600" height="1061" loading="lazy" alt="助手首次给参后的中性黑白演出结果"></div>
-          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
-          <input type="range" min="0" max="100" value="50" aria-label="拖动对比演出原图与助手首次给参的黑白结果"><div class="knob">‹›</div>
-        </div>
-        <figcaption><h4>演出 · 中性黑白</h4>去除颜色，以中间调对比、明亮琴身与深色衣服组织画面。</figcaption>
-        <details><summary>查看完整意图</summary><p lang="en">Create a bold neutral black-and-white performance photograph: rich midtone contrast, bright guitar tones and deep but readable clothing. Keep the face visible and remove the green-yellow colour completely.</p></details>
-      </figure>
     </div>
   </div>
 
-<!-- ============ 展望 ============ -->
+<section id="expanded-gallery" class="wide assistant-probe expanded-gallery" aria-labelledby="expanded-gallery-title">
+  <div class="col">
+    <h2 id="expanded-gallery-title">更多场景的调色示例</h2>
+    <p>每张照片展示一种选定的调色方向。拖动比较原图与结果的明暗和色彩。</p>
+  </div>
+  <div class="gallery" id="expanded-gallery-content">
+    <figure>
+      <div class="compare" id="expanded-forest_steps-1">
+        <img src="assets/expanded-probe/forest_steps-before.jpg" width="1600" height="1067" loading="lazy" alt="林间台阶原图">
+        <div class="top"><img src="assets/expanded-probe/forest_steps-1-after.jpg" width="1600" height="1067" loading="lazy" alt="林间台阶 · 清透森林参数化调色结果"></div>
+        <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+        <input type="range" min="0" max="100" value="50" aria-label="拖动对比林间台阶原图与清透森林结果"><div class="knob">‹›</div>
+      </div>
+      <figcaption><h4>林间台阶 · 清透森林</h4>打开林下台阶的暗部，增强绿叶层次，并保留浅色石面的亮部。</figcaption>
+      <details><summary>查看完整意图</summary><p lang="en">Give this shaded woodland staircase a clear, lush green treatment. Open the dark steps enough to retain their wood texture, keep the sunlit stones controlled, deepen the green foliage and preserve neutral stone without an overall blue cast.</p></details>
+    </figure>
+    <figure>
+      <div class="compare" id="expanded-cat-1">
+        <img src="assets/expanded-probe/cat-before.jpg" width="1600" height="1067" loading="lazy" alt="树下的猫原图">
+        <div class="top"><img src="assets/expanded-probe/cat-1-after.jpg" width="1600" height="1067" loading="lazy" alt="树下的猫 · 清透自然参数化调色结果"></div>
+        <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+        <input type="range" min="0" max="100" value="50" aria-label="拖动对比树下的猫原图与清透自然结果"><div class="knob">‹›</div>
+      </div>
+      <figcaption><h4>树下的猫 · 清透自然</h4>轻提亮度与毛发层次，保持白毛、灰纹与眼睛的区分。</figcaption>
+      <details><summary>查看完整意图</summary><p lang="en">Make this shaded cat portrait clear and luminous, with clean white fur, distinct grey stripes and readable yellow-green eyes. Keep the background quiet, preserve fur texture and avoid adding a conspicuous warm cast.</p></details>
+    </figure>
+    <figure>
+      <div class="compare" id="expanded-day_portrait-2">
+        <img src="assets/expanded-probe/day_portrait-before.jpg" width="1600" height="1067" loading="lazy" alt="日光人像原图">
+        <div class="top"><img src="assets/expanded-probe/day_portrait-2-after.jpg" width="1600" height="1067" loading="lazy" alt="日光人像 · 中性黑白肖像参数化调色结果"></div>
+        <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+        <input type="range" min="0" max="100" value="50" aria-label="拖动对比日光人像原图与中性黑白肖像结果"><div class="knob">‹›</div>
+      </div>
+      <figcaption><h4>日光人像 · 中性黑白肖像</h4>以中间调刻画面部，保留外套深色层次与天空亮部。</figcaption>
+      <details><summary>查看完整意图</summary><p lang="en">Render this outdoor portrait entirely in neutral black and white. Give the face a clear midtone presence and the jacket a defined dark structure, retain detail in the bright sky and preserve the natural separation of hair, skin and background. Leave no coloured remnants.</p></details>
+    </figure>
+    <figure>
+      <div class="compare" id="expanded-city_street-1">
+        <img src="assets/expanded-probe/city_street-before.jpg" width="1600" height="1067" loading="lazy" alt="城市街道原图">
+        <div class="top"><img src="assets/expanded-probe/city_street-1-after.jpg" width="1600" height="1067" loading="lazy" alt="城市街道 · 冷调城市电影参数化调色结果"></div>
+        <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+        <input type="range" min="0" max="100" value="50" aria-label="拖动对比城市街道原图与冷调城市电影结果"><div class="knob">‹›</div>
+      </div>
+      <figcaption><h4>城市街道 · 冷调城市电影</h4>将天空与街道收向偏冷色调，保留红色出租车和阴影中的招牌。</figcaption>
+      <details><summary>查看完整意图</summary><p lang="en">Give this busy daylight street a cool cinematic palette, with a cyan-blue sky, restrained building colours and clearly retained red taxis. Shape the sunlight and street shadows with moderate contrast while keeping signs and the shaded facades readable.</p></details>
+    </figure>
+    <figure>
+      <div class="compare" id="expanded-night_portrait-1">
+        <img src="assets/expanded-probe/night_portrait-before.jpg" width="1600" height="1067" loading="lazy" alt="夜景人像原图">
+        <div class="top"><img src="assets/expanded-probe/night_portrait-1-after.jpg" width="1600" height="1067" loading="lazy" alt="夜景人像 · 自然夜景人像参数化调色结果"></div>
+        <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+        <input type="range" min="0" max="100" value="50" aria-label="拖动对比夜景人像原图与自然夜景人像结果"><div class="knob">‹›</div>
+      </div>
+      <figcaption><h4>夜景人像 · 自然夜景人像</h4>减轻脸部橙色光照，保留暖肤色、深蓝外套和彩色背景光点。</figcaption>
+      <details><summary>查看完整意图</summary><p lang="en">Give this night portrait a clean, balanced colour treatment. Reduce the strong orange illumination on the face while retaining believable warm skin, keep the navy jacket distinct and preserve the warm and cool background light circles without clipping them further.</p></details>
+    </figure>
+    <figure>
+      <div class="compare" id="expanded-sea_pier-1">
+        <img src="assets/expanded-probe/sea_pier-before.jpg" width="1600" height="1067" loading="lazy" alt="海边栈道原图">
+        <div class="top"><img src="assets/expanded-probe/sea_pier-1-after.jpg" width="1600" height="1067" loading="lazy" alt="海边栈道 · 清透海岸参数化调色结果"></div>
+        <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+        <input type="range" min="0" max="100" value="50" aria-label="拖动对比海边栈道原图与清透海岸结果"><div class="knob">‹›</div>
+      </div>
+      <figcaption><h4>海边栈道 · 清透海岸</h4>加强海天蓝色与石柱暖色的区分，让木板与栏杆更清楚。</figcaption>
+      <details><summary>查看完整意图</summary><p lang="en">Give this hazy pier photograph a clear coastal palette with a distinctly blue-cyan sea and sky, warm recognizable stone pillars and readable wooden decking. Add defined midtone contrast without crushing the railings or inventing detail in the distant haze.</p></details>
+    </figure>
+  </div>
+</section>
+
+<section id="motivation" class="reveal">
+  <div class="sec-head"><div class="sec-no">01<span>RESEARCH QUESTION</span></div><h2>怎样让同一张照片，<em>产生值得选择的不同成片</em></h2></div>
+  <div class="col">
+    <p class="lead">照片调色通常没有唯一答案。我们研究的是：从一张真实 JPEG 出发，生成几张各自成立、风格可辨、仍忠于原片的候选，让用户决定哪一种更适合这张照片。</p>
+    <p>这里有三个相互牵制的目标：<b>单张要好看，候选要有区别，修改要可控</b>。
+      单纯扩大颜色距离可能只得到偏色；单纯贴近配对目标又可能让所有候选过于保守。
+      因此我们把“理解风格”“执行能力”和“用户可选性”分开检验。</p>
+    <nav class="research-toc" aria-label="研究内容目录"><a href="#expanded-gallery">更多场景样张</a><a href="#outlook">完整流程</a><a href="#executor">网络与颜色执行</a><a href="#training">数据与监督</a><a href="#experiments">实测证据</a><a href="#validation">评价方法</a><a href="#workflow">选择与导出</a><a href="#repro">复现与局限</a></nav>
+    <h3>与 PhotoAgent 的关系</h3>
+    <p><a href="https://arxiv.org/html/2602.22809v1" target="_blank" rel="noopener">PhotoAgent</a>以多步树搜索组织编辑动作，结合执行和评价反馈推进结果。
+      我们把问题聚焦到保持内容的颜色与影调编辑，研究开放风格意图如何转成可解释、可回放的参数，以及如何提供一组有效选择。</p>
+  </div>
+  <div class="wide research-table"><table>
+    <thead><tr><th>维度</th><th>PhotoAgent 的方法</th><th>本项目的当前研究方案</th></tr></thead>
+    <tbody>
+      <tr><td>任务范围</td><td>包含语义内容变化的自动照片编辑</td><td>JPEG 颜色与影调增强，保持原始像素坐标</td></tr>
+      <tr><td>规划单位</td><td>编辑动作与多步搜索轨迹</td><td>照片相关的完整风格意图，作为连续条件交给执行器</td></tr>
+      <tr><td>执行方式</td><td>生成式及传统图像处理工具</td><td>预测滑块与有界残差，再在原图上确定性渲染</td></tr>
+      <tr><td>终选方式</td><td>评价反馈控制自动改进与回退</td><td>保留多个独立候选与原图，由用户选择和微调</td></tr>
+      <tr><td>需要验证</td><td colspan="2">在同图、同候选数和清楚的执行预算下，比较偏好、内容保持与成本；再用共享执行器检验规划贡献。</td></tr>
+    </tbody>
+  </table></div>
+  <div class="col">
+    <p class="small">这是方法定位，尚无本项目对 PhotoAgent 的直接胜出证据。MCTS、单步贪心与像素平均是不同方法；标量评分本身也不意味着风格会被平均。</p>
+    <h3>创新要落在可验证的组合上</h3>
+    <p><a href="https://groups.csail.mit.edu/graphics/hdrnet/" target="_blank" rel="noopener">HDRNet</a>、
+      <a href="https://github.com/ImCharlesY/SepLUT" target="_blank" rel="noopener">SepLUT</a>已研究高效颜色映射，
+      <a href="https://openimaginglab.github.io/InstantRetouch/" target="_blank" rel="noopener">InstantRetouch</a>和
+      <a href="https://github.com/mv-lab/pixtalk" target="_blank" rel="noopener">PixTalk</a>也涉及语言引导的照片处理。
+      因此“预测参数”或“接受文字”本身不是充分的新意。我们希望证明的是：完整意图的可执行性、单张质量与同图选择覆盖能在一个可复现系统中同时成立。</p>
+  </div>
+</section>
+
 <section id="outlook" class="reveal">
-  <div class="sec-head"><div class="sec-no">01<span>CURRENT DESIGN</span></div><h2>当前设计：从完整意图到独立候选</h2></div>
+  <div class="sec-head"><div class="sec-no">02<span>ARCHITECTURE</span></div><h2>理解意图，在原图上执行</h2></div>
   <div class="col">
     <p class="lead">规划器观察照片并自主提出风格，执行器理解完整意图，预测滑块与有界残差 LUT。
       每个候选从同一原图独立渲染，由用户选择，也可以保留原图。</p>
-    <p>目前优先打磨执行器。页首样张用助手直接给参检验调色能力；本地预览已支持比较、继续调整与原尺寸导出。</p>
+  </div>
+  <figure class="wide research-figure" id="current-architecture-figure">
+    <p class="diagram-scroll-hint">左右滑动查看完整图示</p>
+    <div class="research-diagram" tabindex="0" role="region" aria-label="当前规划与执行架构图，可横向滚动">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 850" width="1680" height="850" role="img" aria-labelledby="pp-arch-current-title pp-arch-current-desc" style="display:block;width:100%;height:auto;min-width:1080px">
+<title id="pp-arch-current-title">从原始照片到可选择的风格候选</title><desc id="pp-arch-current-desc">目标架构由规划器根据照片自主提出完整风格意图，图像文字预测器输出40滑块与有界残差LUT。每个候选独立作用在同一原图，用户选择，也可保留原图。当前展示为参数化渲染示例，不代表学习模型质量通过；规划质量尚未独立验证。</desc>
+<defs><marker id="pp-arch-current-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#e2a23b"/></marker><marker id="pp-arch-current-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#a9b39a"/></marker><marker id="pp-arch-current-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#c9785a"/></marker><linearGradient id="pp-arch-current-photo" x2="0" y2="1"><stop stop-color="#405953"/><stop offset="1" stop-color="#1e2d2b"/></linearGradient></defs>
+<style>.pp-arch-current-text{font-family:'Segoe UI','Microsoft YaHei',sans-serif}.pp-arch-current-flow{stroke-dasharray:8 7;animation:pp-arch-current-dash 2.8s linear infinite}@keyframes pp-arch-current-dash{to{stroke-dashoffset:-30}}@media(prefers-reduced-motion:reduce){.pp-arch-current-flow{animation:none}}</style>
+<rect width="1680" height="850" rx="22" fill="#191919"/>
+<text class="pp-arch-current-text" x="50" y="48" font-size="16" fill="#e2a23b" text-anchor="start" font-weight="700">01  /  PHOTO → INTENT → RECIPE → CHOICE</text>
+<text class="pp-arch-current-text" x="50" y="91" font-size="29" fill="#edebe7" text-anchor="start" font-weight="650">先提出适合这张照片的风格，再把完整意图落实为可回放的颜色处理</text>
+<rect x="35" y="120" width="1610" height="305" rx="18" fill="#1c1b19" stroke="#51432d" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="56" y="153" font-size="18" fill="#e2a23b" text-anchor="start" font-weight="650">规划层 · 最终目标接口</text>
+<rect x="65" y="181" width="220" height="125" rx="9" fill="url(#pp-arch-current-photo)" stroke="#70857b"/><circle cx="232.2" cy="216" r="12.5" fill="#d2b788"/><path d="M77 293 L148.6 228.5 197 268.5 238.8 242.25 273 293Z" fill="#90a391" opacity=".56"/>
+<text class="pp-arch-current-text" x="175" y="339" font-size="24" fill="#edebe7" text-anchor="middle" font-weight="650">原始 JPEG</text>
+<text class="pp-arch-current-text" x="175" y="371" font-size="19" fill="#a9a49d" text-anchor="middle" font-weight="400">内容、光线与主体</text>
+<path d="M290 246 H356" fill="none" stroke="#e2a23b" stroke-width="2.3" class="pp-arch-current-flow" marker-end="url(#pp-arch-current-amber)"/>
+<rect x="365" y="181" width="332" height="196" rx="18" fill="#222222" stroke="#e2a23b" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="531" y="224" font-size="26" fill="#e2a23b" text-anchor="middle" font-weight="650">按图自主提出风格</text>
+<text class="pp-arch-current-text" x="531" y="264" font-size="21" fill="#edebe7" text-anchor="middle" font-weight="400">解释审美方向与主体约束</text>
+<text class="pp-arch-current-text" x="531" y="300" font-size="21" fill="#edebe7" text-anchor="middle" font-weight="400">形成 K 条完整意图</text>
+<text class="pp-arch-current-text" x="531" y="339" font-size="18" fill="#a9a49d" text-anchor="middle" font-weight="400">方向不是固定风格 ID</text>
+<path d="M700 265 H753" fill="none" stroke="#e2a23b" stroke-width="2.3" class="pp-arch-current-flow" marker-end="url(#pp-arch-current-amber)"/>
+<rect x="770" y="184" width="255" height="183" rx="18" fill="#222222" stroke="#c9785a" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="792" y="219" font-size="16" fill="#c9785a" text-anchor="start" font-weight="700">意图 1</text>
+<text class="pp-arch-current-text" x="792" y="264" font-size="25" fill="#edebe7" text-anchor="start" font-weight="650">电影冷暖</text>
+<text class="pp-arch-current-text" x="792" y="306" font-size="18" fill="#c6c0b7" text-anchor="start" font-weight="400">保留肤色 · 控制高光</text>
+<text class="pp-arch-current-text" x="792" y="340" font-size="17" fill="#8f8b83" text-anchor="start" font-weight="400">语义、范围、最终状态</text>
+<rect x="1050" y="184" width="255" height="183" rx="18" fill="#222222" stroke="#a9b39a" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="1072" y="219" font-size="16" fill="#a9b39a" text-anchor="start" font-weight="700">意图 2</text>
+<text class="pp-arch-current-text" x="1072" y="264" font-size="25" fill="#edebe7" text-anchor="start" font-weight="650">清透空气感</text>
+<text class="pp-arch-current-text" x="1072" y="306" font-size="18" fill="#c6c0b7" text-anchor="start" font-weight="400">打开暗部 · 保留层次</text>
+<text class="pp-arch-current-text" x="1072" y="340" font-size="17" fill="#8f8b83" text-anchor="start" font-weight="400">语义、范围、最终状态</text>
+<rect x="1330" y="184" width="255" height="183" rx="18" fill="#222222" stroke="#c7b08a" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="1352" y="219" font-size="16" fill="#c7b08a" text-anchor="start" font-weight="700">意图 K</text>
+<text class="pp-arch-current-text" x="1352" y="264" font-size="25" fill="#edebe7" text-anchor="start" font-weight="650">完全中性黑白</text>
+<text class="pp-arch-current-text" x="1352" y="306" font-size="18" fill="#c6c0b7" text-anchor="start" font-weight="400">去除全部颜色 · 塑造明暗</text>
+<text class="pp-arch-current-text" x="1352" y="340" font-size="17" fill="#8f8b83" text-anchor="start" font-weight="400">语义、范围、最终状态</text>
+<text class="pp-arch-current-text" x="771" y="399" font-size="17" fill="#a9a49d" text-anchor="start" font-weight="400">示意方向随照片而变；当前为参数化渲染示例，规划质量尚未独立验证。</text>
+<rect x="35" y="452" width="1610" height="356" rx="18" fill="#1b1d1a" stroke="#40493b" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="56" y="486" font-size="18" fill="#a9b39a" text-anchor="start" font-weight="650">执行层 · 同一原图，独立执行每条完整意图</text>
+<rect x="65" y="539" width="218" height="160" rx="18" fill="#222222" stroke="#4a4a4a" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="174" y="578" font-size="24" fill="#edebe7" text-anchor="middle" font-weight="650">图像特征</text>
+<text class="pp-arch-current-text" x="174" y="619" font-size="21" fill="#a9a49d" text-anchor="middle" font-weight="400">ResNet18</text>
+<text class="pp-arch-current-text" x="174" y="657" font-size="19" fill="#a9a49d" text-anchor="middle" font-weight="400">+ 全局颜色 / 亮度</text>
+<path d="M175 378 V529" fill="none" stroke="#a9b39a" stroke-width="2.3" class="pp-arch-current-flow" marker-end="url(#pp-arch-current-green)"/>
+<rect x="368" y="532" width="335" height="174" rx="18" fill="#222222" stroke="#e2a23b" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="535" y="570" font-size="24" fill="#e2a23b" text-anchor="middle" font-weight="650">图像 + 完整文字预测器</text>
+<text class="pp-arch-current-text" x="535" y="611" font-size="20" fill="#edebe7" text-anchor="middle" font-weight="400">Qwen 完整描述表示</text>
+<text class="pp-arch-current-text" x="535" y="646" font-size="19" fill="#c6c0b7" text-anchor="middle" font-weight="400">融合图像特征与全局统计</text>
+<text class="pp-arch-current-text" x="535" y="679" font-size="18" fill="#a9a49d" text-anchor="middle" font-weight="400">一次预测一份完整配方</text>
+<path d="M285 620 H358" fill="none" stroke="#a9b39a" stroke-width="2.3" class="pp-arch-current-flow" marker-end="url(#pp-arch-current-green)"/>
+<path d="M1185 368 V437 H535 V521" fill="none" stroke="#e2a23b" stroke-width="2.3" class="pp-arch-current-flow" marker-end="url(#pp-arch-current-amber)"/>
+<rect x="780" y="528" width="284" height="184" rx="18" fill="#222222" stroke="#c9785a" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="922" y="563" font-size="19" fill="#c9785a" text-anchor="middle" font-weight="650">可解释主变化</text>
+<line x1="809" y1="588" x2="894" y2="588" stroke="#676056" stroke-width="3"/><circle cx="824" cy="588" r="5" fill="#e2a23b"/>
+<line x1="809" y1="605" x2="894" y2="605" stroke="#676056" stroke-width="3"/><circle cx="848" cy="605" r="5" fill="#e2a23b"/>
+<line x1="809" y1="622" x2="894" y2="622" stroke="#676056" stroke-width="3"/><circle cx="872" cy="622" r="5" fill="#e2a23b"/>
+<text class="pp-arch-current-text" x="960" y="613" font-size="24" fill="#edebe7" text-anchor="middle" font-weight="650">40 滑块</text>
+<path d="M812 658 830 647 848 658 848 680 830 690 812 680Z M812 658 830 669 848 658 M830 669V690" fill="none" stroke="#a9b39a" stroke-width="2"/>
+<text class="pp-arch-current-text" x="937" y="670" font-size="19" fill="#a9b39a" text-anchor="middle" font-weight="400">rank-8 · 17³ LUT</text>
+<text class="pp-arch-current-text" x="935" y="694" font-size="16" fill="#a9a49d" text-anchor="middle" font-weight="400">残差幅度 ≤ 0.15</text>
+<path d="M705 620 H768" fill="none" stroke="#c9785a" stroke-width="2.3" class="pp-arch-current-flow" marker-end="url(#pp-arch-current-orange)"/>
+<rect x="1126" y="532" width="226" height="174" rx="18" fill="#222222" stroke="#a9b39a" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="1239" y="575" font-size="24" fill="#a9b39a" text-anchor="middle" font-weight="650">原尺寸渲染</text>
+<text class="pp-arch-current-text" x="1239" y="613" font-size="18" fill="#edebe7" text-anchor="middle" font-weight="400">滑块 → 残差映射</text>
+<text class="pp-arch-current-text" x="1239" y="650" font-size="18" fill="#c6c0b7" text-anchor="middle" font-weight="400">不重画像素位置</text>
+<text class="pp-arch-current-text" x="1239" y="683" font-size="18" fill="#a9a49d" text-anchor="middle" font-weight="400">JSON 精确回放</text>
+<path d="M1068 620 H1115" fill="none" stroke="#a9b39a" stroke-width="2.3" class="pp-arch-current-flow" marker-end="url(#pp-arch-current-green)"/>
+<rect x="1414" y="532" width="193" height="174" rx="18" fill="#222222" stroke="#c7b08a" stroke-width="1.5"/>
+<text class="pp-arch-current-text" x="1510" y="575" font-size="25" fill="#edebe7" text-anchor="middle" font-weight="650">用户选择</text>
+<text class="pp-arch-current-text" x="1510" y="618" font-size="22" fill="#e2a23b" text-anchor="middle" font-weight="400">候选 1 … K</text>
+<text class="pp-arch-current-text" x="1510" y="658" font-size="19" fill="#a9b39a" text-anchor="middle" font-weight="400">也可保留原图</text>
+<path d="M1355 620 H1403" fill="none" stroke="#a9b39a" stroke-width="2.3" class="pp-arch-current-flow" marker-end="url(#pp-arch-current-green)"/>
+<path d="M90 307 H45 V766 H1239 V718" fill="none" stroke="#a9b39a" stroke-width="2.3" class="pp-arch-current-flow" marker-end="url(#pp-arch-current-green)"/>
+<text class="pp-arch-current-text" x="625" y="789" font-size="18" fill="#a9b39a" text-anchor="middle" font-weight="400">原始像素直达渲染器 · 各候选不串联 · 不由自动评委替用户终选</text>
+<text class="pp-arch-current-text" x="52" y="839" font-size="17" fill="#8f8b83" text-anchor="start" font-weight="400">渲染表达、学习预测、配方回放与用户偏好，是分别核验的四类证据。</text>
+</svg>
+    </div>
+    <figcaption>完整意图连接规划与执行；每份配方独立作用于原图，用户保留最终选择。</figcaption>
+  </figure>
+  <div class="col">
+    <h3>规划器描述结果，执行器负责落实</h3>
+    <p>规划器的输出是照片相关的开放描述，例如“提亮逆光人物，柔和压缩背景亮部，保持自然肤色”。
+      电影、胶片、清透与黑白只是可能方向；系统的目标不是从固定风格编号中选一个。</p>
+    <p>当前将风格理解与渲染表达分开检查：以渲染实验检验颜色与影调表达，再独立评价学习预测器。自动规划接口与本地文字条件执行入口已具备，
+      但端到端自主规划的质量、学习模型对新意图的落实能力仍需分别验收。</p>
   </div>
   <div class="wide story-view-switch" role="group" aria-label="选择架构讲解形式">
     <button type="button" data-story-view="video" aria-pressed="true">观看 38 秒讲解</button>
@@ -350,404 +500,271 @@
       <label class="story-seek-label"><span class="story-sr">讲解进度</span><input class="story-seek" type="range" min="0" max="38" step="0.1" value="0" aria-label="架构讲解进度，单位秒"></label>
       <output class="story-time">00:00 / 00:38</output>
     </div>
-    <figcaption>同一原图 → 完整意图 → 参数化执行 → 独立候选 → 用户选择。当前开发重点为执行器。</figcaption>
+    <figcaption>同一原图 → 完整意图 → 参数化执行 → 独立候选 → 用户选择。</figcaption>
     <noscript><p class="story-noscript">同一 JPEG → 规划器提出完整开放风格意图 → 执行器理解图像与意图 → 40 个滑块与可选有界残差 LUT → 每个候选从原图独立渲染 → 用户选择，包含保留原图。</p></noscript>
   </figure>
-  <div class="wide">
-    <div class="path"><div class="n">01</div><div style="max-width:var(--col)">
-      <h3>可解释控制，完整配方</h3>
-      <p>模型根据图像与完整文字预测白平衡、曝光、曲线、混色和饱和度，小型残差 LUT 补充颜色映射。
-        参数作用于原图坐标，完整 JSON 可精确回放；外部 LUT 和 XMP 导出为近似。</p>
 
-    </div></div>
-    <div class="path"><div class="n">02</div><div style="max-width:var(--col)">
-      <h3>先把风格落实到照片上</h3>
-      <p>受控训练改善了部分目标重建和亮部层次，但学习模型仍有暗脸、黑白残色和风格不鲜明的问题，相关新权重尚未采纳。
-        当前结合完整成片与主体细节改进监督，让冷暖、影调和色彩差异真正形成值得选择的结果。</p>
-    </div></div>
-    <div class="path"><div class="n">03</div><div style="max-width:var(--col)">
-      <h3>把最后的选择交给用户</h3>
-      <p>电影、胶片、清透、黑白是可能的方向，最终候选由照片与意图决定。
-        已准备匿名比较工具，计划邀请 3–5 位独立评委先导评价；当前尚无人类偏好实验结论。</p>
-    </div></div>
-    <div class="path"><div class="n">04</div><div style="max-width:var(--col)">
-      <h3>JPEG 优先，再扩展能力</h3>
-      <p>先适应相机、手机和已有后期的 JPEG。RAW 与局部控制留作后续扩展；
-        当前全局颜色映射对相同颜色执行相同处理，独立控制天空与肤色仍有限制。</p>
-    </div></div>
+</section>
+
+<section id="executor" class="reveal">
+  <div class="sec-head"><div class="sec-no">03<span>PARAMETRIC EXECUTOR</span></div><h2>图像与文字共同决定配方</h2></div>
+  <div class="col">
+    <p class="lead">网络预测的是颜色处理方式，最终输出由显式渲染器计算。
+      这样可以把低分辨率特征预测与原尺寸执行分开，也能检查一次错误究竟来自语言、参数预测还是颜色算子。</p>
+  </div>
+  <div class="wide network" role="img" aria-label="图像特征与完整文字表示融合后预测40滑块和8个残差混合系数">
+    <div class="grid2">
+      <div><h3>图像分支</h3><p>ResNet18 提取 512 维特征；均值、标准差、线性 RGB 均值与亮度直方图补充 25 维全局统计。</p><p>这些统计保留曝光与颜色分布信息，帮助同一风格适应不同输入。</p></div>
+      <div><h3>完整文字分支</h3><p>Qwen3-Embedding-0.6B 编码完整描述，取末有效 token 的前 512 维并做 L2 归一化，再映射为 128 维条件。</p><p>保留否定、范围和最终状态；超长输入明确拒绝，不静默截断成关键词。</p></div>
+    </div>
+    <div class="network-join">512 + 25 + 128 → 665 → 512 → 256 → 40 个滑块 + 8 个 LUT 混合系数</div>
+  </div>
+  <div class="col">
+    <h3>40 个控制量承担可解释的主要变化</h3>
+    <p>控制量分为白平衡 2 项、曝光与影调 6 项、自然饱和度与饱和度 2 项、八个色带的 H/S/L 共 24 项，以及 6 个曲线控制点。
+      模型输出限制在合法范围，曲线采用单调构造；控制值不是直接等同于 Lightroom 的内部处理。</p>
+    <h3>有界残差补足滑块的颜色表达</h3>
+    <p>额外分支混合 <b>8 个 17³ 残差 LUT 基底</b>，混合系数的绝对值和受限，归一化 RGB 域内残差幅度上限为 <b>0.15</b>。
+      它补充滑块难以表达的颜色关系，同时保留滑块解释。训练中的平滑约束减少不连续映射，但边界与平滑都不是审美保证。</p>
+    <div class="formula">照片 I + 完整意图 t → (滑块 p, 残差 Δ)<br>候选 Y = LUT(Id + Δ) [ Develop(I; p) ]</div>
+    <p>当前渲染版本在线性光域处理白平衡与曝光，并使用配方增益上限控制高光肩部，再执行影调、颜色和残差映射。
+      它缓解了过早夹断，却仍可能由后续操作产生截断、残色或灰雾，必须看最终成片。</p>
+    <h3>保留原尺寸，不把预览当最终输出</h3>
+    <p>每条配方都从同一原始 JPEG 独立渲染，原尺寸执行按二维块处理以控制内存。
+      图像坐标不经过生成式重画；颜色和局部对比仍会改变，因此“保持坐标”与“没有损伤”分开验证。</p>
   </div>
 </section>
 
-<!-- ============ 摘要 ============ -->
-<section id="abstract" class="reveal">
-  <div class="sec-head"><div class="sec-no">02<span>EARLIER PROTOTYPE</span></div><h2>早期原型：从哪里出发</h2></div>
+<section id="training" class="reveal">
+  <div class="sec-head"><div class="sec-no">04<span>DATA &amp; SUPERVISION</span></div><h2>先让目标成立，<em>再让模型学会</em></h2></div>
   <div class="col">
-    <p class="lead">
-      早期生成式原型研究<b>执行成本</b>与<b>候选选择</b>：先预测方向，再执行少量分支。
-      下列架构、27 张照片实验和历史画廊均来自这一流程，与上方参数化样张分开呈现。
-    </p>
+    <p class="lead">当前质量瓶颈不只是网络容量。输入分布、风格目标是否好看，以及描述是否真正对应最终效果，都会决定模型学到什么。</p>
   </div>
-  <div class="metrics">
-    <div class="metric"><div class="num" id="stat-speedup">—</div><div class="lbl">早期原型整图耗时<br>详见下方历史实验</div></div>
-    <div class="metric"><div class="num">0</div><div class="lbl">早期原型规划期<br>生成的图片数</div></div>
-    <div class="metric"><div class="num" id="stat-peaks">—</div><div class="lbl">早期原型每轮<br>提出的风格方向</div></div>
-    <div class="metric"><div class="num" id="stat-photos">27</div><div class="lbl">早期三策略对照<br>本人实拍照片</div></div>
-  </div>
-  <div class="wide">
-    <div class="contribs">
-      <div class="contrib"><div class="tag">C1</div><h4>先预测，再执行</h4>
-        <p>每个候选方向只让视觉模型看一眼原图，给出预测分，不再"跑一遍看看"。本实现规划期生成 0 张、规划耗时 16.5 秒（论文报告其默认配置为约 60 次生成、规划约 250 秒）。</p></div>
-      <div class="contrib"><div class="tag">C2</div><h4>按风格方向搜索，而不是按动作</h4>
-        <p>候选单位从"提亮/加饱和"这类动作，换成"胶片暖调""冷调极简"这类完整方向。K 条链路各做各的（本次运行 K = 2），分数和参数都不互相混合。</p></div>
-      <div class="contrib"><div class="tag">C3</div><h4>允许不改</h4>
-        <p>终选可以判定"原图最好"；另有内容保持门禁，改动破坏画面时整条分支作废。</p></div>
-    </div>
-  </div>
-  <div class="col">
-    <h3>早期原型与论文的设计对照</h3>
-    <div class="tbl-wrap">
-      <table class="tbl">
-        <thead><tr><th>维度</th><th>PhotoAgent</th><th>PhotoPeaks</th></tr></thead>
-        <tbody>
-          <tr><td>搜索单元</td><td>原子动作组成的多步序列</td><td class="best">完整风格概念，分支隔离</td></tr>
-          <tr><td>候选评估</td><td>模拟执行并评价候选</td><td class="best">VLM 预测打分</td></tr>
-          <tr><td>规划成本</td><td>约 250s · 论文默认配置</td><td class="best">16.5s · 规划期 0 次生成</td></tr>
-          <tr><td>目标形式</td><td>多指标加权标量</td><td class="best">四维预测效用加权排序 + 比较式终选</td></tr>
-          <tr><td>接受策略</td><td>单调不降，否则回滚</td><td class="best">分支保留 + 允许原图</td></tr>
-          <tr><td>安全机制</td><td>多指标评价 + 不提升则回退</td><td class="best">内容保持门禁 + 比较终选</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="tbl-note">表内左侧为其论文报告的设计与数字（成本见附录 F），右侧为本实现实测。<b>两者不是同一套代码，本表是设计对照，不是对照实验。</b></p>
-  </div>
-</section>
+  <figure class="wide research-figure" id="current-training-figure">
+    <p class="diagram-scroll-hint">左右滑动查看完整图示</p>
+    <div class="research-diagram" tabindex="0" role="region" aria-label="当前训练与验证流程图，可横向滚动">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 1050" width="1680" height="1050" role="img" aria-labelledby="pp-train-current-title pp-train-current-desc" style="display:block;width:100%;height:auto;min-width:1080px">
+<title id="pp-train-current-title">完整意图执行器的训练与验证</title><desc id="pp-train-current-desc">训练从照片和完整意图预测40控制与rank8残差LUT，在同一输入上渲染并与匹配干净目标比较。RGB色差、匹配颜色探针及正则提供监督。原尺寸回放、目视检查与待完成的独立人评分开报告。</desc>
+<defs><marker id="pp-train-current-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#e2a23b"/></marker><marker id="pp-train-current-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#a9b39a"/></marker><marker id="pp-train-current-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#c9785a"/></marker><linearGradient id="pp-train-current-photo" x2="0" y2="1"><stop stop-color="#405953"/><stop offset="1" stop-color="#1e2d2b"/></linearGradient></defs>
+<style>.pp-train-current-text{font-family:'Segoe UI','Microsoft YaHei',sans-serif}.pp-train-current-flow{stroke-dasharray:8 7;animation:pp-train-current-dash 2.8s linear infinite}@keyframes pp-train-current-dash{to{stroke-dashoffset:-30}}@media(prefers-reduced-motion:reduce){.pp-train-current-flow{animation:none}}</style>
+<rect width="1680" height="1050" rx="22" fill="#191919"/>
 
-<!-- ============ 方法 ============ -->
-<section id="method" class="reveal">
-  <div class="sec-head"><div class="sec-no">03<span>METHOD</span></div>
-    <h2>早期流程：闭环候选搜索<br><em>提方向 → 排序 → 独立执行 → 比较终选</em></h2></div>
-  <div class="col">
-    <p>
-      从当前照片提出 <b>n</b> 个方向，预测打分后执行 <b>Top-K</b> 条独立分支。
-      内容检查后比较候选与原图，允许保持不变。记录中的实验采用单轮执行。
-    </p>
-  </div>
-  <figure class="wide">
-    <div class="frame pan"><object data="assets/fig_method.svg" type="image/svg+xml" aria-label="闭环候选搜索架构图" style="width:100%;display:block"></object></div>
-    <figcaption>
-      <span class="fig-no">Figure 1</span><b>闭环候选搜索。</b>
-      历史实验配置：n = 5 · K = 2 · R = 1（单轮），平均 5.8 次编辑 / 张。
-      图中保留多轮接口；内容门禁始终对照原图。
-    </figcaption>
+<text class="pp-train-current-text" x="50" y="48" font-size="16" fill="#e2a23b" text-anchor="start" font-weight="700">02  /  SUPERVISION → PARAMETRIC EXECUTION → VALIDATION</text>
+<text class="pp-train-current-text" x="50" y="91" font-size="29" fill="#edebe7" text-anchor="start" font-weight="650">让完整描述对应可信成片，再学习同一风格如何适应不同照片</text>
+<rect x="35" y="123" width="1610" height="631" rx="18" fill="#1c1b19" stroke="#51432d" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="55" y="157" font-size="18" fill="#e2a23b" text-anchor="start" font-weight="650">训练 · 低分辨率学习颜色处理，高分辨率复用同一配方</text>
+<rect x="62" y="196" width="258" height="185" rx="18" fill="#222222" stroke="#4a4a4a" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="191" y="239" font-size="25" fill="#edebe7" text-anchor="middle" font-weight="650">干净输入 I</text>
+<text class="pp-train-current-text" x="191" y="281" font-size="20" fill="#c6c0b7" text-anchor="middle" font-weight="400">自然颜色与原始内容</text>
+<text class="pp-train-current-text" x="191" y="320" font-size="19" fill="#a9a49d" text-anchor="middle" font-weight="400">照片与完整条件配对</text>
+<text class="pp-train-current-text" x="191" y="358" font-size="18" fill="#a9a49d" text-anchor="middle" font-weight="400">按原图身份划分数据</text>
+<rect x="378" y="196" width="270" height="185" rx="18" fill="#222222" stroke="#c7b08a" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="513" y="239" font-size="25" fill="#edebe7" text-anchor="middle" font-weight="650">训练输入 X</text>
+<text class="pp-train-current-text" x="513" y="283" font-size="20" fill="#c7b08a" text-anchor="middle" font-weight="400">干净输入 / 部分扰动</text>
+<text class="pp-train-current-text" x="513" y="321" font-size="18" fill="#a9a49d" text-anchor="middle" font-weight="400">曝光、白平衡、颜色</text>
+<text class="pp-train-current-text" x="513" y="358" font-size="18" fill="#a9a49d" text-anchor="middle" font-weight="400">D(I) 与干净目标配对</text>
+<path d="M322 286 H366" fill="none" stroke="#e2a23b" stroke-width="2.3" class="pp-train-current-flow" marker-end="url(#pp-train-current-amber)"/>
+<rect x="710" y="196" width="378" height="185" rx="18" fill="#222222" stroke="#c9785a" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="899" y="237" font-size="25" fill="#c9785a" text-anchor="middle" font-weight="650">图文条件预测器</text>
+<text class="pp-train-current-text" x="899" y="279" font-size="20" fill="#edebe7" text-anchor="middle" font-weight="400">完整描述表示 + 图像特征</text>
+<text class="pp-train-current-text" x="899" y="318" font-size="20" fill="#c6c0b7" text-anchor="middle" font-weight="400">40 个控制量 + 8 个混合系数</text>
+<text class="pp-train-current-text" x="899" y="358" font-size="18" fill="#a9b39a" text-anchor="middle" font-weight="400">有界残差 LUT · 17³</text>
+<path d="M650 286 H698" fill="none" stroke="#c9785a" stroke-width="2.3" class="pp-train-current-flow" marker-end="url(#pp-train-current-orange)"/>
+<rect x="1150" y="196" width="444" height="185" rx="18" fill="#222222" stroke="#a9b39a" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="1372" y="238" font-size="25" fill="#a9b39a" text-anchor="middle" font-weight="650">同一输入上的显式颜色渲染</text>
+<text class="pp-train-current-text" x="1372" y="282" font-size="25" fill="#edebe7" text-anchor="middle" font-weight="400">Ŷ = R(X; p, Δ)</text>
+<text class="pp-train-current-text" x="1372" y="320" font-size="20" fill="#c6c0b7" text-anchor="middle" font-weight="400">每条条件独立执行，不串联候选</text>
+<text class="pp-train-current-text" x="1372" y="357" font-size="18" fill="#a9a49d" text-anchor="middle" font-weight="400">训练缩图 / 验证原尺寸</text>
+<path d="M1090 286 H1138" fill="none" stroke="#a9b39a" stroke-width="2.3" class="pp-train-current-flow" marker-end="url(#pp-train-current-green)"/>
+<rect x="62" y="453" width="258" height="217" rx="18" fill="#222222" stroke="#e2a23b" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="191" y="495" font-size="23" fill="#e2a23b" text-anchor="middle" font-weight="650">完整风格描述 t</text>
+<text class="pp-train-current-text" x="191" y="538" font-size="20" fill="#edebe7" text-anchor="middle" font-weight="400">效果 · 强度 · 约束</text>
+<text class="pp-train-current-text" x="191" y="575" font-size="19" fill="#c6c0b7" text-anchor="middle" font-weight="400">否定 · 范围 · 最终状态</text>
+<text class="pp-train-current-text" x="191" y="618" font-size="19" fill="#a9a49d" text-anchor="middle" font-weight="400">同一意图跨不同输入</text>
+<text class="pp-train-current-text" x="191" y="650" font-size="17" fill="#a9a49d" text-anchor="middle" font-weight="400">推理不查固定配方表</text>
+<path d="M321 479 H679 V349 H698" fill="none" stroke="#e2a23b" stroke-width="2.3" class="pp-train-current-flow" marker-end="url(#pp-train-current-amber)"/>
+<rect x="378" y="487" width="270" height="183" rx="18" fill="#222222" stroke="#a9b39a" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="513" y="528" font-size="23" fill="#a9b39a" text-anchor="middle" font-weight="650">匹配干净目标 Y*</text>
+<text class="pp-train-current-text" x="513" y="568" font-size="19" fill="#edebe7" text-anchor="middle" font-weight="400">保留期望风格与主体</text>
+<text class="pp-train-current-text" x="513" y="605" font-size="17" fill="#a9a49d" text-anchor="middle" font-weight="400">监督含固定颜色变换</text>
+<text class="pp-train-current-text" x="513" y="642" font-size="17" fill="#c7b08a" text-anchor="middle" font-weight="400">新逐图目标先审图再训练</text>
+<path d="M191 384 V417 H513 V474" fill="none" stroke="#a9b39a" stroke-width="2.3" class="pp-train-current-flow" marker-end="url(#pp-train-current-green)"/>
+<rect x="710" y="487" width="378" height="183" rx="18" fill="#222222" stroke="#c7b08a" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="899" y="527" font-size="23" fill="#c7b08a" text-anchor="middle" font-weight="650">配方的颜色函数监督</text>
+<rect x="740" y="548" width="28" height="25" rx="3" fill="#262626"/>
+<rect x="775" y="548" width="28" height="25" rx="3" fill="#77716a"/>
+<rect x="810" y="548" width="28" height="25" rx="3" fill="#d3cabb"/>
+<rect x="845" y="548" width="28" height="25" rx="3" fill="#b06b51"/>
+<rect x="880" y="548" width="28" height="25" rx="3" fill="#8a9d75"/>
+<rect x="915" y="548" width="28" height="25" rx="3" fill="#517e7a"/>
+<rect x="950" y="548" width="28" height="25" rx="3" fill="#566d94"/>
+<rect x="985" y="548" width="28" height="25" rx="3" fill="#8f7394"/>
+<rect x="1020" y="548" width="28" height="25" rx="3" fill="#d1b066"/>
+<text class="pp-train-current-text" x="899" y="608" font-size="18" fill="#edebe7" text-anchor="middle" font-weight="400">同一配方作用于 RGB / 灰阶探针</text>
+<text class="pp-train-current-text" x="899" y="643" font-size="17" fill="#a9a49d" text-anchor="middle" font-weight="400">只用于具备匹配颜色函数的样本</text>
+<path d="M899 383 V475" fill="none" stroke="#c9785a" stroke-width="2.3" class="pp-train-current-flow" marker-end="url(#pp-train-current-orange)"/>
+<rect x="1150" y="459" width="444" height="235" rx="18" fill="#222222" stroke="#c9785a" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="1372" y="501" font-size="24" fill="#c9785a" text-anchor="middle" font-weight="650">目标匹配 + 有界平滑</text>
+<text class="pp-train-current-text" x="1372" y="544" font-size="23" fill="#edebe7" text-anchor="middle" font-weight="400">RGB L1 + 0.01 ΔE76</text>
+<text class="pp-train-current-text" x="1372" y="582" font-size="18" fill="#edebe7" text-anchor="middle" font-weight="400">+ 0.5 颜色探针损失（适用样本）</text>
+<text class="pp-train-current-text" x="1372" y="620" font-size="20" fill="#c7b08a" text-anchor="middle" font-weight="400">+ 0.001 ‖p‖² + 0.001 TV(Δ)</text>
+<text class="pp-train-current-text" x="1372" y="662" font-size="18" fill="#a9a49d" text-anchor="middle" font-weight="400">对可训练参数反向传播</text>
+<path d="M1372 383 V447" fill="none" stroke="#a9b39a" stroke-width="2.3" class="pp-train-current-flow" marker-end="url(#pp-train-current-green)"/>
+<path d="M650 655 V711 H1372 V704" fill="none" stroke="#a9b39a" stroke-width="2.3" class="pp-train-current-flow" marker-end="url(#pp-train-current-green)"/>
+<path d="M1090 578 H1138" fill="none" stroke="#c9785a" stroke-width="2.3" class="pp-train-current-flow" marker-end="url(#pp-train-current-orange)"/>
+<text class="pp-train-current-text" x="55" y="737" font-size="18" fill="#a9a49d" text-anchor="start" font-weight="400">监督边界：固定风格目标不自动保证逐图适配；最新逐图教师小样尚未整批通过，未启动对应学生训练。</text>
+<rect x="35" y="787" width="1610" height="214" rx="18" fill="#1b1d1a" stroke="#40493b" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="55" y="822" font-size="18" fill="#a9b39a" text-anchor="start" font-weight="650">验证 · 数值、可回放与真实偏好分别回答不同问题</text>
+<rect x="60" y="846" width="509" height="126" rx="18" fill="#222222" stroke="#c7b08a" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="80" y="884" font-size="23" fill="#c7b08a" text-anchor="start" font-weight="650">目标与语义</text>
+<text class="pp-train-current-text" x="80" y="919" font-size="19" fill="#edebe7" text-anchor="start" font-weight="400">PSNR / ΔE / 完整意图边界</text>
+<text class="pp-train-current-text" x="80" y="951" font-size="17" fill="#a9a49d" text-anchor="start" font-weight="400">开发集反复使用，不冒充独立测试</text>
+<rect x="584" y="846" width="509" height="126" rx="18" fill="#222222" stroke="#a9b39a" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="604" y="884" font-size="23" fill="#a9b39a" text-anchor="start" font-weight="650">原尺寸与目视</text>
+<text class="pp-train-current-text" x="604" y="919" font-size="19" fill="#edebe7" text-anchor="start" font-weight="400">JSON 像素回放 + 全图 / 主体细节</text>
+<text class="pp-train-current-text" x="604" y="951" font-size="17" fill="#a9a49d" text-anchor="start" font-weight="400">暗脸、残色、截断、风格分离分别检查</text>
+<rect x="1108" y="846" width="509" height="126" rx="18" fill="#222222" stroke="#c9785a" stroke-width="1.5"/>
+<text class="pp-train-current-text" x="1128" y="884" font-size="23" fill="#c9785a" text-anchor="start" font-weight="650">独立用户评价 · 待完成</text>
+<text class="pp-train-current-text" x="1128" y="919" font-size="19" fill="#edebe7" text-anchor="start" font-weight="400">3–5 位未参与开发者先导盲评</text>
+<text class="pp-train-current-text" x="1128" y="951" font-size="17" fill="#a9a49d" text-anchor="start" font-weight="400">比较候选实用性，始终允许选择原图</text>
+<text class="pp-train-current-text" x="52" y="1035" font-size="18" fill="#8f8b83" text-anchor="start" font-weight="400">损失降低 ≠ 目标更好看 ≠ 完整意图泛化；对照、失败与审图结果共同决定是否采纳。</text>
+</svg>
+    </div>
+    <figcaption>完整描述与配对目标共同监督参数预测；颜色探针补充未覆盖颜色，原尺寸回放与目视检查检验最终结果。</figcaption>
   </figure>
-</section>
-
-<!-- ============ 动机 ============ -->
-<section id="motivation" class="reveal">
-  <div class="sec-head"><div class="sec-no">04<span>MOTIVATION</span></div><h2>动机：降低执行成本，<em>保留不同选择</em></h2></div>
-  <div class="wide">
-    <figure style="margin:0 0 40px">
-      <div class="frame"><img src="assets/fig_cost.png" alt="成本剖析" style="width:100%;display:block"></div>
-      <figcaption>
-        <span class="fig-no">Figure 2</span><b>时间花在哪。</b>
-        上条是 PhotoAgent 论文给出的分解：规划 250 秒里，有 170 秒是在"模拟"——真的把候选编辑执行一遍。
-        下条是我自己实现的实测值（约 75 秒）。两者不是同一套实现，仅作量级参考。
-      </figcaption>
-    </figure>
-    <figure style="margin:0">
-      <div class="frame"><img src="assets/fig_timeline.png" alt="单次运行时间线" style="width:100%;display:block"></div>
-      <figcaption>
-        <span class="fig-no">Figure 3</span><b>一次真实运行的时间线。</b>
-        每一步编辑的耗时都是实测（约 18.8 秒一次，两条链路同时跑，本次运行 K = 2）。
-        红条来自 PhotoAgent 附录 F 的默认配置；不同实现与后端，仅作成本量级参考。
-      </figcaption>
-    </figure>
-  </div>
   <div class="col">
-    <h3>早期分支样例：两种风格与像素平均</h3>
-    <p>同一张挂饰照片的两个生成式分支及其像素平均，仅作单图观察。</p>
+    <h3>配对数据与 JPEG 输入适应</h3>
+    <p>基础数据来自 <a href="https://data.csail.mit.edu/graphics/fivek/" target="_blank" rel="noopener">MIT-Adobe FiveK</a>。
+      本地流程将 RAW 中性解码为 sRGB，并把专家目标转换到相同颜色空间。
+      它提供配对监督，但与相机 JPEG、手机照片及已有后期的输入并不相同。</p>
+    <p>最近的渲染与监督对照固定 <b>388 张训练图、25 张开发图</b>，以照片为单位划分，相关专家版本不跨集合。当前这组执行器开发使用 128 × 192 监督分辨率，原尺寸效果另行检验。
+      训练混入已有成片与曝光、颜色扰动，检验输入纠偏和风格执行能否共存。
+      这 25 张图已反复用于开发，不能再作为未见泛化证据；另有 8 张熟悉的相机照片用于原尺寸诊断。</p>
+    <h3>完整描述需要教到约束和组合</h3>
+    <p>训练描述覆盖效果、强度、混合、排除项和操作后的最终状态。
+      “去掉新加的紫色”不一定等于“删除照片里所有颜色”；“单色”也可能指有色的棕褐或蓝晒。
+      因此我们同时检查同义措辞、相反意图和语义边界，推理时不查询配方表，也不把长句降级为固定风格分类。</p>
+    <h3>照片重建之外，还检查颜色函数</h3>
+    <p>主要图像损失结合 RGB L1 与 ΔE76，并约束控制幅度和残差平滑。
+      对有明确颜色变换目标的训练项，将预测的同一配方作用于均匀 RGB、近中性和灰阶探针，补充照片中未覆盖的颜色监督。
+      已审查的六类外部颜色目标只参与训练与诊断，不成为推理期预设菜单。</p>
+    <div class="formula">L = L<sub>RGB</sub> + 0.01 L<sub>ΔE76</sub> + 0.5 L<sub>colour probes</sub><br>+ 0.001 ‖p‖² + 0.001 TV(Δ)</div>
+    <p class="small muted">颜色探针项只施加到具备匹配颜色函数目标的样本。对照组固定图像、描述、随机采样与更新预算，分别检查渲染、监督与文字表示的影响。</p>
+    <h3>为什么现在重点修监督目标</h3>
+    <p>目视审查发现，部分暖调目标本身会压暗人物，部分电影/胶片目标差别太弱。模型即使更接近这些目标，也不等于成片更好。
+      最近按图设计的教师小样覆盖 4 张照片、每张 4 个完整意图；首轮 16 个目标仍有风格分离不足与灰雾。
+      后续加强其中 8 个彩色目标后，部分水景与室内改善，但整批仍未达到训练采纳标准，因此没有据此启动学生训练。</p>
   </div>
-  <div class="wide">
-    <div class="triptych">
-      <figure><img src="assets/peak_a.jpg" alt="方向 A"><figcaption><span>方向 A · 黑白极简</span><span class="score" id="score-a">—</span></figcaption></figure>
-      <figure><img src="assets/peak_b.jpg" alt="方向 B"><figcaption><span>方向 B · 浓郁民族风</span><span class="score" id="score-b">—</span></figcaption></figure>
-      <figure class="avg"><img src="assets/peak_avg.jpg" alt="像素平均"><figcaption><span>两者的像素平均</span><span class="score" id="score-avg">—</span></figcaption></figure>
-    </div>
-  </div>
-  <div class="col"><div class="note" id="avg-verdict"></div></div>
 </section>
 
-<!-- ============ 过程 ============ -->
-<section id="process" class="reveal">
-  <div class="sec-head"><div class="sec-no">05<span>PROCESS</span></div>
-    <h2>处理一张照片的四步<br><em>这是"一轮"的样子，闭环可以走多轮</em></h2></div>
-  <div class="wide">
-    <div class="steps">
-      <div class="step"><div class="n">1</div><h4>想方向</h4>
-        <p>让模型提出 <b>n</b> 个<b>互不相同</b>的风格方向（n 是可调参数，示例 n = 5；比如胶片暖调、冷调极简、戏剧化）。
-        像"提亮一点"和"再亮一点"这类同义方向会被要求重写；拍人的照片不许改动脸。</p></div>
-      <div class="step"><div class="n">2</div><h4>先算不做</h4>
-        <p>每个方向只让模型看一眼当前图像，给出预测分：值不值得做、会不会伤画面。
-        <b>这一步不生成任何图片</b>，也是成本能降下来的原因。</p></div>
-      <div class="step"><div class="n">3</div><h4>各做各的</h4>
-        <p>只做效用最高的 <b>K</b> 个方向（K ≤ n，示例 K = 2），各自在自己的链路里执行、同时进行，<b>互不交流</b>——
-        各方向独立执行，比较输出后选择。这样保留多个候选，不对混合结果作数学保证。</p></div>
-      <div class="step"><div class="n">4</div><h4>挑一张，或者不改</h4>
-        <p>把<b>当前状态</b>和 K 个成品放在一起比较，允许直接判"当前状态最好"：第 1 轮就是"原图最好"，直接退出；
-        否则胜者成为下一轮的起点，最多走 <b>R</b> 轮。另有内容保持检查——改动破坏了画面，整条链路作废。</p></div>
-    </div>
-  </div>
-  <figure class="col">
-    <div class="frame"><img src="assets/fig_judge.png" alt="预测打分" style="width:100%;display:block"></div>
-    <figcaption><span class="fig-no">Figure 4</span>一次真实运行的打分与选择。</figcaption>
-  </figure>
-</section>
-
-<!-- ============ 实验 ============ -->
 <section id="experiments" class="reveal">
-  <div class="sec-head"><div class="sec-no">06<span>EXPERIMENTS</span></div><h2>27 张真照片，三种做法对比</h2></div>
+  <div class="sec-head"><div class="sec-no">05<span>CURRENT EVIDENCE</span></div><h2>哪些已经核验，<em>哪些还没有解决</em></h2></div>
+  <div class="col"><p class="lead">下面把学习模型、参数表达诊断与实现一致性分开报告。它们回答不同问题，不能用回放正确替代成片质量，也不能用几张精选图证明开放意图泛化。</p></div>
   <div class="col">
-    <p class="lead">
-      照片是我自己拍的 27 张（人像、风光、城市、夜景、食物混着来）。三种做法跑同样的 API：
-      <code>single</code> 只发一句"把这张图修好"；<code>scalar</code> 拆成动作逐个打分选一个（内部单动作基线）；
-      <code>peaks</code> 是本文的完整流程。
-    </p>
+    <h3>基础受控实验：条件、残差与输入域</h3>
+    <p>先在同一数据协议下检查参数预测的基础组件：739 张训练、50 张内部验证、198 张有效测试照片，八个模型各训练 60 轮。
+      下表是 384 × 256、单随机种子的 sRGB 配对重建结果，按照片聚合所有专家目标。
+      专家标签与训练集原型用于消融，不是当前开放文字执行器的风格菜单。</p>
   </div>
-  <figure class="wide">
-    <div class="frame"><img src="assets/fig_quality.png" alt="质量对照" style="width:100%;display:block"></div>
-    <figcaption>
-      <span class="fig-no">Figure 5</span><b>三种做法的质量对比，每个点是一张照片，横线是均值。</b>
-      盲评（打分时不告诉模型图从哪来）：peaks 4.30，single 4.23，scalar 4.21。
-      peaks 的 CLIP 相似度与 BRISQUE 表现较差；这些指标反映不同侧面，不能把差异仅归因于改动更多。
-    </figcaption>
-  </figure>
-
+  <div class="wide research-table"><table>
+    <thead><tr><th>条件与输入设置</th><th>执行表示</th><th>PSNR ↑（dB）</th><th>ΔE76 ↓</th></tr></thead><tbody>
+      <tr><td>无条件</td><td>滑块</td><td class="value">21.452</td><td class="value">11.295</td></tr>
+      <tr><td>无条件</td><td>滑块 + 残差 LUT</td><td class="value">21.500</td><td class="value">11.018</td></tr>
+      <tr><td>专家条件</td><td>滑块</td><td class="value">21.673</td><td class="value">11.223</td></tr>
+      <tr><td>专家条件 + 成片输入</td><td>滑块</td><td class="value">21.320</td><td class="value">11.666</td></tr>
+      <tr><td>专家条件</td><td>滑块 + 残差 LUT</td><td class="value">21.730</td><td class="value">10.918</td></tr>
+      <tr><td>专家条件 + 成片输入</td><td>滑块 + 残差 LUT</td><td class="value">21.575</td><td class="value">11.179</td></tr>
+      <tr><td>训练集 CLIP 原型</td><td>滑块</td><td class="value">20.891</td><td class="value">11.996</td></tr>
+      <tr><td>训练集 CLIP 原型 + 合成监督</td><td>滑块</td><td class="value">19.326</td><td class="value">13.950</td></tr>
+    </tbody></table></div>
   <div class="col">
-    <h3>主结果表（27 张的均值）</h3>
-    <div class="tbl-wrap">
-      <table class="tbl" id="res-table">
-        <thead><tr><th>策略</th><th class="num">耗时/张</th><th class="num">VLM 调用</th><th class="num">编辑调用</th><th class="num">内容保持↑</th><th class="num">BRISQUE↓</th><th class="num">美学盲评↑</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <div class="note">
-      <b>运行配置</b>　n = 5 · K = 2 · R = 1（单轮，即闭环在 R = 1 的特例）；每张平均 7 次 VLM 调用 + 5.8 次编辑调用（概念内的步骤链逐步执行）。
-      表中数字是这一配置下的实测；架构本身是闭环（R 可调，见 Figure 1）。
-    </div>
-    <div class="note">
-      <b>评测口径</b>　每个输出只评分一次；评分不参与当次规划，但仍使用同一模型族，不能视为独立的人类审美证据。
-      按照片配对 bootstrap（2000 次），peaks−single 为 +0.074，95% 区间 [−0.045, +0.193]；
-      peaks−scalar 为 +0.096，区间 [−0.059, +0.259]。两者都跨过零，当前样本尚未建立稳定质量优势。
-    </div>
-    <div class="note">
-      <b>怎么读这张表</b>　peaks 的盲评样本均分略高，但内容保持和 BRISQUE 更差。
-      CLIP 相似度会惩罚部分合法外观变化，也可能漏掉内容损伤；BRISQUE 是自然图像质量代理，不能用改动大小解释全部差异。
-      三种模式的执行预算和门禁也不同，本表是实现内部的探索性比较，尚不能隔离规划方式的因果效果。
-    </div>
+    <p>残差的价值需要与输入适应一起看：在专家成片输入压力测试中，专家条件 LUT 模型相对不改输入的 PSNR 增益为 −0.702 dB；
+      加入成片输入训练后为 +1.216 dB，按原照片 bootstrap 的 95% 区间为 [1.006, 1.410]。
+      这是 FiveK 专家成片域的适应证据，不能代替真实相机 JPEG 的独立审美评价。</p>
+    <h3>完整文字执行器：当前开发检验</h3>
   </div>
-
-  <figure class="col">
-    <div class="frame"><img src="assets/fig_diversity.png" alt="相对原图的变化幅度与嵌入分布" style="width:100%;display:block"></div>
-    <figcaption>
-      <span class="fig-no">Figure 6</span><b>改动幅度。</b>
-      左：输出离原图有多远（1−CLIP 相似度），peaks 0.157 &gt; scalar 0.106 &gt; single 0.067。
-      右：全部输出的嵌入投影，星号是示例照片的两个真实分支。
-      离原图更远不等于候选之间更多样；跨照片的 PCA 也会混入内容差异。候选多样性需在同图的有效候选之间另行测量。
-    </figcaption>
-  </figure>
-
+  <div class="wide research-table"><table>
+    <thead><tr><th>检验问题</th><th>受控设置</th><th>实际结果</th><th>当前判断</th></tr></thead>
+    <tbody>
+      <tr><td>高光处理是否改善</td><td>同初始化，两组各 3,200 更新；渲染器与匹配监督目标共同替换，按共同目标评价</td><td>亮区 RGB MAE<br><span class="value">0.073924 → 0.055188</span><br>下降 25.35%</td><td>高光目标匹配改善；共同基础目标域损失仅降 4.42%，黑白残色与暗脸仍存在，模型未采纳。</td></tr>
+      <tr><td>颜色函数监督是否足够</td><td>同初始化，两组各 1,600 更新；只增加干净域函数约束</td><td>干净基础域损失下降 7.01%；共同基础目标域损失仅下降 1.12%</td><td>局部均值改善没有解决成片；最坏黑白输出的每图平均 RGB 通道差为 0.114486（归一化值），超过预设 0.02。</td></tr>
+      <tr><td>完整文字是否理解最终去色</td><td>同读出初始化与 1,200 更新；冻结末层 vs. Q/V 低秩适配</td><td>原 276 句两组均 11 错；新 32 句错误 7 → 6</td><td>新句严格门槛均有 7 项失败。适配未解决语义组合，不接入图像推理。</td></tr>
+      <tr><td>现有渲染器的表达能力</td><td>3 张 JPEG × 3 条完整意图；40 项滑块控制，残差关闭</td><td>两张全图黑白输出的最大 RGB 通道差均为 0；同一逆光人像的 3 个候选脸区亮度提高 0.73–1.31 EV</td><td>支持继续改进参数预测与监督。只涉及这批已看过的诊断照片，不是学习模型结果。</td></tr>
+      <tr><td>配方是否可精确回放</td><td>9 个渲染能力诊断结果 + 9 个学习模型去残差对照，均按原尺寸输出</td><td>18 份 JSON 磁盘回放<br>最大 uint8 像素差均为 0</td><td>完整配方与渲染路径一致；不能据此推断审美质量。</td></tr>
+      <tr><td>显式资源入口能否独立复现</td><td>外部源码目录与安装后的 wheel，分别对同一张 6048 × 4032 原图执行相同 3 条意图</td><td>编码、40 控件、残差与 RGB 均一致；6 份 JSON 回放误差为 0</td><td>入口与打包执行一致。使用同一台机器的运行库，尚非干净机器安装验证。</td></tr>
+    </tbody>
+  </table></div>
   <div class="col">
-    <h3>历史画廊：早期生成式编辑</h3>
-    <p>旧生成式流程与细节融合的展示样例，其中四例曾人工调整提示词。左为原图，右为历史成品；当前参数化样张见页首。</p>
-  </div>
-  <div class="wide"><div class="gallery" id="gallery"></div></div>
-
-  <div class="col">
-    <h3>终选与门禁的实际行为</h3>
-  </div>
-  <div class="wide grid2" style="align-items:start">
-    <figure style="margin:0">
-      <div class="compare" id="compare1">
-        <img src="assets/cmp_before.jpg" alt="原图">
-        <div class="top"><img src="assets/cmp_after.jpg" alt="终选成品"></div>
-        <div class="rule"></div>
-        <span class="lab l">原图</span><span class="lab r">终选</span>
-        <input type="range" min="0" max="100" value="50" aria-label="拖动对比原图与终选成品">
-        <div class="knob">‹›</div>
-      </div>
-      <figcaption><span class="fig-no">Figure 7</span>早期生成式样例：挂饰原图与被选中的彩色分支。</figcaption>
-    </figure>
-    <div>
-      <h4 style="margin-top:0; font-family:var(--serif); font-weight:500; font-size:19px">判定"不该动手"的情况</h4>
-      <p>
-        所有分支都被门禁否决，或者终选认为原图更好时，系统就交回原图。
-        PhotoAgent 也有分数未改善时回退的机制；本实现额外加入内容门禁，并在比较时显式保留原图选项。
-      </p>
-      <div class="note">
-        <b>已知边界</b>　暗光或低质量输入时，判断和编辑都会变难；人像的细节一致性取决于编辑后端的能力；
-        统一美学评分也无法代替个人偏好。
-      </div>
-    </div>
+    <div class="evidence-note"><p><b>目前最重要的结论：</b>参数化执行已经可运行、可解释并可回放；学习模型仍未稳定做到理解并执行风格，成片质量也仍需改进。亮区或训练误差的改善，尚不足以支持默认权重替换。</p></div>
+    <details class="source-details"><summary>数值定义与证据来源</summary><div>
+      <p>基础受控表来自正式完成记录与 results/peaknet/metrics.json，200 张构建测试图按预先对齐规则剔除 2 张，实际为 198 张；未将依赖测试目标的 oracle 或专家均值混入可部署行。八模型结果只支持基础组件分析，不代表当前 Qwen 文字模型。</p>
+      <p>渲染匹配与颜色函数对照分别见工作区 J29、J35 的计划、完整评估及原尺寸目视记录。亮区掩膜固定取同一干净参考中最大 sRGB 通道大于 0.9 的像素；RGB MAE 为目标匹配误差。</p>
+      <p>文字诊断见 J34。严格去色判断要求正类概率至少 0.95、负类至多 0.05。原 276 句评分完整保留；剔除其中 3 条事后发现歧义的句子，另报 273 条清晰句的结果，32 新句为作者编写的开发检查，非独立标注测试。</p>
+      <p>首轮渲染能力诊断：两张黑白指标是在全部原尺寸像素上计算 max(max(R,G,B)−min(R,G,B))，单位为 8-bit 级。
+        人像使用既有手工脸框，先线性化 sRGB，再取 Y = 0.2126R + 0.7152G + 0.0722B 的区域中位数；EV 为相对原图的 log₂ 比值。</p>
+      <p>资源入口一致性见 2026-10-04 local_v5b 实际验收。被加载的研究权重仍未获质量采纳；复现一致与质量通过分别记录。所有表格结果均来自本项目内部研究。</p>
+    </div></details>
   </div>
 </section>
 
-<!-- ============ 稳健性 ============ -->
-<section id="robustness" class="reveal">
-  <div class="sec-head"><div class="sec-no">07<span>ROBUSTNESS</span></div><h2>如果不加约束，会出什么问题</h2></div>
+<section id="validation" class="reveal">
+  <div class="sec-head"><div class="sec-no">06<span>VALIDATION</span></div><h2>验证器也需要被验证</h2></div>
   <div class="col">
-    <p class="lead">早期生成式编辑中观察到四类问题，并尝试相应约束。</p>
-  </div>
-  <div class="wide">
-    <div class="risk-grid">
-      <div class="risk">
-        <h4>不锁内容 → 模型会"加戏"</h4>
-        <p>指令里出现"氛围""层次"，它就可能真的去画前景、加光晕。
-          做法：每条指令带保持性要求，概念层面禁止"添加类"步骤，门禁用边缘结构相关性复核。</p>
-        <div class="delta"><b>0.40 → 0.99</b>边缘幅值相关性（相似结构的代理，非几何完全一致的证明）</div>
-      </div>
-      <div class="risk">
-        <h4>不锁肤色 → 人像被整体染色</h4>
-        <p>"暖光""日落感"这类词很容易把整张图推向橙红，风景还好，脸就明显不对。
-          做法：概念阶段锁定肤色与身份，融合时只从原片取纹理、不碰颜色。</p>
-        <div class="delta"><b>0.86 → 0.95</b>内容相似度 · 色度噪声 3.2 → 1.17</div>
-      </div>
-      <div class="risk">
-        <h4>不做细节融合 → 修完比原图还糊</h4>
-        <p>编辑接口固定返回约 130 万像素，而原片是 2400 万像素，一步接一步重画还会继续掉细节。
-          做法：影调和颜色取编辑结果，纹理从原片高频补回。</p>
-        <div class="delta"><b>0.21 → 1.00</b>分辨率保留 · 细节能量比 0.97</div>
-      </div>
-      <div class="risk">
-        <h4>只看一个总分 → 拦不住局部的坏</h4>
-        <p>全局相似度看的是"还是不是那张图"，局部多画几片叶子、脸偏一点色，它几乎不扣分。
-          做法：三个本地指标交叉检查（内容相似度、结构相关性、高频色度噪声），越界即整条分支作废。</p>
-        <div class="delta"><b>3 项</b>本地指标交叉检查，任一越界即作废</div>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="note">
-      <b>代价也说清楚</b>　约束变严之后改动更保守，盲评从 4.22 到 4.18，BRISQUE 从 35.6 到 40.4
-      。这说明约束与质量指标之间存在取舍，尚不能把分数变化归因于单一处理。
-    </div>
-
-    <h3>实测：通用编辑模型的指令遵循并不可靠</h3>
-    <p>另用猫与城景两张照片检查指令幅度：固定各自输入，改变措辞，观察整体色彩偏移。</p>
-    <div class="tbl-wrap">
-      <table class="tbl">
-        <thead><tr><th>指令</th><th class="num">Δ(R−B) 暖冷偏移</th><th class="num">Δ 饱和</th><th class="num">Δ 亮度</th></tr></thead>
-        <tbody>
-          <tr><td>"稍微锐化"（不含颜色词）</td><td class="num best">≈ 0</td><td class="num best">≈ 0</td><td class="num">≈ 0</td></tr>
-          <tr><td>"提高中间调对比"（纯影调）</td><td class="num">+3 ~ +12</td><td class="num">+3 ~ +9</td><td class="num">−34 / +9</td></tr>
-          <tr><td>"整体调冷"</td><td class="num bad">−57 / −44</td><td class="num bad">+29 / +35</td><td class="num">±10 内</td></tr>
-          <tr><td>"整体调暖"</td><td class="num bad">+50 / +83</td><td class="num bad">+46 / +49</td><td class="num">±10 内</td></tr>
-          <tr><td>"稍微锐化"连做两步</td><td class="num">+0.7 / +4.3</td><td class="num">≈ 0</td><td class="num">≈ 0</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="tbl-note">
-      两组数字分别对应两张测试照片（猫、城景）。中性指令下模型几乎是忠实的；
-      一旦出现"暖/冷/色温"，它就会把整幅图推走 50–80 个单位的暖冷偏移，把饱和度抬高三四十，
-      在这些样例上，"稍微"没有把修改幅度可靠地限定到预期范围。
-    </p>
-    <p>
-      这两张照片暴露的是<b>早期生成式模型与提示组合的幅度控制失配</b>，不能据此断言所有通用编辑模型都只能做大动作。
-      限制动作和检查输出能减少部分问题，但还需要验证执行器能否稳定遵循调色意图。
-      我们因此转向可记录、可调整的参数化执行，并把质量与控制能力分别检验。
-    </p>
+    <p>PSNR、色差和重建损失能够检查目标匹配，无法单独判断目标是否好看。
+      本轮已经观察到“亮区误差下降，但逆光脸仍偏暗”和“干净域损失下降，但黑白局部仍残色”。这正是保留全图与主体细节检查的原因。</p>
+    <h3>逐图看什么</h3>
+    <p>检查主体可读性、肤色与场景光线的关系、高光与暗部层次、局部残色、色带、接缝及候选重复度。
+      人脸 EV、RGB 通道差和候选间色差是可解释诊断，不自动代替人的判断。
+      室内彩色样张已由用户明确接受；局部灯具颜色不能直接当作整幅白平衡失败。</p>
+    <h3>怎样证明候选真的更有用</h3>
+    <p>计划先邀请 3–5 位未参与开发的评委进行匿名先导评价：每组选出最喜欢的一张，同时允许原图，再比较两组选择。
+      分开记录单张质量、可选性、重复候选和选择时间；照片与评委都是统计单位，不能把同图的多个候选当作独立样本。</p>
+    <p>对 PhotoAgent 的直接实验需要可核验的同图输出、匹配候选数量及执行预算。
+      还要比较共享执行器的策略版本，避免把替换颜色后端带来的收益全部归因于规划。
+      当前尚无独立偏好结论，也没有直接性能胜出结论。</p>
   </div>
 </section>
 
-<!-- ============ 讨论 ============ -->
-<section id="discussion" class="reveal">
-  <div class="sec-head"><div class="sec-no">08<span>DISCUSSION</span></div><h2>从这些结果，<em>能推到哪里</em></h2></div>
+<section id="workflow" class="reveal">
+  <div class="sec-head"><div class="sec-no">07<span>YOUR CHOICE</span></div><h2>选一张，再继续调整</h2></div>
   <div class="col">
-    <p>历史 27 张照片比较发生在本实现内部；模型评分差的置信区间跨过零，尚未建立审美优势。
-      PhotoAgent 的 MCTS、本文单动作基线和像素平均是不同方法；论文成本只作量级参考。</p>
-    <p>PhotoAgent 报告的 BRISQUE 不在其四个奖励项内，附录也检验了奖励模型与人类评分的相关性。
-      后续直接对照需匹配候选数量、执行器与预算，并加入独立偏好评价；当前没有对 PhotoAgent 的性能胜出证据。</p>
-    <p>参数预测已有 <a href="https://groups.csail.mit.edu/graphics/hdrnet/" target="_blank" rel="noopener">HDRNet</a>、
-      <a href="https://github.com/ImCharlesY/SepLUT" target="_blank" rel="noopener">SepLUT</a> 等工作。
-      我们关注候选各自的质量、同图的有效选择，以及本地控制与执行成本。</p>
-    <blockquote>让候选各自成立，再验证用户是否拥有更好的选择。</blockquote>
+    <p class="lead">候选从同一原图独立生成，可以比较、微调，也可以保留原图。选定后按原尺寸导出照片，并保存调色配方。</p>
+  </div>
+  <div class="wide grid3" style="margin-top:28px">
+    <div class="output-card"><h3>JSON · 完整配方</h3><p>保存滑块与残差 LUT，在相同渲染器中精确回放。</p></div>
+    <div class="output-card"><h3>LUT · 颜色映射</h3><p>导出 .cube 文件，便于其他工具近似呈现这套颜色处理。</p></div>
+    <div class="output-card"><h3>XMP · 滑块设置</h3><p>将兼容滑块近似映射到外部工具；残差 LUT 效果需用完整配方保留。</p></div>
   </div>
 </section>
 
-<!-- ============ 复现 ============ -->
 <section id="repro" class="reveal">
-  <div class="sec-head"><div class="sec-no">09<span>REPRODUCIBILITY</span></div><h2>复现入口与历史设置</h2></div>
-  <div class="wide grid2" style="align-items:start">
-    <div>
-      <h4 style="margin-top:0">当前本地参数化入口</h4>
-      <pre>python -m photopeaks.local_v5b_cli --help</pre>
-      <p class="small">显式提供本地权重、文本模型、JPEG 与完整意图。自有代码采用 MIT，权重与照片另循其来源条款；源码尚未公开发布。</p>
-      <h4>早期生成式代码</h4>
-      <pre>photopeaks/
-├── perceiver.py   概念生成（Qwen-VL，一次调用出 n 个概念，本次 n = 5）
-├── judge.py       预测式评判 + 比较式终选
-├── executor.py    编辑执行器（DashScope / OpenAI 兼容端点）
-├── gates.py       本地 CLIP 门禁与质量度量
-├── agent.py       主闭环（分支并行、计时与调用计数）
-└── scripts/
-    ├── run_benchmark.py    三策略对照（single / scalar / peaks）
-    ├── make_figdata.py     图表数据（CLIP 嵌入、多样性、逐张指标）
-    ├── make_figures.py     本文所有数据图表
-    └── make_method_figure.py Figure 1 架构大图（SVG）</pre>
-      <p class="small">图表都由 <code>scripts/make_*.py</code> 生成。</p>
-    </div>
-    <div>
-      <h4 style="margin-top:0">早期 27 图实验设置</h4>
-      <div class="tbl-wrap" style="margin-top:0">
-        <table class="tbl small">
-          <tbody>
-            <tr><td>感知 / 评判模型</td><td>Qwen-VL（DashScope 兼容端点）</td></tr>
-            <tr><td>编辑模型</td><td>qwen-image-edit，每次约 18–20 秒，输入 1280px 长边</td></tr>
-            <tr><td>门禁模型</td><td>CLIP ViT-B/32，本地 CPU</td></tr>
-            <tr><td>盲评做法</td><td>同一个 VLM 打分，不告诉它图是哪套流程出的</td></tr>
-            <tr><td>照片</td><td>27 张本人实拍，三套流程各跑一遍，共 81 次</td></tr>
-            <tr><td>主要超参</td><td>n = 5 个候选方向 · K = 2 条并行链路 · R = 1 轮 · 概念内步骤链逐步执行（平均 5.8 次编辑 / 张）</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="small">历史数据与脚本保留用于复核。生成式复现会调用付费 API，须另行配置并确认调用预算。</p>
-      <figure style="margin:24px 0">
-        <div class="frame pan"><img src="assets/fig_train.svg" alt="早期离散专家条件训练示意" style="width:100%;display:block"></div>
-        <figcaption>早期离散专家条件训练示意，用于历史对照；当前执行器接收完整文字意图。</figcaption>
-      </figure>
-    </div>
+  <div class="sec-head"><div class="sec-no">08<span>REPRODUCIBILITY</span></div><h2>可运行的入口，<em>清楚的能力边界</em></h2></div>
+  <div class="col">
+    <h3>显式资源，本地执行</h3>
+    <p>当前模块入口接受本地 checkpoint、文本模型目录、JPEG、完整意图文件与输出目录。
+      缺失资源、版本不匹配或参数越界会明确停止，不联网找替代模型，也不以随机权重兜底。</p>
+    <pre>python -m photopeaks.local_v5b_cli --help</pre>
+    <p>运行后生成原图选项、每条意图的独立候选、完整 JSON 配方与可比较页面。
+      输入和渲染版本与配方绑定；权重、文本编码设置和所需依赖都有明确资源契约。自有代码采用 MIT，模型与照片分别遵循来源条款，完整开源包仍在整理。</p>
+    <h3>当前局限</h3>
+    <p><b>全局颜色映射：</b>相同输入颜色会被同样处理，无法仅靠颜色识别一处是皮肤、另一处是墙面；独立空间控制尚未纳入当前主线。</p>
+    <p><b>语言与风格质量：</b>长句约束、最终状态以及不同场景下的风格强度仍有失败。当前样张展示参数表达能力，学习模型还不能稳定复现同等质量。</p>
+    <p><b>泛化与发布：</b>训练代理与真实 JPEG 有分布差异；现有开发照片已被反复观察，独立确认、跨机器安装和权重分发仍需补齐。RAW 在 JPEG 质量稳定后推进。</p>
+    <h3>接下来怎样推进</h3>
+    <ol class="list">
+      <li>先把逐图监督目标审到可用：电影、胶片、清透和黑白要有可辨、合理的差异，人物与亮部不能为风格让步。</li>
+      <li>再做匹配预算的学习对照，保持完整意图与现有参数化架构，同时检查熟悉难例及冻结的新照片。</li>
+      <li>最后冻结可交付模型，开展独立偏好与强基线比较，报告质量、选择覆盖和端到端成本。</li>
+    </ol>
   </div>
 </section>
 
 <footer>
-  <div>PhotoPeaks · 受 <a href="https://arxiv.org/abs/2602.22809">PhotoAgent</a> 启发的独立实现与调色研究</div>
-  <div>当前样张：助手给参、v5b 原图渲染 · 历史实验：早期生成式原型 · 动画：架构示意 · 个人研究记录</div>
+  <div>PhotoPeaks · 完整意图，参数化执行，自主选择</div>
+  <div>JPEG 优先 · 本地渲染 · 研究进行中</div>
 </footer>
 
-<script src="data.js"></script>
 <script>
-const D = window.SHOWCASE_DATA;
-const $ = id => document.getElementById(id);
-$('stat-speedup').innerHTML = (D.race && D.race.photopeaks ? D.race.photopeaks.time : '—') + '<small>s</small>';
-$('stat-peaks').textContent = D.nConcepts;
-$('stat-photos').textContent = D.nPhotos;
-$('score-a').textContent = '美学 ' + D.avgDemo.scoreA;
-$('score-b').textContent = '美学 ' + D.avgDemo.scoreB;
-$('score-avg').textContent = '美学 ' + D.avgDemo.scoreAvg;
-$('avg-verdict').innerHTML = D.avgDemo.verdict.replace(/^实测：/, '<b>实测</b>　');
-
-/* main results table */
-const tbody = document.querySelector('#res-table tbody');
-D.table.forEach(r => {
-  const tr = document.createElement('tr');
-  if (r.hl) tr.className = 'ours';
-  const c = ok => 'num' + (ok ? ' best' : '');
-  const f = (v, d) => typeof v === 'number' ? v.toFixed(d) : v;
-  tr.innerHTML = `<td>${r.name}</td><td class="num">${f(r.time, 1)}s</td><td class="num">${r.vlm}</td><td class="num">${r.edit}</td>` +
-    `<td class="${c(r.bestSim)}">${f(r.sim, 3)}</td><td class="${c(r.bestBrisque)}">${f(r.brisque, 2)}</td><td class="${c(r.bestAes)}">${f(r.aes, 2)}</td>`;
-  tbody.appendChild(tr);
-});
-
-/* before / after */
 function bindCompare(box) {
   const input = box.querySelector('input');
   let activePointer = null;
@@ -785,41 +802,52 @@ function bindCompare(box) {
   input.addEventListener('input', () => set(input.value));
   set(input.value);
 }
-const HERO = 'pair_6-DSC_1630_before.jpg';
-const gal = $('gallery');
-D.gallery.filter(g => g.before !== HERO).forEach((g, i) => {
-  const id = (g.before.match(/pair_(.+)_before/) || [, ''])[1].replace(/^\d+-/, '');
-  const f = document.createElement('figure');
-  f.innerHTML =
-    `<div class="compare"><img src="assets/${g.before}" loading="lazy" alt="原图">` +
-    `<div class="top"><img src="assets/${g.after}" loading="lazy" alt="成品"></div>` +
-    `<div class="rule"></div><span class="lab l">原图</span><span class="lab r">成品</span>` +
-    `<input type="range" min="0" max="100" value="50" aria-label="拖动对比原图与成品"><div class="knob">‹›</div></div>` +
-    `<figcaption>${String(i + 1).padStart(2, '0')} · ${id}</figcaption>`;
-  gal.appendChild(f);
-});
 document.querySelectorAll('.compare').forEach(bindCompare);
 
-/* reveal on scroll */
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); }),
-                                    { threshold: 0.02 });
-document.querySelectorAll('.reveal').forEach(el => {
-  io.observe(el);
-  if (el.getBoundingClientRect().top < innerHeight) el.classList.add('on');
+const io = new IntersectionObserver(entries => entries.forEach(entry => {
+  if (entry.isIntersecting) entry.target.classList.add('on');
+}), { threshold: 0.02 });
+document.querySelectorAll('.reveal').forEach(section => {
+  io.observe(section);
+  if (section.getBoundingClientRect().top < innerHeight) section.classList.add('on');
 });
 
-/* reading progress + active section */
-const links = [...document.querySelectorAll('.topbar nav a')];
-const secs = links.map(a => document.querySelector(a.getAttribute('href')));
-function onScroll() {
-  const h = document.documentElement;
-  $('progress').style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
-  let cur = -1;
-  secs.forEach((s, i) => { if (s && s.getBoundingClientRect().top < 140) cur = i; });
-  links.forEach((a, i) => a.classList.toggle('on', i === cur));
+// Match links to actual document positions, including the sample block outside <section>.
+const navigation = [...document.querySelectorAll('.topbar nav a[href^="#"]')]
+  .map(link => ({ link, target: document.getElementById(link.hash.slice(1)) }))
+  .filter(item => item.target);
+const progress = document.getElementById('progress');
+function updateNavigation() {
+  const scroller = document.scrollingElement || document.documentElement;
+  const extent = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+  progress.style.width = (extent ? Math.max(0, Math.min(100, scroller.scrollTop / extent * 100)) : 0) + '%';
+  const ordered = navigation.map(item => ({ ...item, top: item.target.getBoundingClientRect().top }))
+    .sort((a, b) => a.top - b.top);
+  const marker = Math.min(160, innerHeight * 0.22);
+  let active = null;
+  ordered.forEach(item => { if (item.top <= marker) active = item.link; });
+  if (extent > 0 && scroller.scrollTop > 0 && extent - scroller.scrollTop <= 2) active = ordered.at(-1)?.link || null;
+  navigation.forEach(({ link }) => {
+    const selected = link === active;
+    link.classList.toggle('on', selected);
+    if (selected) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+  });
 }
-addEventListener('scroll', onScroll, { passive: true });
-onScroll();
+let navigationFrame = 0;
+function scheduleNavigation() {
+  if (!navigationFrame) navigationFrame = requestAnimationFrame(() => {
+    navigationFrame = 0;
+    updateNavigation();
+  });
+}
+addEventListener('scroll', scheduleNavigation, { passive: true });
+addEventListener('resize', scheduleNavigation);
+addEventListener('load', scheduleNavigation, true);
+document.addEventListener('toggle', scheduleNavigation, true);
+document.addEventListener('transitionend', scheduleNavigation);
+if ('ResizeObserver' in window) new ResizeObserver(scheduleNavigation).observe(document.body);
+updateNavigation();
 </script>
 <script src="assets/architecture-story.js" defer></script>
 </body>
