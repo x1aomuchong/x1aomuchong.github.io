@@ -132,6 +132,13 @@
   .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 24px; }
   .gallery figure { margin: 0; }
   .gallery figcaption { margin-top: 10px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em; }
+  .assistant-probe { margin: 58px auto 62px; }
+  .assistant-probe .compare img { height: auto; }
+  .assistant-probe .gallery figcaption { font-family: var(--sans); font-size: 13px; letter-spacing: 0; line-height: 1.9; color: var(--text-2); }
+  .assistant-probe .gallery h4 { font-family: var(--serif); font-size: 20px; font-weight: 500; margin: 13px 0 5px; color: var(--text); }
+  .assistant-probe details { margin-top: 10px; }
+  .assistant-probe details summary { padding: 8px 0; font-size: 12px; }
+  .assistant-probe details p { font-size: 12px; line-height: 1.8; color: var(--text-2); margin: 0 0 12px; }
   @media (max-width: 900px) { .gallery { grid-template-columns: 1fr; } }
 
   /* ---------- tables ---------- */
@@ -565,7 +572,7 @@
     <p class="lead">第一版给同一张 JPEG 提供多个好看的候选，让用户选择。先验证每个候选的质量、差异与可控性，再扩展到 RAW 和局部编辑。</p>
     <p>目前已在本地预览版中贯通照片导入、五个候选比较、继续调整与原尺寸导出，也保留不修改原图的选择。
       新的联合训练让整组候选共同对应不同参考效果，但小样本上的重建改进尚未转化为稳定的整组质量。
-      因此模型仍在验证中；本页成片展示来自此前已核验的流程。</p>
+      因此模型仍在验证中；既有画廊来自此前已核验的流程，下方参数化样张单独标明助手给参的诊断来源。</p>
   </div>
   <div class="wide story-view-switch" role="group" aria-label="选择架构讲解形式">
     <button type="button" data-story-view="video" aria-pressed="true">观看 38 秒讲解</button>
@@ -605,6 +612,57 @@
     <figcaption>流程、连线和控制器均为示意，不代表模型预测或成片。最终由规划器自主提出开放风格；<b>当前开发由人工提供完整意图，重点验证执行器</b>。尚未验证优于 PhotoAgent。</figcaption>
     <noscript><p class="story-noscript">同一 JPEG → 规划器提出完整开放风格意图 → 执行器理解图像与意图 → 40 个滑块与可选有界残差 LUT → 每个候选从原图独立渲染 → 用户选择，包含保留原图。</p></noscript>
   </figure>
+  <div class="wide assistant-probe" id="assistant-probe" aria-labelledby="assistant-probe-title">
+    <div class="col">
+      <h3 id="assistant-probe-title">先验证，参数能否表达意图</h3>
+      <p>当前助手读图并给出参数，由现有渲染器执行；<b>这是能力诊断，训练模型尚未通过验收</b>。
+        四例均直接来自助手首次给出的 40 个滑块参数，不用残差 LUT，也没有为展示重新调色。
+        调整只作用于原图的颜色与影调，不重新生成场景内容。</p>
+      <p class="small muted">拖动圆钮比较原图与参数化结果。样张来源为当前助手，不是本地训练模型或 Qwen 输出。</p>
+    </div>
+    <div class="gallery" id="assistant-probe-gallery">
+      <figure>
+        <div class="compare" id="probe-landscape-3">
+          <img src="assets/assistant-probe/landscape-3-before.jpg" width="1600" height="1067" loading="lazy" alt="村落风景原图">
+          <div class="top"><img src="assets/assistant-probe/landscape-3-after.jpg" width="1600" height="1067" loading="lazy" alt="助手首次给参后的鲜明幻灯片风格结果"></div>
+          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比村落原图与助手首次给参结果"><div class="knob">‹›</div>
+        </div>
+        <figcaption><h4>风景 · 鲜明的幻灯片色彩</h4>增强树木与天空的色彩，形成更有分量的暗部，同时保留云层和屋顶。</figcaption>
+        <details><summary>查看完整意图</summary><p lang="en">Give the village a vivid slide-film palette with intense green trees, cyan-blue sky and dense contrasting shadows. Blend three parts of this treatment with one part of the original, preserving the clouds and roofs.</p></details>
+      </figure>
+      <figure>
+        <div class="compare" id="probe-backlit-portrait-1">
+          <img src="assets/assistant-probe/backlit_portrait-1-before.jpg" width="1600" height="1067" loading="lazy" alt="逆光人像原图">
+          <div class="top"><img src="assets/assistant-probe/backlit_portrait-1-after.jpg" width="1600" height="1067" loading="lazy" alt="助手首次给参后的明亮人像结果"></div>
+          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比逆光人像原图与助手首次给参结果"><div class="knob">‹›</div>
+        </div>
+        <figcaption><h4>人像 · 打开逆光暗部</h4>提亮暗部与中间调，让脸部更容易看清，并柔和处理背景亮部。</figcaption>
+        <details><summary>查看完整意图</summary><p lang="en">Create a bright airy portrait by opening dark midtones and shadows, keeping neutral skin and gently compressing bright tones. The face must stay readable despite the bright background; avoid a grey veil.</p></details>
+      </figure>
+      <figure>
+        <div class="compare" id="probe-indoor-colour-1">
+          <img src="assets/assistant-probe/indoor_cast-1-before.jpg" width="1600" height="1061" loading="lazy" alt="室内演出原图，带黄绿色光照">
+          <div class="top"><img src="assets/assistant-probe/indoor_cast-1-after.jpg" width="1600" height="1061" loading="lazy" alt="助手首次给参后的室内彩色纠偏结果"></div>
+          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比室内彩色原图与助手首次给参结果"><div class="knob">‹›</div>
+        </div>
+        <figcaption><h4>室内 · 恢复颜色关系</h4>减少强烈的黄绿色偏色，保留肤色、吉他的木质色与衣服层次。</figcaption>
+        <details><summary>查看完整意图</summary><p lang="en">Remove the strong green-yellow cast for clean documentary colour, with near-neutral light walls, natural skin and warm guitar wood. Open the midtones moderately and retain separation in the dark clothing.</p></details>
+      </figure>
+      <figure>
+        <div class="compare" id="probe-indoor-mono-2">
+          <img src="assets/assistant-probe/indoor_cast-2-before.jpg" width="1600" height="1061" loading="lazy" alt="室内演出彩色原图">
+          <div class="top"><img src="assets/assistant-probe/indoor_cast-2-after.jpg" width="1600" height="1061" loading="lazy" alt="助手首次给参后的中性黑白演出结果"></div>
+          <div class="rule"></div><span class="lab l">原图</span><span class="lab r">参数化结果</span>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比演出原图与助手首次给参的黑白结果"><div class="knob">‹›</div>
+        </div>
+        <figcaption><h4>演出 · 中性黑白</h4>去除颜色，以中间调对比、明亮琴身与深色衣服组织画面。</figcaption>
+        <details><summary>查看完整意图</summary><p lang="en">Create a bold neutral black-and-white performance photograph: rich midtone contrast, bright guitar tones and deep but readable clothing. Keep the face visible and remove the green-yellow colour completely.</p></details>
+      </figure>
+    </div>
+  </div>
   <div class="wide">
     <div class="path">
       <div class="n">01</div>
@@ -671,7 +729,7 @@
           最新的文字适配仍会误判复合要求；补充颜色学习后，干净输入更接近目标，但整组改进还不足，
           人像可读性、黑白残色与风格力度仍未过关。两项修正均未采纳，完整意图与真实成片必须一起通过检验。</p>
         <p>更鲜明的外部调色参考也需要逐张审查。新参考虽然带来明显色彩变化，却会压暗部分人像；
-          它们尚未被采纳为训练目标或展示成片。当前页面的成片仍来自此前标明的流程，不代表新参数执行器已达到同等质量。</p>
+          它们尚未被采纳为训练目标或展示成片。上方助手给参样张用于检查现有调色参数的表达能力，不代表训练模型已达到同等质量。</p>
         <p>风格目标与主体保护也需要一致：清透应保持明亮可读，黑白与哑光则允许合理的影调变化。
           我们会结合成片判断这些要求，避免把“更亮”直接等同于“更好看”。
           对于哑光等需要抬起暗部的风格，我们也在逐张检查暗部颜色，防止微小色差被放大。
