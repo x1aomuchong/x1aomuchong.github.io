@@ -347,22 +347,6 @@
       单纯扩大颜色距离可能只得到偏色；单纯贴近配对目标又可能让所有候选过于保守。
       因此我们把“理解风格”“执行能力”和“用户可选性”分开检验。</p>
     <nav class="research-toc" aria-label="研究内容目录"><a href="#expanded-gallery">更多场景样张</a><a href="#outlook">完整流程</a><a href="#executor">网络与颜色执行</a><a href="#training">数据与监督</a><a href="#experiments">实测证据</a><a href="#validation">评价方法</a><a href="#workflow">选择与导出</a><a href="#repro">复现与局限</a></nav>
-    <h3>与 PhotoAgent 的关系</h3>
-    <p><a href="https://arxiv.org/html/2602.22809v1" target="_blank" rel="noopener">PhotoAgent</a>以多步树搜索组织编辑动作，结合执行和评价反馈推进结果。
-      我们把问题聚焦到保持内容的颜色与影调编辑，研究开放风格意图如何转成可解释、可回放的参数，以及如何提供一组有效选择。</p>
-  </div>
-  <div class="wide research-table"><table>
-    <thead><tr><th>维度</th><th>PhotoAgent 的方法</th><th>本项目的当前研究方案</th></tr></thead>
-    <tbody>
-      <tr><td>任务范围</td><td>包含语义内容变化的自动照片编辑</td><td>JPEG 颜色与影调增强，保持原始像素坐标</td></tr>
-      <tr><td>规划单位</td><td>编辑动作与多步搜索轨迹</td><td>照片相关的完整风格意图，作为连续条件交给执行器</td></tr>
-      <tr><td>执行方式</td><td>生成式及传统图像处理工具</td><td>预测滑块与有界残差，再在原图上确定性渲染</td></tr>
-      <tr><td>终选方式</td><td>评价反馈控制自动改进与回退</td><td>保留多个独立候选与原图，由用户选择和微调</td></tr>
-      <tr><td>需要验证</td><td colspan="2">在同图、同候选数和清楚的执行预算下，比较偏好、内容保持与成本；再用共享执行器检验规划贡献。</td></tr>
-    </tbody>
-  </table></div>
-  <div class="col">
-    <p class="small">这是方法定位，尚无本项目对 PhotoAgent 的直接胜出证据。MCTS、单步贪心与像素平均是不同方法；标量评分本身也不意味着风格会被平均。</p>
     <h3>创新要落在可验证的组合上</h3>
     <p><a href="https://groups.csail.mit.edu/graphics/hdrnet/" target="_blank" rel="noopener">HDRNet</a>、
       <a href="https://github.com/ImCharlesY/SepLUT" target="_blank" rel="noopener">SepLUT</a>已研究高效颜色映射，
